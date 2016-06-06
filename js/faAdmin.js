@@ -17,7 +17,7 @@ function RunIfAdmin(successFunc,failureFunc)
       }
     },
     error: function(error) {
-      alert("Error: " + error.code + " " + error.message);
+      alert("Error1: " + error.code + " " + error.message);
       if(failureFunc != nil)
       {
         failureFunc();
@@ -59,7 +59,7 @@ function LoadUsers()
       });
     },
     error: function(error) {
-      alert("Error: " + error.code + " " + error.message);
+      alert("Error2: " + error.code + " " + error.message);
     }
   });
 }
@@ -89,25 +89,26 @@ function AddUser(auser,isadmin)
   str += "<td class='cellMissions'><a>"+auser.get('username')+"</a></td>";
   if(isadmin)
   {
-    str += '<td><a href="#" id="'+auser.get('username')+'"<i class="fa fa-star"></i></a></td>';
+    str += '<td><a href="#" id="'+auser.id+'"<i class="fa fa-star"></i></a></td>';
   }
   else
   {
-    str += '<td><a href="#" id="'+auser.get('username')+'"<i class="fa fa-star-o"></i></a></td>';
+    str += '<td><a href="#" id="'+auser.id+'"<i class="fa fa-star-o"></i></a></td>';
   }
   str += "</tr>";
   $("#missionTable").append(str);
+  link = '#'+auser.id;    
   if(isadmin)
   {
-    $( "#"+auser.get("username") ).click(function(event) {
-      alert(this.id);
+    $(link).click(function(event) {
+      //alert(event.target.id);
       RemoveAdmin(event.target.id);
     });
   }
   else
   {
-    $( "#"+auser.get("username") ).click(function(event) {
-      alert(this.id);
+    $(link).click(function(event) {
+      //alert(this.id);
       SetAdmin(this.id);
     });
   }
@@ -115,9 +116,8 @@ function AddUser(auser,isadmin)
 function SetAdmin(user)
 {
   var query = new Parse.Query(Parse.User);
-  query.equalTo("username", user);
-  query.first({
-    success: function(object) {
+  query.get(user, {
+  success: function(object) {
       // Successfully retrieved the object.
       window.adminUser = object;
    //   object.set("isAdmin",true);
@@ -135,17 +135,15 @@ function SetAdmin(user)
           alert("Error: " + error.code + " " + error.message);
         }
       });
-    },
-    error: function(error) {
+  },error: function(error) {
       alert("Error: " + error.code + " " + error.message);
     }
-  });
+});
 }
 function RemoveAdmin(user)
 {
   var query = new Parse.Query(Parse.User);
-  query.equalTo("username", user);
-  query.first({
+  query.get(user, {
     success: function(object) {
       // Successfully retrieved the object.
       window.adminUser = object;
@@ -162,7 +160,7 @@ function RemoveAdmin(user)
           RunIfAdmin(LoadUsers,HideAll)
         },
         error: function(error) {
-          alert("Error: " + error.code + " " + error.message);
+          alert("Error3: " + error.code + " " + error.message);
         }
       });
     },
