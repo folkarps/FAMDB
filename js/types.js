@@ -1,5 +1,5 @@
 var missionTypes = ["Adversarial","Adversarial (ZEUS)","Coop","Coop (ZEUS)","ZEUS vs. Players","ZEUS vs. ZEUS","Other"];
-var islands = ["Altis","Stratis","Virtual Reality"];
+var islands = ["Altis","Tanoa","Stratis","Virtual Reality"];
 var games = ["Arma 3"];
 var session = ["Vanilla"];
 
