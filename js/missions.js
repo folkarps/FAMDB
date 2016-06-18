@@ -29,6 +29,8 @@ function LoadData() {
     if (searchVal !== "") query.contains("missionName", searchVal);
     query.greaterThanOrEqualTo("missionPlayers", Number($("#slotsMin").val()));
     query.lessThanOrEqualTo("missionPlayers", Number($("#slotsMax").val()));
+    query.greaterThanOrEqualTo("playedCounter", Number($("#playcountMin").val()));
+    query.lessThanOrEqualTo("playedCounter", Number($("#playcountMax").val()));
     if(sessionVal != "All Sessions")
     {
          query.equalTo("Session", sessionVal);

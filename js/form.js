@@ -150,8 +150,8 @@ function WriteMission(object) {
         return false;
     }
 
-    if (isNaN(missionPlaycount)  || missionPlaycount < 0 || missionPlaycount > 99 || missionPlaycount === null) {
-        MissionSaveError("Playcount must be a number between 0 and 99");
+    if (isNaN(missionPlaycount)  || missionPlaycount < 0 || missionPlaycount === null) {
+        MissionSaveError("Playcount must be a number at least 0");
         return false;
     }
 

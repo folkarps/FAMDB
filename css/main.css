@@ -359,7 +359,7 @@ SECTION: MISSIONSLIST
 }
 
 #missionsListTableContainer table.tableMissions td.cellPlayed {
-    display:none
+    display:none;
 }
 
 #missionsListTableContainer table.tableMissions td.cellLastPlayed {
