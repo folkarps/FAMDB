@@ -5,6 +5,6 @@ $('#submitButton').click(function() {
     return false;
 });
 
-UpdateLogin();
+UpdateLoginButton();
 GetMissionAuthor();
 LoadData();

@@ -7,7 +7,7 @@ if (!Parse.User.current() || Parse.User.current() === null) {
     window.location.href = "index.html";
 }
 
-UpdateLogin();
+UpdateLoginButton();
 $("#missionAuthors").hide();
 $("#editMissionsAuthorToggle").hide();
 

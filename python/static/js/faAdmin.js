@@ -178,5 +178,5 @@ function HideAll()
 
 Parse.initialize("1IijmSndIGJFPg6cw6xDl5PRe5AiGCHliyPzIgPc", "NHQLKq3nL8i0aK6Hz9J4EOMbAvHgkEu2XY5RAq8Q");
 $("#getout").hide();
-UpdateLogin();
+UpdateLoginButton();
 RunIfAdmin(LoadUsers,HideAll)

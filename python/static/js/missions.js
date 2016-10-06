@@ -1,5 +1,11 @@
 // Functions used to populate the main table
 
+
+//getMissions
+//uploadMission
+//move mission
+//saveMission
+
 function LoadData() {
     var sessionVal = $("#sessionSelected").val();
     var mapVal = $("#islandSelected").val();
@@ -7,38 +13,104 @@ function LoadData() {
     var gameVal = $("#gameSelected").val();
     var MissionObject = Parse.Object.extend("Missions");
     var searchVal = $("#searchText").val();
-    var query = new Parse.Query(MissionObject);
-    if (mapVal != "All Maps") query.equalTo("missionMap", mapVal);
-    if (authorVal != "All Authors") query.contains("missionAuthor",
-        authorVal);
-    
-    if ($("#missionBroken:checked").val()) query.equalTo("isBroken", true);
-    if ($("#missionNeedsRevision:checked").val()) query.equalTo("needsRevision", true);
-    if ($("#missionWorking:checked").val()) query.equalTo("isBroken", false);
-    //if ($("#missionFine:checked").val()) query.equalTo("needsRevision", true);
-	var checkboxes = $("#missionTypes").find(':checkbox');
-	var strings = [];
-	for(var x = 0;x<checkboxes.length;x++) {
-		var checkbox = checkboxes[x];
-		if(checkbox.checked === true) {
-			strings.push(checkbox.id);
-		}
-	}
-	query.containedIn("missionType",strings);
+    var params = {};
+    params["map"] = mapVal;
+    params["author"] = authorVal;
+    params["isBroken"] = $("#missionBroken:checked").val();
+    params["needsRevision"] = $("#missionNeedsRevision:checked").val();
 
-    if (searchVal !== "") query.contains("missionName", searchVal);
-    query.greaterThanOrEqualTo("missionPlayers", Number($("#slotsMin").val()));
-    query.lessThanOrEqualTo("missionPlayers", Number($("#slotsMax").val()));
-    query.greaterThanOrEqualTo("playedCounter", Number($("#playcountMin").val()));
-    query.lessThanOrEqualTo("playedCounter", Number($("#playcountMax").val()));
-    if(sessionVal != "All Sessions")
-    {
-         query.equalTo("Session", sessionVal);
+
+    var checkboxes = $("#missionTypes").find(':checkbox');
+    var typeString = [];
+    for(var x = 0;x<checkboxes.length;x++) {
+        var checkbox = checkboxes[x];
+        if(checkbox.checked === true) {
+            typeString.push(checkbox.id);
+        }
     }
-    if(gameVal != "All Games")
+
+    params["missionTypes"] = typeString;
+    params["playerMax"] = Number($("#slotsMax").val());
+    params["playerMin"] = Number($("#slotsMin").val());
+    params["name"] = searchVal;
+    params["countMax"] = Number($("#playcountMax").val());
+    params["countMin"] = Number($("#playcountMin").val());
+    params["session"] = sessionVal;
+    params["game"] = gameVal;
+
+
+    jQuery.get("/missions", params, function (data, status, jqXHR)
     {
-         query.equalTo("game", gameVal);
-    }
+        //clear out the table
+        $("#missionTable > tbody").html("");
+
+        var missions = eval(data);
+        missions.forEach(function(item) {
+            //format data for template
+            if(item.isBroken == 0) {
+                item.brokenYesNo = 'No'
+            }else {
+                item.brokenYesNo = 'Yes'
+            }
+            if(item.needsRevision == 0) {
+                item.revisionYesNo = 'No'
+            }else {
+                item.revisionYesNo = 'Yes'
+            }
+        })
+
+        $("#missionTable > tbody").loadTemplate("missionTemplate.html",
+    missions);
+
+        // Hide all description rows
+        $('.descRow').hide();
+
+        // Setup hide/show toggle on clicking the mission name
+        $(".cellMissions").click(function() {
+            $(this).find("#chevron").toggleClass("fa-chevron-down fa-chevron-up");
+            $(this).parent().next('#descRow').toggle();
+            return false;
+        });
+
+        // Sort the table
+        $("#missionTable").tablesorter({
+            // sort on the first column and third column, order asc
+            widgets: ["zebra"], // initialize zebra striping of the table
+            sortList: [[0,0]], // Sort table alphabetically by default
+            widgetZebra: {
+                css: ["normal-row", "odd"]
+            },
+            cssChildRow: "descRow"
+        });
+
+        setTimeout(function() {
+            var resort = false, // re-apply the current sort
+                callback = function(table) {};
+            // let the plugin know that we made a update, then the plugin will
+            // automatically sort the table based on the header settings
+            $("table").trigger("updateAll", [resort,
+                callback
+            ]);
+        }, 100);
+    });
+/*
+missionName
+
+[{
+
+ "needsRevision": 0,
+ "versions": [{"createDate": "2016-02-02","missionId": 1,"name": "fa_c15_test.pbo","toBeArchived": 0,"id": 1, "origin": "main", "toBeDeleted": 0}],
+ "name": "test name",
+ "id": 1,
+ "missionMap": "Altis",
+ "missionNotes": "test Notes",
+ "missionDesc": "test description",
+ "missionPlayers": 11,
+ "missionAuthor": "test author",
+ "lastPlayed": "2016-08-16",
+ "isBroken": 0,
+ "playedCounter": 5}]
+
     query.limit(1000);
     query.include("createdBy");
     $("#missionTable > tbody").html("");
@@ -190,28 +262,17 @@ function LoadData() {
         error: function(error) {
             console.log("Error: " + error.code + " " + error.message);
         }
-    });
+    });*/
     // <ul><li><a href="#">Delete</a></li><li><a href="#">Edit</a></li></ul>
 }
 
-function DeleteRow() {
-    var MissionObject = Parse.Object.extend("Missions");
-    var query = new Parse.Query(MissionObject);
-    query.get(window.delRow, {
-        success: function(object) {
-            object.destroy({
-                success: function(myObject) {
-                    HidePopup("#deleteWindow");
-                    LoadData();
-                    return false;
-                },
-                error: function(myObject, error) {
-                    Alert("Error:" + error.message);
-                }
-            });
-        },
-        error: function(error) {
-            alert("Error: " + error.code + " " + error.message);
-        }
-    });
+function archiveMission(mission) {
+    jQuery.post( baseURL + "/archive", [
+        $(mission).data("missionId")]);
+    //\ refresh or just mark the delete button as unavailable
+}
+function deleteMission(mission) {
+    jQuery.post( baseURL + "/delete", [
+        $(mission).data("missionId")]);
+    //\ refresh or just mark the delete button as unavailable
 }

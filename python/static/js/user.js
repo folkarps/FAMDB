@@ -1,6 +1,5 @@
-function UpdateLogin() {
-    var currentUser = Parse.User.current();
-    if (currentUser) {
+function UpdateLoginButton() {
+    if(document.cookie.includes("sessionId")) {
         $("#LogoutButton").html("<i class='fa fa-sign-out'></i>Logout");
         $("#AddButton").show();
     }
@@ -12,34 +11,35 @@ function UpdateLogin() {
 
 function Login() {
     $("#errorLogin").text("");
-    Parse.User.logIn($("#loginName").val(), $("#PasswordInput").val(), {
-        success: function(user) {
-            HidePopup("#loginWindow");
-            UpdateLogin();
-            RefreshPage();
-        },
-        error: function(user, error) {
-            $("#errorLogin").text(error.message);
-        }
-    });
+    var data = $("#loginName").val() +"\n" + $("#PasswordInput").val();
+    jQuery.post("/login", data, function( data ) {
+            //refresh current page with new cookies so that the buttons are correct
+            //if cookie is set, login was accepted, else display data as error message
+            if(document.cookie.includes("sessionId")) {
+                HidePopup("#loginWindow");
+                UpdateLoginButton();
+                RefreshPage();
+            }else {
+                $("#errorLogin").text(data);
+            }
+    })
 }
 
 function SignUp() {
     $("#errorSignup").text("");
-    var user = new Parse.User();
-    user.set("username", $("#signupName").val());
-    user.set("password", $("#signupPassword").val());
-    user.set("email", $("#signupEmail").val());
-    user.signUp(null, {
-        success: function(user) {
-            HidePopup("#loginWindow");
-            $("#signupScreen").hide();
-            $("#loginScreen").show();
-            UpdateLogin();
-        },
-        error: function(user, error) {
-            $("#errorSignup").text(error.message);
-        }
+    var data = $("#signupName").val() + "\n" + $("#signupEmail").val() + "\n" + $("#signupPassword").val();
+    jQuery.post("/signup", data, function (data) {
+
+            //refresh current page with new cookies so that the buttons are correct
+            //if cookie is set, login was accepted, else display data as error message
+            if(document.cookie.includes("sessionId")) {
+                HidePopup("#loginWindow");
+                $("#signupScreen").hide();
+                $("#loginScreen").show();
+                UpdateLoginButton();
+            }else {
+                $("#errorSignup").text(data);
+            }
     });
 }
 
@@ -53,9 +53,9 @@ function RefreshPage() {
 }
 
 $('#LogoutButton').click(function() {
-    if (Parse.User.current()) {
-        Parse.User.logOut();
-        UpdateLogin();
+    if (isLoggedIn()) {
+        //delete session cookie
+        UpdateLoginButton();
         RefreshPage();
     }
     else {
@@ -68,6 +68,11 @@ $("#forgottonPassword").click(function() {
 });
 $("#forgottenWindowOk").click(function() {
 	$("#errorForgot").text("");
+
+	jQuery.post("/forgotPass", data, function (data) {
+        //if data returned anything it would be an error message
+    });
+
     var val = $("#forgottonUsername").val();
     Parse.User.requestPasswordReset(val, {
         success: function() {
