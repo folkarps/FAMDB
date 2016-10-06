@@ -31,9 +31,7 @@ def handleMissions(request):
 
     # groupby has returned these as a list of tuple(missionId, list(version))
     #  we want a map so that we can do key access
-    versionMap = {}
-    for x in versionsGroupedByMission:
-        versionMap[x[0]] = x[1]
+    versionMap = dict(versionsGroupedByMission)
 
     # transform the row objects into objects that can be serialized
     m = [toDto(x, versionMap) for x in missionsFromDb]
@@ -51,10 +49,7 @@ def toDto(missionFromDb, verionsGrouped):
 
 
 def toDtoHelper(version):
-    dto = {}
-    for key in version.keys():
-        dto[key] = version[key]
-    return dto
+    return dict(version)
 
 
 def constructQuery(params):

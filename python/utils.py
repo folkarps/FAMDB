@@ -1,14 +1,14 @@
 import sqlite3
-from datetime import date
+from datetime import datetime
 from http import cookies
 
 from Crypto.Cipher import AES
 
-sessionGenKey = date.today()
+sessionGenKey = str.encode(datetime.today().ctime())
 
 __file = open('folders.config')
 
-# upgrade to actually reading properties
+# //\ upgrade to actually reading properties
 missionMainDir = __file.readline()
 missionMainArchive = __file.readline()
 

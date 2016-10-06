@@ -23,11 +23,9 @@ c.execute('''CREATE TABLE if not exists missions
                 playedCounter int,
                 missionDesc text,
                 missionNotes text)''')
-c.execute('''insert into missions(name, lastPlayed, missionAuthor, missionModified, isBroken, needsRevision, missionPlayers, missionType, missionMap, playedCounter, missionDesc, missionNotes)
-                values ('test name', '2016-08-16', 'test author', '2016-01-01', 0, 0, 11, 'Cooperative', 'Altis', 5, 'test description', 'test Notes')''')
 
 c.execute('''CREATE TABLE if not exists users
-             (id integer primary key, name text, email text, password text, createDate text, lastLogin text, permissionLevel integer)''')
+             (id integer primary key, login text, email text, password text, createDate text, lastLogin text, permissionLevel integer)''')
 # Create table
 c.execute('''CREATE TABLE if not exists versions
              (id integer primary key, origin text, missionId integer, name text, createDate text, toBeArchived integer, toBeDeleted integer)''')
@@ -42,8 +40,11 @@ conn.commit()
 # Just be sure any changes have been committed or they will be lost.
 conn.close()
 
-from delete import handleDelete
+from delete import handleVersionDelete
 from cleanup import handleCleanup
+from createUser import handleCreateUser
+from login import handleLogin
+from authors import handleAuthors
 from archive import handleArchive
 from move import handleMove
 from missions import handleMissions
@@ -51,7 +52,9 @@ from urllib.parse import urlparse
 
 # add each of the path handlers to the pathHandler map
 
-pathHandlers = {'missions': handleMissions, 'delete': handleDelete,
+pathHandlers = {'missions': handleMissions, 'authors': handleAuthors}
+
+postHandlers = {'deleteVersion': handleVersionDelete, 'login': handleLogin, 'signup': handleCreateUser,
                 'move': handleMove, 'archive': handleArchive, 'cleanup': handleCleanup}
 
 
@@ -65,6 +68,13 @@ class mainRequestHandler(SimpleHTTPRequestHandler):
             pathHandlers[path](self)
         else:
             super().do_GET()
+        return
+
+    def do_POST(self):
+        o = urlparse(self.path)
+        path = str.replace(o.path, "/", "")
+        if path in postHandlers:
+            postHandlers[path](self)
         return
 
 

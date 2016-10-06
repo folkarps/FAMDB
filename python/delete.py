@@ -2,7 +2,7 @@ import sqlite3
 from urllib.parse import urlparse, parse_qs
 
 
-def handleDelete(request):
+def handleVersionDelete(request):
     conn = sqlite3.connect('famdb.db')
     c = conn.cursor()
     o = parse_qs(urlparse(request.path).query)

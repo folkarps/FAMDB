@@ -9,13 +9,17 @@ function UpdateLoginButton() {
     }
 }
 
+function isLoggedIn() {
+    return document.cookie.includes("sessionId");
+}
+
 function Login() {
     $("#errorLogin").text("");
-    var data = $("#loginName").val() +"\n" + $("#PasswordInput").val();
+    var data = $("#loginName").val() +"\n" + $("#PasswordInput").val() + "\n\n"
     jQuery.post("/login", data, function( data ) {
             //refresh current page with new cookies so that the buttons are correct
             //if cookie is set, login was accepted, else display data as error message
-            if(document.cookie.includes("sessionId")) {
+            if(isLoggedIn()) {
                 HidePopup("#loginWindow");
                 UpdateLoginButton();
                 RefreshPage();
@@ -27,7 +31,7 @@ function Login() {
 
 function SignUp() {
     $("#errorSignup").text("");
-    var data = $("#signupName").val() + "\n" + $("#signupEmail").val() + "\n" + $("#signupPassword").val();
+    var data = $("#signupName").val() + "\n" + $("#signupEmail").val() + "\n" + $("#signupPassword").val()+"\n\n";
     jQuery.post("/signup", data, function (data) {
 
             //refresh current page with new cookies so that the buttons are correct
@@ -55,6 +59,7 @@ function RefreshPage() {
 $('#LogoutButton').click(function() {
     if (isLoggedIn()) {
         //delete session cookie
+        $.removeCookie('sessionId', { path: '/' });
         UpdateLoginButton();
         RefreshPage();
     }
