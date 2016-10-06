@@ -1,3 +1,4 @@
+import base64
 import sqlite3
 from datetime import datetime
 from http import cookies
@@ -22,6 +23,10 @@ class User:
         self.permissionLevel = permissionLevel
         self.login = login
 
+
+def userToSessionId(user):
+    return bytes.decode(
+        base64.b64encode(AES.new(sessionGenKey).encrypt(user['id'].to_bytes(16, byteorder='big'))))
 
 def getCurrentUser(request):
     C = cookies.SimpleCookie()

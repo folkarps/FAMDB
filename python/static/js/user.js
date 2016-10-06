@@ -15,7 +15,7 @@ function isLoggedIn() {
 
 function Login() {
     $("#errorLogin").text("");
-    var data = $("#loginName").val() +"\n" + $("#PasswordInput").val() + "\n\n"
+    var data = JSON.stringify({login:$("#loginName").val(), password:$("#PasswordInput").val() })
     jQuery.post("/login", data, function( data ) {
             //refresh current page with new cookies so that the buttons are correct
             //if cookie is set, login was accepted, else display data as error message
@@ -31,7 +31,7 @@ function Login() {
 
 function SignUp() {
     $("#errorSignup").text("");
-    var data = $("#signupName").val() + "\n" + $("#signupEmail").val() + "\n" + $("#signupPassword").val()+"\n\n";
+    var data = JSON.stringify({login:$("#signupName").val(), password:$("#signupPassword").val(), email: $("#signupEmail").val()})
     jQuery.post("/signup", data, function (data) {
 
             //refresh current page with new cookies so that the buttons are correct
