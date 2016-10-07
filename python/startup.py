@@ -1,12 +1,13 @@
-import sqlite3
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
-conn = sqlite3.connect('famdb.db')
+import utils
+from saveMission import handleSaveMission
+
+c = utils.getCursor()
 missionMakerDir = ''
 missionMainDir = ''
 missionMainArchive = ''
 missionMakerArchive = ''
-c = conn.cursor()
 
 # Create table
 c.execute('''CREATE TABLE if not exists missions
@@ -34,11 +35,11 @@ c.execute('''CREATE TABLE if not exists comments
              (id integer primary key, contents text, user text, createDate text, missionId integer)''')
 
 # Save (commit) the changes
-conn.commit()
+c.connection.commit()
 
 # We can also close the connection if we are done with it.
 # Just be sure any changes have been committed or they will be lost.
-conn.close()
+c.connection.close()
 
 from delete import handleVersionDelete
 from cleanup import handleCleanup
@@ -55,7 +56,8 @@ from urllib.parse import urlparse
 pathHandlers = {'missions': handleMissions, 'authors': handleAuthors}
 
 postHandlers = {'deleteVersion': handleVersionDelete, 'login': handleLogin, 'signup': handleCreateUser,
-                'move': handleMove, 'archive': handleArchive, 'cleanup': handleCleanup}
+                'move': handleMove, 'archive': handleArchive, 'cleanup': handleCleanup,
+                'saveMission': handleSaveMission}
 
 
 # HTTPRequestHandler class

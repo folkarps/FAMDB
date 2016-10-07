@@ -17,6 +17,13 @@ missionMakerDir = __file.readline()
 missionMakerArchive = __file.readline()
 
 
+def getCursor():
+    conn = sqlite3.connect('famdb.db', detect_types=sqlite3.PARSE_DECLTYPES)
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+    return c
+
+
 class User:
     def __init__(self, email, permissionLevel, login):
         self.email = email

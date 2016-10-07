@@ -105,3 +105,7 @@ function deleteVersion(mission) {
         $(mission).data("missionId")]);
     //\ refresh or just mark the delete button as unavailable
 }
+
+function editMission(button) {
+        window.location.href = "form.html?missionId=" + $(button).data("missionid");
+}

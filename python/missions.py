@@ -1,13 +1,12 @@
 import itertools
 import json
-import sqlite3
 from urllib.parse import urlparse, parse_qs
+
+import utils
 
 
 def handleMissions(request):
-    conn = sqlite3.connect('famdb.db')
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
+    c = utils.getCursor()
 
     o = parse_qs(urlparse(request.path).query)
     query, params = constructQuery(o)
@@ -55,10 +54,10 @@ def toDtoHelper(version):
 def constructQuery(params):
     query = []
     p = []
-    if ("map" in params) & (params['map'][0] != 'All Maps'):
+    if ("map" in params) and (params['map'][0] != 'All Maps'):
         query.append('missionMap = ?')
         p.append(params['map'][0])
-    if ("author" in params) & (params['author'][0] != 'All Authors'):
+    if ("author" in params) and (params['author'][0] != 'All Authors'):
         query.append("missionAuthor = ?")
         p.append(params['author'][0])
     if "isBroken" in params:
@@ -79,4 +78,7 @@ def constructQuery(params):
     if "playerMin" in params:
         query.append("missionPlayers  >= ? ")
         p.append(params['playerMin'][0])
+    if "missionId" in params:
+        query.append("id  = ? ")
+        p.append(params['missionId'][0])
     return " AND ".join(query), p

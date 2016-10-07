@@ -1,9 +1,7 @@
 // Functions for the add/edit form
 
-Parse.initialize("1IijmSndIGJFPg6cw6xDl5PRe5AiGCHliyPzIgPc",
-    "NHQLKq3nL8i0aK6Hz9J4EOMbAvHgkEu2XY5RAq8Q");
 
-if (!Parse.User.current() || Parse.User.current() === null) {
+if (!isLoggedIn()) {
     window.location.href = "index.html";
 }
 
@@ -11,96 +9,65 @@ UpdateLoginButton();
 $("#missionAuthors").hide();
 $("#editMissionsAuthorToggle").hide();
 
-// Decide whether mission is being edited or updated
-var queryDict = {};
-location.search.substr(1).split("&").forEach(function(item) {
-    queryDict[item.split("=")[0]] = item.split("=")[1];
-});
-var MissionObject = Parse.Object.extend("Missions");
-var query = new Parse.Query(MissionObject);
-query.get(queryDict.row, {
-            success: function(object) {
-                LoadMission(false,object);
-            },
-            error: function(model,error) {
-                if (error.code === Parse.Error.OBJECT_NOT_FOUND) {
-                LoadMission(true,null);
+function getQueryDict() {
+    queryDict = {}
+   location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]})
+   return queryDict;
+}
+
+
+function LoadMission() {
+    //load mission if exists
+    var queryDict = getQueryDict();
+
+    if(queryDict['missionId'] != null) {
+        jQuery.get("/missions", queryDict, function (data, status, jqXHR) {
+            var missions = eval(data);
+            if(missions.length > 0) {
+                var mission = missions[0]
+                $("#loading").show();
+                $('.editMissionsTitle').append(' Edit Mission');
+                $('#editMissionsHeader').children().append('Edit Mission');
+                $("#authorSelected").hide();
+                $("#missionAuthors").show();
+                $("#missionName").val(mission.missionName);
+                $("#missionIsland").val(mission.missionMap);
+                $("#missionType").val(mission.missionType);
+                $("#missionSlots").val(mission.missionPlayers);
+                $("#missionPlaycount").val(mission.playedCounter);
+                $("#authorSelected").val(mission.missionAuthor);
+                $("#missionAuthors").val(mission.missionAuthor);
+                $("#missionDescription").val(mission.missionDesc);
+                $("#missionNotes").val(mission.missionNotes);
+
+                if (mission.isBroken == 1) {
+                    $("#missionBroken").prop('checked',true);
                 }
+                if (mission.needsRevision == 1) {
+                    $("#missionNeedsRevision").prop('checked',true);
+                }
+                $("#loading").hide();
+            }else {
+                setNewMission();
             }
-});
-
-function LoadMission(newMission,object) {
-    var currentUser = Parse.User.current();
-    if (currentUser === null) return;
-        
-    // If mission exists, populate the elements
-    if (newMission) {
-        $('.editMissionsTitle').append(' Add Mission');
-        $('#editMissionsHeader').children().append('Add Mission');
-        $("#editMissionsAuthorToggle").show();
-        GetMissionAuthor(newMission);     
-    } else {
-        $("#loading").show();
-        $('.editMissionsTitle').append(' Edit Mission');
-        $('#editMissionsHeader').children().append('Edit Mission');
-        $("#authorSelected").hide();
-        $("#missionAuthors").show();
-        var MissionObject = object;
-        var ACL = object.getACL();
-        var query = new Parse.Query(Parse.Role);
-        var currentUser = Parse.User.current();
-        query.equalTo("users", currentUser);
-        query.find({
-                    success: function(roles) {
-                        for (var x = 0; x < roles.length; x++) {
-                            if (ACL.getWriteAccess(
-                                    roles[x]) ||
-                                ACL.getWriteAccess(
-                                    currentUser)) {
-                                window.row = object;
-                                $("#missionName").val(object.get("missionName"));
-                                $("#missionGame").val(object.get("game"));
-                                $("#missionIsland").val(object.get("missionMap"));
-                                $("#missionSession").val(object.get("Session"));
-                                $("#missionType").val(object.get("missionType"
-                                    ));
-                                $("#missionSlots").val(object.get("missionPlayers"));
-                                $("#missionPlaycount").val(object.get("playedCounter"));
-                                $("#authorSelected").val(object.get("missionAuthor"));
-                                $("#missionAuthors").val(object.get("missionAuthor"));
-                                $("#missionDescription").val(object.get("missionDesc"));
-                                $("#missionNotes").val(object.get("missionNotes"));
-                                $("#f3Version").val(object.get("Scripts"));
-
-                                var bool = object.get("isBroken");
-                                if (bool) {
-                                    $("#missionBroken").prop('checked',true);
-                                }
-                                var bool = object.get("needsRevision");
-                                if (bool) {
-                                    $("#missionNeedsRevision").prop('checked',true);
-                                }
-                                $("#loading").hide();
-                                //   $("#form_edit").show();
-                                return;
-                            }
-                        }
-                    },
-                    error: function(error) {
-                        alert("Error: " + error.code +
-                            " " + error.message
-                        );
-                    }
-                });
+        });
+    }else {
+        setNewMission();
     }
+
     
-    
-    $('#missionSave').click({param1: object}, function(event) {
-        WriteMission(event.data.param1);
+    $('#missionSave').click({}, function(event) {
+        WriteMission();
     });
 }
 
-function WriteMission(object) {
+function setNewMission() {
+        $('.editMissionsTitle').append(' Add Mission');
+        $('#editMissionsHeader').children().append('Add Mission');
+        $("#editMissionsAuthorToggle").show();
+}
+
+function WriteMission() {
     
     var missionName = $("#missionName").val();
     var missionGame = $("#missionGame").val();
@@ -109,13 +76,13 @@ function WriteMission(object) {
     var missionType = $("#missionType").val();
     var missionSlots = Number($("#missionSlots").val());
     var missionPlaycount = Number($('#missionPlaycount').val());
-    var missionsAuthors = "";
+    var missionAuthor = "";
     
     // Only if the missionAuthors field is visible and not empty it is used to pass the author's name
     if ($("#missionAuthors").is(":visible") && $("#missionAuthors") !== "") {
-        missionsAuthors = $("#missionAuthors").val();
+        missionAuthor = $("#missionAuthors").val();
     } else {
-        missionsAuthors = $("#authorSelected").val();
+        missionAuthor = $("#authorSelected").val();
     }
     
     var missionDescription = $("#missionDescription").val();
@@ -128,16 +95,8 @@ function WriteMission(object) {
         MissionSaveError("Enter a mission name!");
         return false;
     }
-    if (missionGame === "" || missionGame === null) {
-        MissionSaveError("Select a game!");
-        return false;
-    }
     if (missionIsland === "" || missionIsland === null) {
         MissionSaveError("Select an island!");
-        return false;
-    }
-    if (missionSession === "" || missionSession === null) {
-        MissionSaveError("Select a session!");
         return false;
     }
     if (missionType === "" || missionType === null) {
@@ -155,17 +114,13 @@ function WriteMission(object) {
         return false;
     }
 
-    if (missionsAuthors === "" || missionsAuthors === null) {
+    if (missionAuthor === "" || missionAuthor === null) {
         MissionSaveError("Select or enter an author!");
         return false;
     }
     
     if (missionDescription.trim().length < 1  || missionDescription === null) {
         MissionSaveError("Enter a description for your mission!");
-        return false;
-    }
-    if (missionF3version === "" || missionF3version === null) {
-        MissionSaveError("Select a F3 version!");
         return false;
     }
     if (isBroken || needsRevision) {
@@ -175,33 +130,33 @@ function WriteMission(object) {
             return false;
         }
     }
-    
-    var Mission = Parse.Object.extend("Missions");
-    var objMission = new Mission();
-    
-    var currentUser = Parse.User.current();
-    
-    if (object === null) {
-        objMission.set("createdBy", currentUser);
-    } else {
-       objMission = window.row;
+    var data = {}
+    data.missionName = missionName;
+    data.missionMap = missionIsland;
+    data.missionType = missionType;
+    data.missionPlayers = missionSlots;
+    data.playedCounter = missionPlaycount;
+    data.missionAuthor = missionAuthor;
+    data.missionDesc = missionDescription;
+    data.isBroken = isBroken;
+    data.needsRevision = needsRevision;
+    data.missionNotes = missionNotes;
+    if(getQueryDict()['missionId'] != null) {
+
+        data.missionId = getQueryDict()['missionId'];
     }
-  
-    objMission.set("missionName", missionName);
-    objMission.set("game", missionGame);
-    objMission.set("missionMap", missionIsland);
-    objMission.set("Session", missionSession);
-    objMission.set("missionType", missionType);  
-    objMission.set("missionPlayers", missionSlots);
-    objMission.set("playedCounter", missionPlaycount);
-    objMission.set("missionAuthor", missionsAuthors);
-    objMission.set("missionDesc", missionDescription);
-    objMission.set("isBroken", isBroken);
-    objMission.set("needsRevision", needsRevision);
-    objMission.set("Scripts",missionF3version);
-    objMission.set("missionNotes", missionNotes);
-      
-    SaveMission(objMission,currentUser,true);
+
+    jQuery.post("/saveMission", JSON.stringify(data),  function (data, status, jqXHR) {
+        if(data == null || data.length == 0) {
+            //save was accepted, go to index
+            window.location.href = "index.html";
+            //\TODO: make it so that the mission we just saved is opened
+        }else {
+            //save was rejected, display message
+            MissionSaveError(data)
+        }
+    });
+
     
     return false;
 }
@@ -209,3 +164,5 @@ function WriteMission(object) {
 function MissionSaveError(string) {
     $("#errorEdit").text(string);
 }
+
+LoadMission();

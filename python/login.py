@@ -1,5 +1,4 @@
 import json
-import sqlite3
 from datetime import date
 from http import cookies
 
@@ -9,9 +8,7 @@ import utils
 
 
 def handleLogin(request):
-    conn = sqlite3.connect('famdb.db')
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
+    c = utils.getCursor()
     loginJsonString = request.rfile.read1(99999999).decode()
     loginJson = json.loads(loginJsonString)
     login = loginJson['login']
@@ -28,8 +25,8 @@ def handleLogin(request):
         request.send_header('set-cookie', cookie.output(header=''))
         request.end_headers()
         c.execute("update users set lastLogin = ?", [date.today()])
-        conn.commit()
-        conn.close()
+        c.connection.commit()
+        c.connection.close()
     else:
         request.wfile.write("incorrect password".encode())
     return

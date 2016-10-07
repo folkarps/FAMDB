@@ -1,15 +1,13 @@
 import gzip
 import os
 import shutil
-import sqlite3
 from urllib.parse import urlparse, parse_qs
 
 import utils
 
 
 def handleCleanup(request):
-    conn = sqlite3.connect('famdb.db')
-    c = conn.cursor()
+    c = utils.getCursor()
     o = parse_qs(urlparse(request.path).query)
     c.execute('''select * from archiveList where origin = ?''', o['origin'])
     toBeArchived = c.fetchall()

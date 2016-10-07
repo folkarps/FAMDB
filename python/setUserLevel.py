@@ -1,10 +1,10 @@
-import sqlite3
 from urllib.parse import urlparse, parse_qs
+
+import utils
 
 
 def handleSetUserLevel(request):
-    conn = sqlite3.connect('famdb.db')
-    c = conn.cursor()
+    c = utils.getCursor()
     o = parse_qs(urlparse(request.path).query)
     userId = o['id']
     level = o['level']

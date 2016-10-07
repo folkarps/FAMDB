@@ -1,11 +1,10 @@
 import json
-import sqlite3
+
+import utils
 
 
 def handleAuthors(request):
-    conn = sqlite3.connect('famdb.db')
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
+    c = utils.getCursor()
     c.execute("select distinct missionAuthor from missions order by missionAuthor")
     authors = c.fetchall()
     authorDto = [x['missionAuthor'] for x in authors]

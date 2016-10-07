@@ -1,5 +1,4 @@
 import json
-import sqlite3
 from datetime import date
 from http import cookies
 
@@ -9,9 +8,7 @@ import utils
 
 
 def handleCreateUser(request):
-    conn = sqlite3.connect('famdb.db', detect_types=sqlite3.PARSE_DECLTYPES)
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
+    c = utils.getCursor()
     loginJsonString = request.rfile.read1(99999999).decode()
     signUpJson = json.loads(loginJsonString)
     login = signUpJson['login']
@@ -29,8 +26,8 @@ def handleCreateUser(request):
         # python has horrible cookie management
         request.send_header('set-cookie', cookie.output(header=''))
         request.end_headers()
-        conn.commit()
-        conn.close()
+        c.connection.commit()
+        c.connection.close()
     else:
         request.wfile.write("user with that login or email already exists".encode())
     return

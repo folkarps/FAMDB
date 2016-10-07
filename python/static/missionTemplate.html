@@ -41,8 +41,10 @@
         </p>
 
         <ul>
-            <li><a href="#">Delete</a></li>
-            <li><a href="#">Edit</a></li>
+            <li><a data-template-bind='[
+     {"attribute": "data-missionId", "value": "id"}]' onclick="deleteMission(this)">Delete</a></li>
+            <li><a data-template-bind='[
+     {"attribute": "data-missionId", "value": "id"}]' onclick="editMission(this)">Edit</a></li>
         </ul>
     </td>
 </tr>
