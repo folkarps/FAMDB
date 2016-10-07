@@ -47,15 +47,15 @@ function LoadData() {
         var missions = eval(data);
         missions.forEach(function(item) {
             //format data for template
-            if(item.isBroken == 0) {
-                item.brokenClass = ''
-            }else {
+            if(item.isBroken == 1) {
                 item.brokenClass = 'fa fa-exclamation-triangle'
-            }
-            if(item.needsRevision == 0) {
-                item.revisionClass = ''
             }else {
+                item.brokenClass = ''
+            }
+            if(item.needsRevision == 1) {
                 item.revisionClass = 'fa fa-exclamation-circle'
+            }else {
+                item.revisionClass = ''
             }
         })
 

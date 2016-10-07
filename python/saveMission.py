@@ -8,7 +8,8 @@ def constructQuery(missionJson):
     queryParts = []
     params = []
 
-    for part in ['missionAuthor', 'missionPlayers', 'missionMap', 'missionType', 'missionDesc', 'missionNotes']:
+    for part in ['missionAuthor', 'missionPlayers', 'missionMap', 'missionType', 'missionDesc', 'missionNotes',
+                 'framework']:
         queryParts.append(part + "=?")
         params.append(missionJson[part])
 

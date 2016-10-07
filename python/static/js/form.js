@@ -87,7 +87,6 @@ function WriteMission() {
     
     var missionDescription = $("#missionDescription").val();
     var missionNotes = $("#missionNotes").val();
-    var missionF3version = $("#f3Version").val();
     var isBroken = $('#missionBroken').prop('checked');
     var needsRevision = $('#missionNeedsRevision').prop('checked');
 
@@ -141,6 +140,7 @@ function WriteMission() {
     data.isBroken = isBroken;
     data.needsRevision = needsRevision;
     data.missionNotes = missionNotes;
+    data.framework = $("#framework").val();
     if(getQueryDict()['missionId'] != null) {
 
         data.missionId = getQueryDict()['missionId'];

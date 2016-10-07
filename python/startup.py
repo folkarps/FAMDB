@@ -16,6 +16,7 @@ c.execute('''CREATE TABLE if not exists missions
               lastPlayed text,
                missionAuthor text,
               missionModified text,
+              framework text,
                isBroken integer,
               needsRevision integer,
                missionPlayers int,

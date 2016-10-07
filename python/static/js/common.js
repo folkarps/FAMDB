@@ -2,56 +2,12 @@
 
 // Function to populate #authorsSelected dropdown field with all authors from the DB
 function GetMissionAuthor(preSelect) {
-    var MissionObject = Parse.Object.extend("Missions");
-    var query = new Parse.Query(MissionObject);
-    query.limit(1000);
-    query.find({
-        success: function(results) {
-           // $("#authorSelected").empty();
-            //$("#authorSelected").append(
-            //    "<option>All Authors</option>");
-            var 
-                arr = [],
-                authors = [];
-
-            for (var x = 0; x < results.length; x++) {
-                var obj = results[x];
-                authors = authors.concat(obj.get("missionAuthor").split(','));
-            }
-
-            for(var y = 0; y < authors.length;y++) {
-                var author = authors[y].trim();
-                if (arr.indexOf(author) == -1) {
-                    arr.push(author);
-                }
-            }
-
-            arr.sort(function (a, b){
-                var aName = a.toLowerCase();
-                var bName = b.toLowerCase(); 
-                return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
-              }
-            );
-
-            for (var y = 0;y < arr.length;y++) {
-                $("#authorSelected").append("<option>" +
-                arr[y] +
-                "</option>");
-            }
-            var currentUser = Parse.User.current();
-            if (currentUser === null) return;
-            
-            if (preSelect) {
-                if ((arr.indexOf(currentUser.get("username"))) != -1) {        
-                    $("#authorSelected").val(currentUser.get("username"));
-                } else {
-                    ToggleAuthors();   
-                    $("#missionAuthors").val(currentUser.get("username"));
-                }
-            }
-        },
-        error: function(error) {
-            alert("Error: " + error.code + " " + error.message);
+    jQuery.get("/authors", null, function (data, status, jqXHR) {
+        arr = eval(data);
+        for (var y = 0;y < arr.length;y++) {
+            $("#authorSelected").append("<option>" +
+            arr[y] +
+            "</option>");
         }
     });
 }
