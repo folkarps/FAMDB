@@ -147,13 +147,12 @@ function WriteMission() {
     }
 
     jQuery.post("/saveMission", JSON.stringify(data),  function (data, status, jqXHR) {
-        if(data == null || data.length == 0) {
-            //save was accepted, go to index
-            window.location.href = "index.html";
-            //\TODO: make it so that the mission we just saved is opened
+        data = data.replace("location: ", "");
+        data = data.replace(/(?:\r\n|\r|\n).*/g, "");
+        if(status == "success") {
+            window.location.href = "index.html?missionId="+data;
         }else {
-            //save was rejected, display message
-            MissionSaveError(data)
+            MissionSaveError(data);
         }
     });
 

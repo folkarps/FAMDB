@@ -82,6 +82,15 @@ function LoadData() {
             },
             cssChildRow: "descRow"
         });
+        if(getQueryDict()['missionId'] != null) {
+            table = $("#missionTable > tbody");
+            children = table.children("[data-missionid=" +getQueryDict()['missionId'] + "] ");
+            item = children[0];
+            cellMissions = $($(item).prev().children()[0]).find("i")[0];
+            $(cellMissions).toggleClass("fa-chevron-down fa-chevron-up")
+            $(item).toggle();
+
+        }
 
         setTimeout(function() {
             var resort = false, // re-apply the current sort
@@ -91,6 +100,7 @@ function LoadData() {
             $("table").trigger("updateAll", [resort,
                 callback
             ]);
+
         }, 100);
     });
 }
@@ -138,4 +148,9 @@ function updateFileLabel(uploadSystem) {
         text += files[i].name + ",";
     }
     div.innerHTML = (text)
+}
+function getQueryDict() {
+    queryDict = {}
+   location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]})
+   return queryDict;
 }

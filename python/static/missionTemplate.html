@@ -27,7 +27,8 @@
     <td class="cellBroken"><i title="Broken" data-class="brokenClass"></i></td>
     <td class="cellRevision"><i title="Revision" data-class="revisionClass"></i></td>
 </tr>
-<tr id="descRow" class="row descRow">
+<tr id="descRow" class="row descRow" data-template-bind='[
+                {"attribute": "data-missionId", "value": "id"}]'>
     <td data-id="id" class="cellDropdown" colspan="10">
         <p class="fullInfo">
         <div class="cellDropdownSubtitle">Framework</div>

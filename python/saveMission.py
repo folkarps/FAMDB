@@ -43,6 +43,7 @@ def handleSaveMission(request):
     c.execute("update missions set " + query + "where id=?", params)
     c.connection.commit()
     c.connection.close()
-    request.send_response(200)
+    request.send_header("location", missionId)
+    request.send_response(201)
     request.end_headers()
     return
