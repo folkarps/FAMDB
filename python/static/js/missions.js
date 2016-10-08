@@ -129,3 +129,13 @@ function uploadFile(submitButton){
         xhr.send(fd);
     }
 }
+
+function updateFileLabel(uploadSystem) {
+    var div = $(uploadSystem).siblings("span")[0];
+    var files = uploadSystem.files;
+    var text = ""
+    for(var i=0; i < files.length; i++) {
+        text += files[i].name + ",";
+    }
+    div.innerHTML = (text)
+}
