@@ -9,8 +9,7 @@ import utils
 def handleCleanup(request):
     c = utils.getCursor()
     o = parse_qs(urlparse(request.path).query)
-    c.execute('''select * from archiveList where origin = ?''', o['origin'])
-    toBeArchived = c.fetchall()
+
     if o['origin'] == 'main':
         missionDirPrefix = utils.missionMainDir
         missionArchivePrefix = utils.missionMainArchive
@@ -18,13 +17,16 @@ def handleCleanup(request):
         missionDirPrefix = utils.missionMakerDir
         missionArchivePrefix = utils.missionMakerArchive
 
+    c.execute('''select * from versions where origin = ? and toBeArchived = 1''', o['origin'])
+    toBeArchived = c.fetchall()
+
     for forArchival in toBeArchived:
         with open(missionDirPrefix + forArchival['name'], 'rb') as f_in:
             with gzip.open(missionArchivePrefix + forArchival['name'] + ".gz", 'wb') as f_out:
                 shutil.copyfileobj(f_in, f_out)
                 os.remove(f_in.name)
 
-    c.execute('''select * from deleteList where origin = ?''', o['origin'])
+    c.execute('''select * from versions where origin = ? and toBeDeleted = 1''', o['origin'])
     toBeDeleted = c.fetchall()
     for deleteMe in toBeDeleted:
         os.remove(missionDirPrefix + deleteMe['name'])

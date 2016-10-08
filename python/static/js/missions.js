@@ -109,3 +109,23 @@ function deleteVersion(mission) {
 function editMission(button) {
         window.location.href = "form.html?missionId=" + $(button).data("missionid");
 }
+
+function uploadFile(submitButton){
+    var button = $(submitButton).siblings("#fileinput")[0];
+    var files = button.files;
+    for(var i=0; i<files.length; i++){
+        var file = files[i];
+        var url = '/upload?missionId=' + $(button).data("missionid");
+        var xhr = new XMLHttpRequest();
+        var fd = new FormData();
+        xhr.open("POST", url, true);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                // Every thing ok, file uploaded
+                console.log(xhr.responseText); // handle response.
+            }
+        };
+        fd.append("upload_file", file);
+        xhr.send(fd);
+    }
+}

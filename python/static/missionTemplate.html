@@ -50,5 +50,10 @@
             <li><a data-template-bind='[
      {"attribute": "data-missionId", "value": "id"}]' onclick="editMission(this)">Edit</a></li>
         </ul>
+        <div>
+            <input data-template-bind='[{"attribute": "data-missionId", "value": "id"}]' type="file" id="fileinput"
+                   multiple="multiple"/>
+            <a onclick="uploadFile(this)">Submit</a>
+        </div>
     </td>
 </tr>
