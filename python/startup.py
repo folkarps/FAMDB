@@ -30,7 +30,7 @@ c.execute('''CREATE TABLE if not exists users
              (id integer primary key, login text, email text, password text, createDate text, lastLogin text, permissionLevel integer)''')
 # Create table
 c.execute('''CREATE TABLE if not exists versions
-             (id integer primary key, origin text, missionId integer, name text, createDate text, toBeArchived integer, toBeDeleted integer)''')
+             (id integer primary key, missionId integer, existsOnMM integer default 1, existsOnMain integer default 0, name text, createDate text, toBeArchivedMM integer default 0, toBeDeletedMM integer default 0, toBeDeletedMain integer default 0, toBeArchivedMain default 0)''')
 
 c.execute('''CREATE TABLE if not exists comments
              (id integer primary key, contents text, user text, createDate text, missionId integer)''')
@@ -42,7 +42,7 @@ c.connection.commit()
 # Just be sure any changes have been committed or they will be lost.
 c.connection.close()
 
-from delete import handleVersionDelete
+from deleteVersion import handleVersionDelete
 from cleanup import handleCleanup
 from createUser import handleCreateUser
 from login import handleLogin

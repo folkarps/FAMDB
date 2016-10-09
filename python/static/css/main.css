@@ -783,3 +783,30 @@ buttongroup a:hover,nav a:active {
     background-color:#ffcb05;
     color:#000
 }
+
+.archiveButton{
+    height: 1.5em;
+    width: 1.5em;
+    background-color:#eaa724;
+    padding: 0.25em;
+    margin: 0.25em
+}
+.deleteButton{
+    height: 1.5em;
+    width: 1.5em;
+    background-color:#eaa724;
+    padding: 0.25em;
+    margin: 0.25em
+}
+.moveButton{
+    height: 1.5em;
+    width: 1.5em;
+    background-color:#eaa724;
+    padding: 0.25em;
+    margin: 0.25em
+}
+
+.hideMe {
+    display:none !important;
+
+}

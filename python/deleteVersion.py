@@ -13,6 +13,11 @@ def handleVersionDelete(request):
         request.wfile.write("Access Denied")
         return
 
-    c.executemany('''update versions set toBeDeleted = 1 where origin = ? and name = ?''',
-                  [o['origin'][0], o['name'][0]])
+    if o['origin'][0] == 'main':
+        property = 'toBeDeletedMain'
+    else:
+        property = 'toBeDeletedMM'
+
+    c.executemany('''update versions set ''' + property + ''' = 1 where and name = ?''',
+                  [o['name'][0]])
     return

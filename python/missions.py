@@ -43,7 +43,10 @@ def handleMissions(request):
 def toDto(missionFromDb, verionsGrouped):
     dto = toDtoHelper(missionFromDb)
     if (dto['id'] in verionsGrouped):
-        dto['versions'] = [toDtoHelper(version) for version in verionsGrouped[dto['id']]]
+        versionsForThisMission = [toDtoHelper(version) for version in verionsGrouped[dto['id']]]
+        finalVersion = sorted(versionsForThisMission, key=lambda x: x['createDate'])
+        dto['versions'] = finalVersion
+
     return dto
 
 

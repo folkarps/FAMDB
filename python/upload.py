@@ -12,18 +12,21 @@ def handleUpload(request):
     missionId = o['missionId'][0]
     if not utils.checkUserPermissions(utils.getCurrentUser(request), 2, missionId):
         request.wfile.write("Access Denied".encode())
+        request.send_response(500)
         return
 
-
+    # This monstrosity of code was copied from the internet, I barely understand how it works
     content_type = request.headers['content-type']
     if not content_type:
         request.wfile.write("Content-Type header doesn't contain boundary".encode())
+        request.send_response(500)
     boundary = content_type.split("=")[1].encode()
     remainbytes = int(request.headers['content-length'])
     line = request.rfile.readline()
     remainbytes -= len(line)
     if not boundary in line:
         request.wfile.write("Content NOT begin with boundary".encode())
+        request.send_response(500)
     line = request.rfile.readline()
     remainbytes -= len(line)
     decode = line.decode()
@@ -31,6 +34,7 @@ def handleUpload(request):
     fn = re.findall(regex, decode)
     if not fn:
         request.wfile.write("Can't find out file name...")
+        request.send_response(500)
     fileName = fn[0]
     fullPath = os.path.join(utils.missionMakerDir, fileName).replace("\n", "")
     line = request.rfile.readline()
@@ -41,6 +45,7 @@ def handleUpload(request):
         out = open(fullPath, 'wb')
     except IOError:
         request.wfile.write("Can't create file to write, do you have permission to write?".encode())
+        request.send_response(500)
 
     preline = request.rfile.readline()
     remainbytes -= len(preline)
@@ -57,9 +62,11 @@ def handleUpload(request):
             out.write(preline)
             preline = line
     request.wfile.write("success".encode())
+    request.send_response(200)
+    # rest of the properties are set by defaults in the table
     c.execute(
-        "insert into versions(origin, missionId, name, createDate, toBeArchived, toBeDeleted) values (?, ?, ?, ?, ?, ?)",
-        ['missionMaking', missionId, fileName, date.today(), 0, 0])
+        "insert into versions(missionId, name, createDate) values (?, ?, ?)",
+        [missionId, fileName, date.today()])
     c.connection.commit()
     c.connection.close()
     return

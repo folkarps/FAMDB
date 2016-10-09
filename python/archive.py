@@ -13,6 +13,11 @@ def handleArchive(request):
         request.wfile.write("Access Denied")
         return
 
-    c.executemany('''update versions set toBeArchived = 1 where origin = ? and name = ?''',
-                  [o['origin'][0], o['name'][0]])
+    if o['origin'][0] == 'main':
+        property = 'toBeArchivedMain'
+    else:
+        property = 'toBeArchivedMM'
+
+    c.executemany('''update versions set ''' + property + ''' = 1 where and name = ?''',
+                  [o['name'][0]])
     return

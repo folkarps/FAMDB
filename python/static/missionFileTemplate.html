@@ -1,0 +1,35 @@
+<div>
+    <div style="display:inline-block" data-class="mmExistsClass">
+
+        <div style="display:inline-block" data-content="name"></div>
+
+        <img src="images/archive.png" alt="Archive" data-template-bind='[
+            {"attribute": "data-missionId", "value": "missionId"}, {"attribute": "data-versionId", "value": "id"}]'
+             class="archiveButton"
+             onclick="archiveVersion(this, 'missionMaking')"/>
+        <img src="images/delete.png" alt="Delete" data-template-bind='[
+            {"attribute": "data-missionId", "value": "missionId"}, {"attribute": "data-versionId", "value": "id"}]'
+             class="deleteButton"
+             onclick="deleteVersion(this, 'missionMaking')"/>
+    </div>
+    <div style="display:inline-block" data-class="mmExistsMainDoesNotClass">
+        <img src="images/move.png" alt="Move" data-template-bind='[
+            {"attribute": "data-missionId", "value": "missionId"}, {"attribute": "data-versionId", "value": "id"}]'
+             class="moveButton" onclick="moveVersion(this)"/>
+    </div>
+    <div style="display:inline-block;float:right" data-class="mainExistsClass">
+
+        <div style="display:inline-block;padding-bottom:0.25em" data-content="name"></div>
+        <img src="images/archive.png" alt="Archive" data-template-bind='[
+            {"attribute": "data-missionId", "value": "missionId"}, {"attribute": "data-versionId", "value": "id"}]'
+             class="archiveButton"
+             onclick="archiveVersion(this, 'main')"/>
+        <img src="images/delete.png" alt="Delete" data-template-bind='[
+                {"attribute": "data-missionId", "value": "missionId"}, {"attribute": "data-versionId", "value": "id"}]'
+             class="deleteButton"
+             onclick="deleteVersion(this, 'main')"/>
+
+    </div>
+
+
+</div>

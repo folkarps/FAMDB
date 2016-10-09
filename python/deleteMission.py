@@ -14,6 +14,8 @@ def handleVersionDelete(request):
         request.wfile.write("Access Denied")
         return
 
-    c.executemany('''update versions set toBeDeleted = 1 where missionId = ?''', {missionId})
-    c.executemany('''delete from missions id = ''', {missionId})
+    c.execute("delete from versions where missionId = ?", [missionId])
+    c.execute("delete from missions where id = ?", [missionId])
+    c.connection.commit()
+    c.connection.close()
     return

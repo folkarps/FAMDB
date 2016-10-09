@@ -37,20 +37,19 @@ class User:
 
 def userToSessionId(user):
     return bytes.decode(
-        base64.b64encode(AES.new(sessionGenKey).encrypt(user['id'].to_bytes(16, byteorder='big'))))
+        base64.b64encode(AES.new(sessionGenKey).encrypt(user['id'].to_bytes(16, byteorder='little'))))
 
 
 def getCurrentUser(request):
     C = cookies.SimpleCookie()
-    C.load(request.getHeader("cookie"))
+    C.load(request.headers["cookie"])
     sessionId = C['sessionId'].value
 
-    userId = AES.new(sessionGenKey).decrypt(sessionId)
+    userId = int.from_bytes(AES.new(sessionGenKey).decrypt(base64.b64decode(sessionId)), byteorder='little')
 
-    conn = sqlite3.connect('famdb.db')
-    conn.row_factory = sqlite3.Row
-
-    c = conn.cursor()
+    if (userId > 9223372036854775807):
+        return None
+    c = getCursor()
     c.execute('''select * from users where id = ?''', [userId])
     user = c.fetchone()
     if user is None:

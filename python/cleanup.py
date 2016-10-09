@@ -18,11 +18,15 @@ def handleCleanup(request):
     if o['origin'] == 'main':
         missionDirPrefix = utils.missionMainDir
         missionArchivePrefix = utils.missionMainArchive
+        toBeArchivedProperty = 'toBeArchivedMain'
+        toBeDeletedProperty = 'toBeDeletedMain'
     else:
         missionDirPrefix = utils.missionMakerDir
         missionArchivePrefix = utils.missionMakerArchive
+        toBeArchivedProperty = 'toBeArchivedMM'
+        toBeDeletedProperty = 'toBeDeletedMM'
 
-    c.execute('''select * from versions where origin = ? and toBeArchived = 1''', o['origin'])
+    c.execute('''select * from versions where ''' + toBeArchivedProperty + ''' = 1''', o['origin'])
     toBeArchived = c.fetchall()
 
     for forArchival in toBeArchived:
@@ -31,8 +35,11 @@ def handleCleanup(request):
                 shutil.copyfileobj(f_in, f_out)
                 os.remove(f_in.name)
 
-    c.execute('''select * from versions where origin = ? and toBeDeleted = 1''', o['origin'])
+    c.execute('''select * from versions where ''' + toBeDeletedProperty + ''' = 1''', o['origin'])
     toBeDeleted = c.fetchall()
     for deleteMe in toBeDeleted:
         os.remove(missionDirPrefix + deleteMe['name'])
+
+    c.execute("update versions set " + toBeArchivedProperty + " = 0, " + toBeDeletedProperty + " = 0 where " +
+              toBeArchivedProperty + " = 1 or " + toBeDeletedProperty + " = 1")
     return
