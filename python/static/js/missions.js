@@ -92,6 +92,10 @@ function LoadData() {
 
         }
 
+        if(!isLoggedIn()) {
+            $(".buttons").css("display", "none");
+        }
+
         setTimeout(function() {
             var resort = false, // re-apply the current sort
                 callback = function(table) {};
@@ -107,13 +111,15 @@ function LoadData() {
 
 function archiveVersion(mission) {
     jQuery.post("/archive", [
-        $(mission).data("missionId")]);
-    //\ refresh or just mark the archive button as unavailable
+        $(mission).data("missionId")], function (data, status, jqXHR) {
+            window.location.href "index.html?missionId="$(mission).data("missionId");
+        });
 }
 function deleteVersion(mission) {
-    jQuery.post("/delete", [
-        $(mission).data("missionId")]);
-    //\ refresh or just mark the delete button as unavailable
+    jQuery.post("/archive", [
+        $(mission).data("missionId")], function (data, status, jqXHR) {
+            window.location.href "index.html?missionId="$(mission).data("missionId");
+        });
 }
 
 function editMission(button) {
