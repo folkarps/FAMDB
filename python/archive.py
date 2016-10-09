@@ -14,5 +14,5 @@ def handleArchive(request):
         return
 
     c.executemany('''update versions set toBeArchived = 1 where origin = ? and name = ?''',
-                  {o['origin'][0], o['name'][0]})
+                  [o['origin'][0], o['name'][0]])
     return
