@@ -24,6 +24,10 @@ def getCursor():
     return c
 
 
+# 0 = new user
+# 1 = trusted MM
+# 2 = low admin (full mission rights)
+# 3 = high admin (full rights)
 class User:
     def __init__(self, email, permissionLevel, login):
         self.email = email
@@ -34,6 +38,7 @@ class User:
 def userToSessionId(user):
     return bytes.decode(
         base64.b64encode(AES.new(sessionGenKey).encrypt(user['id'].to_bytes(16, byteorder='big'))))
+
 
 def getCurrentUser(request):
     C = cookies.SimpleCookie()
@@ -48,4 +53,29 @@ def getCurrentUser(request):
     c = conn.cursor()
     c.execute('''select * from users where id = ?''', [userId])
     user = c.fetchone()
+    if user is None:
+        return None
     return User(user['email'], user['permissionLevel'], user['login'])
+
+
+def AND(one: bool, two: bool):
+    return one and two
+
+
+def OR(one: bool, two: bool):
+    return one or two
+
+
+def checkUserPermissions(user: User, requiredPermissionLevel=-1, missionId=None, collector=OR):
+    authorMatch = True
+    if user is None:
+        return False
+    if missionId is not None:
+        c = getCursor()
+        c.execute("select * from missions where id = ?", [missionId])
+        mission = c.fetchone()
+        if mission is None:
+            authorMatch = False
+        else:
+            authorMatch = user.login in mission['missionAuthor']
+    return collector(user.permissionLevel >= requiredPermissionLevel, authorMatch)

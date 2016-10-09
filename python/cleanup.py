@@ -10,6 +10,11 @@ def handleCleanup(request):
     c = utils.getCursor()
     o = parse_qs(urlparse(request.path).query)
 
+    # if you're a low admin
+    if not utils.checkUserPermissions(utils.getCurrentUser(request), 2):
+        request.wfile.write("Access Denied")
+        return
+
     if o['origin'] == 'main':
         missionDirPrefix = utils.missionMainDir
         missionArchivePrefix = utils.missionMainArchive

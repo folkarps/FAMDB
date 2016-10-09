@@ -35,8 +35,18 @@ def handleSaveMission(request):
         c.execute("insert into missions (missionName) values (?)", [missionJson['missionName']])
         c.execute("select max(id) from missions")
         missionId = c.fetchone()[0]
+        hasPermissions = utils.checkUserPermissions(utils.getCurrentUser(request), 0)
     else:
         missionId = missionJson['missionId']
+        c.execute("select * from missions where id = ?", [missionId])
+        mission = c.fetchone()
+        if mission is None:
+            request.wfile.write("Stop trying to edit a mission that doesn't exist".encode())
+        hasPermissions = utils.checkUserPermissions(utils.getCurrentUser(request), 2, missionId)
+
+    if not hasPermissions:
+        request.wfile.write("Access denied".encode())
+        return
     query, params = constructQuery(missionJson)
     params.append(missionId)
 

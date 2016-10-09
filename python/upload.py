@@ -9,6 +9,12 @@ import utils
 def handleUpload(request):
     c = utils.getCursor()
     o = parse_qs(urlparse(request.path).query)
+    missionId = o['missionId'][0]
+    if not utils.checkUserPermissions(utils.getCurrentUser(request), 2, missionId):
+        request.wfile.write("Access Denied".encode())
+        return
+
+
     content_type = request.headers['content-type']
     if not content_type:
         request.wfile.write("Content-Type header doesn't contain boundary".encode())
@@ -53,7 +59,7 @@ def handleUpload(request):
     request.wfile.write("success".encode())
     c.execute(
         "insert into versions(origin, missionId, name, createDate, toBeArchived, toBeDeleted) values (?, ?, ?, ?, ?, ?)",
-        ['missionMaking', o['missionId'][0], fileName, date.today(), 0, 0])
+        ['missionMaking', missionId, fileName, date.today(), 0, 0])
     c.connection.commit()
     c.connection.close()
     return
