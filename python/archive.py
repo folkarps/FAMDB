@@ -1,23 +1,27 @@
-from urllib.parse import urlparse, parse_qs
+import json
 
 import utils
 
 
 def handleArchive(request):
     c = utils.getCursor()
-    o = parse_qs(urlparse(request.path).query)
-
-    missionId = o['missionId'][0]
+    missionJsonString = request.rfile.read1(99999999).decode()
+    missionJson = json.loads(missionJsonString)
+    missionId = missionJson['missionId']
+    versionId = missionJson['versionId']
+    origin = missionJson['origin']
     # if you're a low admin or this is your mission
     if not utils.checkUserPermissions(utils.getCurrentUser(request), 2, missionId):
         request.wfile.write("Access Denied")
         return
 
-    if o['origin'][0] == 'main':
+    if origin == 'main':
         property = 'toBeArchivedMain'
     else:
         property = 'toBeArchivedMM'
 
-    c.executemany('''update versions set ''' + property + ''' = 1 where and name = ?''',
-                  [o['name'][0]])
+    c.execute('''update versions set ''' + property + ''' = 1 where and id = ?''',
+              [versionId])
+    c.connection.commit()
+    c.connection.close()
     return

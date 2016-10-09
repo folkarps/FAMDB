@@ -74,6 +74,16 @@ function LoadData() {
                     if(!(version.existsOnMM == 1 && version.existsOnMain == 0)) {
                         version.mmExistsMainDoesNotClass = 'hideMe';
                     }
+                    if(version.toBeArchivedMM == 1
+                        || version.toBeDeletedMain) {
+                        version.toBeArchivedMMClass = 'hideMe';
+                        version.toBeDeletedMMClass = 'hideMe';
+                    }
+                    if(version.toBeArchivedMain == 1
+                        || version.toBeDeletedMain == 1) {
+                        version.toBeArchivedMainClass = 'hideMe';
+                        version.toBeDeletedMainClass = 'hideMe';
+                    }
                 });
                 $($("#missionTable").find("[data-missionIdBlah=" + item.id + "]")).loadTemplate("missionFileTemplate.html", item.versions);
             }
@@ -129,29 +139,29 @@ function LoadData() {
 
 function archiveVersion(mission, origin) {
     var data = {}
-    data.missionId = $(mission).data("missionId");
-    data.versionId = $(mission).data("versionId");
+    data.missionId = $(mission).data("missionid");
+    data.versionId = $(mission).data("versionid");
     data.origin = origin;
     jQuery.post("/archive", JSON.stringify(data), function (data, status, jqXHR) {
-            window.location.href = "index.html?missionId=" + $(mission).data("missionId");
+            window.location.href = "index.html?missionId=" + $(mission).data("missionid");
         });
 }
 function deleteVersion(mission, origin) {
     var data = {}
-    data.missionId = $(mission).data("missionId");
-    data.versionId = $(mission).data("versionId");
+    data.missionId = $(mission).data("missionid");
+    data.versionId = $(mission).data("versionid");
     data.origin = origin;
-    jQuery.post("/delete", JSON.stringify(data), function (data, status, jqXHR) {
-            window.location.href = "index.html?missionId=" + $(mission).data("missionId");
+    jQuery.post("/deleteVersion", JSON.stringify(data), function (data, status, jqXHR) {
+            window.location.href = "index.html?missionId=" + $(mission).data("missionid");
         });
 }
 
 function moveVersion(mission) {
     var data = {}
-    data.missionId = $(mission).data("missionId");
-    data.versionId = $(mission).data("versionId");
+    data.missionId = $(mission).data("missionid");
+    data.versionId = $(mission).data("versionid");
     jQuery.post("/move", JSON.stringify(data), function (data, status, jqXHR) {
-            window.location.href = "index.html?missionId=" + $(mission).data("missionId");
+            window.location.href = "index.html?missionId=" + $(mission).data("missionid");
         });
 }
 

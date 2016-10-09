@@ -10,11 +10,11 @@ sessionGenKey = str.encode(datetime.today().ctime())
 __file = open('folders.config')
 
 # //\ upgrade to actually reading properties
-missionMainDir = __file.readline()
-missionMainArchive = __file.readline()
+missionMainDir = __file.readline().replace("\n", "")
+missionMainArchive = __file.readline().replace("\n", "")
 
-missionMakerDir = __file.readline()
-missionMakerArchive = __file.readline()
+missionMakerDir = __file.readline().replace("\n", "")
+missionMakerArchive = __file.readline().replace("\n", "")
 
 
 def getCursor():

@@ -3,11 +3,11 @@
 
         <div style="display:inline-block" data-content="name"></div>
 
-        <img src="images/archive.png" alt="Archive" data-template-bind='[
+        <img src="images/archive.png" alt="Archive" data-class="toBeArchivedMMClass" data-template-bind='[
             {"attribute": "data-missionId", "value": "missionId"}, {"attribute": "data-versionId", "value": "id"}]'
              class="archiveButton"
              onclick="archiveVersion(this, 'missionMaking')"/>
-        <img src="images/delete.png" alt="Delete" data-template-bind='[
+        <img src="images/delete.png" alt="Delete" data-class="toBeDeletedMMClass" data-template-bind='[
             {"attribute": "data-missionId", "value": "missionId"}, {"attribute": "data-versionId", "value": "id"}]'
              class="deleteButton"
              onclick="deleteVersion(this, 'missionMaking')"/>
@@ -20,11 +20,11 @@
     <div style="display:inline-block;float:right" data-class="mainExistsClass">
 
         <div style="display:inline-block;padding-bottom:0.25em" data-content="name"></div>
-        <img src="images/archive.png" alt="Archive" data-template-bind='[
+        <img src="images/archive.png" alt="Archive" data-class="toBeArchivedMainClass" data-template-bind='[
             {"attribute": "data-missionId", "value": "missionId"}, {"attribute": "data-versionId", "value": "id"}]'
              class="archiveButton"
              onclick="archiveVersion(this, 'main')"/>
-        <img src="images/delete.png" alt="Delete" data-template-bind='[
+        <img src="images/delete.png" alt="Delete" data-class="toBeDeletedMainClass" data-template-bind='[
                 {"attribute": "data-missionId", "value": "missionId"}, {"attribute": "data-versionId", "value": "id"}]'
              class="deleteButton"
              onclick="deleteVersion(this, 'main')"/>
