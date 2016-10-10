@@ -46,16 +46,15 @@ def toDto(missionFromDb, verionsGrouped, user: utils.User):
     dto = toDtoHelper(missionFromDb)
     if user is not None:
         if user.permissionLevel >= 2:
-            dto.allowedToMove = True
-            dto.allowedToEdit = True
-            dto.allowedToVersion = True
+            dto['allowedToEdit'] = True
+            dto['allowedToVersion'] = True
         if user.login in missionFromDb['missionAuthor']:
-            dto.allowedToEdit = True
-            dto.allowedToVersion = True
+            dto['allowedToEdit'] = True
+            dto['allowedToVersion'] = True
         if user.login in missionFromDb['missionAuthor'] and user.permissionLevel >= 1:
-            dto.allowedToEdit = True
-            dto.allowedToVersion = True
-            dto.allowedToMove = True
+            dto['allowedToMove'] = True
+            dto['allowedToEdit'] = True
+            dto['allowedToVersion'] = True
     if dto['id'] in verionsGrouped:
         versionsForThisMission = [toDtoHelper(version) for version in verionsGrouped[dto['id']]]
         finalVersion = sorted(versionsForThisMission, key=lambda x: x['createDate'])

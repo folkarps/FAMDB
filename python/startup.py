@@ -50,16 +50,18 @@ from authors import handleAuthors
 from archive import handleArchive
 from move import handleMove
 from missions import handleMissions
+from users import handleUsers
+from setPermissionLevel import handlePermissionLevel
 from upload import handleUpload
 from urllib.parse import urlparse
 
 # add each of the path handlers to the pathHandler map
 
-pathHandlers = {'missions': handleMissions, 'authors': handleAuthors}
+pathHandlers = {'missions': handleMissions, 'authors': handleAuthors, 'users': handleUsers}
 
 postHandlers = {'deleteVersion': handleVersionDelete, 'login': handleLogin, 'signup': handleCreateUser,
                 'move': handleMove, 'archive': handleArchive, 'cleanup': handleCleanup, 'upload': handleUpload,
-                'saveMission': handleSaveMission}
+                'saveMission': handleSaveMission, "setPermissionLevel": handlePermissionLevel}
 
 
 # HTTPRequestHandler class

@@ -43,11 +43,13 @@ def userToSessionId(user):
 def getCurrentUser(request):
     C = cookies.SimpleCookie()
     C.load(request.headers["cookie"])
+    if 'sessionId' not in C:
+        return None
     sessionId = C['sessionId'].value
 
     userId = int.from_bytes(AES.new(sessionGenKey).decrypt(base64.b64decode(sessionId)), byteorder='little')
 
-    if (userId > 9223372036854775807):
+    if userId > 9223372036854775807:
         return None
     c = getCursor()
     c.execute('''select * from users where id = ?''', [userId])
@@ -66,14 +68,14 @@ def OR(one: bool, two: bool):
 
 
 def checkUserPermissions(user: User, requiredPermissionLevel=-1, missionId=None, collector=OR):
-    authorMatch = True
+    authorMatch = False
     if user is None:
         return False
     if missionId is not None:
         c = getCursor()
         c.execute("select * from missions where id = ?", [missionId])
         mission = c.fetchone()
-        if mission is None:
+        if mission is None or user.permissionLevel < 0:
             authorMatch = False
         else:
             authorMatch = user.login in mission['missionAuthor']

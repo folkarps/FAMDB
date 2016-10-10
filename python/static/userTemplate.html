@@ -1,0 +1,10 @@
+<tr class="row" data-id="id">
+    <td class="cellType">
+        <div data-content="login"></div>
+    </td>
+    <td class="cellType">
+        <select onchange="setPermissionLevel(this)" data-value="permissionLevel" data-options="permissionLevels"
+                data-template-bind='[
+                {"attribute": "data-userId", "value": "id"}]'></select>
+    </td>
+</tr>
