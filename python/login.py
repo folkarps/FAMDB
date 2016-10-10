@@ -21,6 +21,7 @@ def handleLogin(request):
     if sha256_crypt.verify(passw, user['password']):
         cookie = cookies.SimpleCookie()
         cookie['sessionId'] = utils.userToSessionId(user)
+        cookie['permissionLevel'] = user['permissionLevel']
         request.send_response(200)
         request.send_header('set-cookie', cookie.output(header=''))
         request.end_headers()

@@ -13,6 +13,15 @@ function isLoggedIn() {
     return document.cookie.includes("sessionId");
 }
 
+function getPermissionLevel() {
+    parts = document.cookie.split(" ");
+    for(var i = 0; i < parts.length; i++) {
+        if(parts[i].includes("permissionLevel")) {
+            return parseInt(parts[i].replace("permissionLevel=", ""));
+        }
+    }
+}
+
 function Login() {
     $("#errorLogin").text("");
     var data = JSON.stringify({login:$("#loginName").val(), password:$("#PasswordInput").val() })

@@ -32,17 +32,31 @@ def handleMissions(request):
     #  we want a map so that we can do key access
     versionMap = dict(versionsGroupedByMission)
 
+    user = utils.getCurrentUser(request)
+
     # transform the row objects into objects that can be serialized
-    m = [toDto(x, versionMap) for x in missionsFromDb]
+    m = [toDto(x, versionMap, user) for x in missionsFromDb]
     encode = json.dumps(m).encode()
     request.wfile.write(encode)
     return
 
 
 # copy the variables out of the non-serializable db object into a blank object
-def toDto(missionFromDb, verionsGrouped):
+def toDto(missionFromDb, verionsGrouped, user: utils.User):
     dto = toDtoHelper(missionFromDb)
-    if (dto['id'] in verionsGrouped):
+    if user is not None:
+        if user.permissionLevel >= 2:
+            dto.allowedToMove = True
+            dto.allowedToEdit = True
+            dto.allowedToVersion = True
+        if user.login in missionFromDb['missionAuthor']:
+            dto.allowedToEdit = True
+            dto.allowedToVersion = True
+        if user.login in missionFromDb['missionAuthor'] and user.permissionLevel >= 1:
+            dto.allowedToEdit = True
+            dto.allowedToVersion = True
+            dto.allowedToMove = True
+    if dto['id'] in verionsGrouped:
         versionsForThisMission = [toDtoHelper(version) for version in verionsGrouped[dto['id']]]
         finalVersion = sorted(versionsForThisMission, key=lambda x: x['createDate'])
         dto['versions'] = finalVersion

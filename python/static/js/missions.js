@@ -57,6 +57,9 @@ function LoadData() {
             }else {
                 item.revisionClass = ''
             }
+            if(!item.allowedToEdit) {
+                item.editClass = 'hideMe';
+            }
         })
 
         $("#missionTable > tbody").loadTemplate("missionTemplate.html",
@@ -71,16 +74,16 @@ function LoadData() {
                     if(version.existsOnMM == 0) {
                         version.mmExistsClass = 'hideMe';
                     }
-                    if(!(version.existsOnMM == 1 && version.existsOnMain == 0)) {
+                    if(!(version.existsOnMM == 1 && version.existsOnMain == 0) || !item.allowedToMove) {
                         version.mmExistsMainDoesNotClass = 'hideMe';
                     }
-                    if(version.toBeArchivedMM == 1
-                        || version.toBeDeletedMain) {
+                    if((version.toBeArchivedMM == 1
+                        || version.toBeDeletedMain) || !item.allowedToVersion) {
                         version.toBeArchivedMMClass = 'hideMe';
                         version.toBeDeletedMMClass = 'hideMe';
                     }
-                    if(version.toBeArchivedMain == 1
-                        || version.toBeDeletedMain == 1) {
+                    if((version.toBeArchivedMain == 1
+                        || version.toBeDeletedMain == 1) || !item.allowedToVersion) {
                         version.toBeArchivedMainClass = 'hideMe';
                         version.toBeDeletedMainClass = 'hideMe';
                     }
