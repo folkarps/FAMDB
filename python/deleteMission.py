@@ -11,6 +11,8 @@ def handleVersionDelete(request):
 
     # if you're a low admin or this is your mission
     if utils.checkUserPermissions(utils.getCurrentUser(request), 2, missionId):
+        request.send_response(500)
+        request.end_headers()
         request.wfile.write("Access Denied")
         return
 

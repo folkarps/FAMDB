@@ -35,7 +35,9 @@ function Login() {
             }else {
                 $("#errorLogin").text(data);
             }
-    })
+    }).fail(function(data, status, jqXHR) {
+        $("#errorLogin").text(data.responseText);
+  });
 }
 
 function SignUp() {
@@ -53,7 +55,9 @@ function SignUp() {
             }else {
                 $("#errorSignup").text(data);
             }
-    });
+    }).fail(function(data, status, jqXHR) {
+        alert(data.responseText);
+  });
 }
 
 // Refresh page. If user is on index.html it'll only reload the data

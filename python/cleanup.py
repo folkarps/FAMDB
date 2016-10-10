@@ -12,7 +12,9 @@ def handleCleanup(request):
 
     # if you're a low admin
     if not utils.checkUserPermissions(utils.getCurrentUser(request), 2):
-        request.wfile.write("Access Denied")
+        request.send_response(500)
+        request.end_headers()
+        request.wfile.write("Access Denied".encode())
         return
 
     if o['origin'] == 'main':

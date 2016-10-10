@@ -14,6 +14,8 @@ def handleMove(request):
     # If you're a MM user and this is your mission, or you're a low admin
     if not (utils.checkUserPermissions(user, 1, missionId=missionId, collector=utils.AND) or utils.checkUserPermissions(
             user, 2)):
+        request.send_response(500)
+        request.end_headers()
         request.wfile.write("Access Denied".encode())
         return
 

@@ -152,9 +152,11 @@ function WriteMission() {
         if(status == "success") {
             window.location.href = "index.html?missionId="+data;
         }else {
-            MissionSaveError(data);
+            MissionSaveError(data.responseText);
         }
-    });
+    }).fail(function(data, status, jqXHR) {
+        MissionSaveError(data.responseText);
+  });
 
     
     return false;

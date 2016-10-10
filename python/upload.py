@@ -11,30 +11,34 @@ def handleUpload(request):
     o = parse_qs(urlparse(request.path).query)
     missionId = o['missionId'][0]
     if not utils.checkUserPermissions(utils.getCurrentUser(request), 2, missionId):
-        request.wfile.write("Access Denied".encode())
         request.send_response(500)
+        request.end_headers()
+        request.wfile.write("Access Denied".encode())
         return
 
     # This monstrosity of code was copied from the internet, I barely understand how it works
     content_type = request.headers['content-type']
     if not content_type:
-        request.wfile.write("Content-Type header doesn't contain boundary".encode())
         request.send_response(500)
+        request.end_headers()
+        request.wfile.write("Content-Type header doesn't contain boundary".encode())
     boundary = content_type.split("=")[1].encode()
     remainbytes = int(request.headers['content-length'])
     line = request.rfile.readline()
     remainbytes -= len(line)
     if not boundary in line:
-        request.wfile.write("Content NOT begin with boundary".encode())
         request.send_response(500)
+        request.end_headers()
+        request.wfile.write("Content NOT begin with boundary".encode())
     line = request.rfile.readline()
     remainbytes -= len(line)
     decode = line.decode()
     regex = r'Content-Disposition.*name="upload_file"; filename="(.*)".*'
     fn = re.findall(regex, decode)
     if not fn:
-        request.wfile.write("Can't find out file name...")
         request.send_response(500)
+        request.end_headers()
+        request.wfile.write("Can't find out file name...")
     fileName = fn[0]
     fullPath = os.path.join(utils.missionMakerDir, fileName).replace("\n", "")
     line = request.rfile.readline()
@@ -44,8 +48,9 @@ def handleUpload(request):
     try:
         out = open(fullPath, 'wb')
     except IOError:
-        request.wfile.write("Can't create file to write, do you have permission to write?".encode())
         request.send_response(500)
+        request.end_headers()
+        request.wfile.write("Can't create file to write, do you have permission to write?".encode())
 
     preline = request.rfile.readline()
     remainbytes -= len(preline)
