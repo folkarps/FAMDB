@@ -7,14 +7,13 @@ from Crypto.Cipher import AES
 
 sessionGenKey = str.encode(datetime.today().ctime())
 
-__file = open('folders.config')
+__props = dict(line.strip().split('=') for line in open('folders.config'))
 
-# //\ upgrade to actually reading properties
-missionMainDir = __file.readline().replace("\n", "")
-missionMainArchive = __file.readline().replace("\n", "")
+missionMainDir = __props['missionMainDir']
+missionMainArchive = __props['missionMainArchive']
 
-missionMakerDir = __file.readline().replace("\n", "")
-missionMakerArchive = __file.readline().replace("\n", "")
+missionMakerDir = __props['missionMakerDir']
+missionMakerArchive = __props['missionMakerArchive']
 
 
 def getCursor():
