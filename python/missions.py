@@ -86,7 +86,7 @@ def constructQuery(params):
         missionTypeString = ["'{0}'".format(w) for w in params['missionTypes[]']]
         query.append(str.format("missionType in({})", ",".join(missionTypeString)))
     if "name" in params:
-        query.append("missionName  = ?")
+        query.append("missionName  like '%?%'")
         p.append(params['name'][0])
     if "playerMax" in params:
         query.append("missionPlayers  <= ? ")

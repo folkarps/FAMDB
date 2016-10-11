@@ -35,6 +35,9 @@ c.execute('''CREATE TABLE if not exists versions
 c.execute('''CREATE TABLE if not exists comments
              (id integer primary key, contents text, user text, createDate text, missionId integer)''')
 
+c.execute('''CREATE TABLE if not exists sessions
+             (id integer primary key, missionNames, date text, host text, isActive integer)''')
+
 # Save (commit) the changes
 c.connection.commit()
 

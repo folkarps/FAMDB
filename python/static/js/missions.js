@@ -169,7 +169,7 @@ function moveVersion(mission) {
 }
 
 function editMission(button) {
-        window.location.href = "form.html?missionId=" + $(button).data("missionid");
+        window.location.href = "missionForm.html?missionId=" + $(button).data("missionid");
 }
 
 function uploadFile(submitButton){
