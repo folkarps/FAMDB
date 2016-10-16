@@ -37,6 +37,8 @@ def handleMissions(request):
     # transform the row objects into objects that can be serialized
     m = [toDto(x, versionMap, user) for x in missionsFromDb]
     encode = json.dumps(m).encode()
+    request.send_response(200)
+    request.end_headers()
     request.wfile.write(encode)
     return
 
@@ -46,6 +48,7 @@ def toDto(missionFromDb, verionsGrouped, user: utils.User):
     dto = toDtoHelper(missionFromDb)
     if user is not None:
         if user.permissionLevel >= 2:
+            dto['allowedToMove'] = True
             dto['allowedToEdit'] = True
             dto['allowedToVersion'] = True
         if user.login in missionFromDb['missionAuthor']:

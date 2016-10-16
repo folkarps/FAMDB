@@ -78,7 +78,7 @@ function LoadData() {
                         version.mmExistsMainDoesNotClass = 'hideMe';
                     }
                     if((version.toBeArchivedMM == 1
-                        || version.toBeDeletedMain) || !item.allowedToVersion) {
+                        || version.toBeDeletedMM) || !item.allowedToVersion) {
                         version.toBeArchivedMMClass = 'hideMe';
                         version.toBeDeletedMMClass = 'hideMe';
                     }
@@ -185,6 +185,7 @@ function uploadFile(submitButton){
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // Every thing ok, file uploaded
                 console.log(xhr.responseText); // handle response.
+                window.location.href = "index.html?missionId=" + $(button).data("missionid");
             }
         };
         fd.append("upload_file", file);

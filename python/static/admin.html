@@ -30,7 +30,7 @@
                     <a href="sessions.html" id="sessionsButton">Sessions</a>
                 </li>
                 <li>
-                    <a onclick="onCleanup(this)" id="cleanup">Cleanup</a>
+                    <a onclick=OpenPopup("#deleteWindow"); id="cleanup">Cleanup</a>
                 </li>
 
                 <li>
@@ -67,76 +67,21 @@
       <p>&copy; 2016 <a href="http://www.folkarps.com">Folk ARPS</a></p>
     </footer>
 
-    <div class="popupWindow" id="loginWindow">
-        <div id="loginScreen">
-            <label for="loginName">Username</label><br>
-            <input class="searchBox" id="loginName" maxlength="56" name=
-            "loginName" type="text" value=""><br>
-            <label for="loginName">Password</label><br>
-            <input class="searchBox" id="PasswordInput" maxlength="56" name=
-            "PasswordInput" type="password" value=""><br>
-            <a id="forgottonPassword">Forgotten
-            your password?</a>
-			<br><span id="errorLogin"></span>
-			<buttongroup>
+    <div class="popupWindow" id="deleteWindow">
+        <span>Are you sure you want cleanup the missions?</span>
+        <div>Both Arma servers MUST be off.</div>
+        <buttongroup>
             <ul>
                 <li>
-                    <a href="#" id="loginWindowCancel">Cancel</a>
+                    <a href="#" id="deleteWindowCancel" onclick=
+                            "HidePopup('#deleteWindow')">Cancel</a>
                 </li>
 
                 <li>
-                    <a href="#" id="loginWindowSignup">SignUp</a>
-                </li>
-
-                <li>
-                    <a href="#" id="loginWindowOk">Login</a>
+                    <a href="#" id="deleteWindowOk" onclick="cleanup()">Yes</a>
                 </li>
             </ul>
-			</buttongroup>
-        </div>
-
-        <div id="forgottenScreen" style="display:none">
-            <label for="email">Email</label><br>
-            <input class="searchBox" id="forgottonUsername" maxlength="56"
-            name="email" type="email" value=""><br>
-			<buttongroup>
-				<ul>
-					<li>
-						<a href="#" id="forgottenWindowCancel">Cancel</a>
-					</li>
-
-					<li>
-						<a href="#" id="forgottenWindowOk">Send</a>
-					</li>
-				</ul>
-			</buttongroup>
-			<br>
-			<span id="errorForgot"></span>
-        </div>
-
-        <div id="signupScreen" style="display:none">
-            <label for="loginName">Username</label><br>
-            <input class="searchBox" id="signupName" maxlength="56" name=
-            "loginName" type="text" value=""><br>
-            <label for="PasswordInput">Password</label><br>
-            <input class="searchBox" id="signupPassword" maxlength="56" name=
-            "PasswordInput" type="password" value=""><br>
-            <label for="email">Email</label><br>
-            <input class="searchBox" id="signupEmail" maxlength="56" name=
-            "email" type="email" value=""><br>
-            <span id="errorSignup"></span>
-			<buttongroup>
-            <ul>
-                <li>
-                    <a href="#" id="signupWindowCancel">Cancel</a>
-                </li>
-
-                <li>
-                    <a href="#" id="signupWindowOk">SignUp</a>
-                </li>
-            </ul>
-			</buttongroup>
-        </div>
+        </buttongroup>
     </div>
     <div class="backgroundPopup" id="backgroundPopup"></div><script src=
     "js/jquery-2.1.0.js" type="text/javascript"></script> <script src="js/parse-1.2.16.min.js" type="text/javascript"></script> <script src="js/moment.min.js" type="text/javascript"></script> <script src="js/popup.js" type="text/javascript"></script> <script src="js/user.js" type="text/javascript"></script> <script src="js/jquery.tablesorter.js" type="text/javascript"></script>

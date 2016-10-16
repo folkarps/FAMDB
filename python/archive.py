@@ -22,8 +22,10 @@ def handleArchive(request):
     else:
         property = 'toBeArchivedMM'
 
-    c.execute('''update versions set ''' + property + ''' = 1 where and id = ?''',
+    c.execute('''update versions set ''' + property + ''' = 1 where id = ?''',
               [versionId])
     c.connection.commit()
     c.connection.close()
+    request.send_response(200)
+    request.end_headers()
     return

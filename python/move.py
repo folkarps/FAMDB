@@ -29,4 +29,6 @@ def handleMove(request):
         c.connection.commit()
         c.connection.close()
 
+    request.send_response(200)
+    request.end_headers()
     return

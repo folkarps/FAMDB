@@ -78,7 +78,7 @@ function editSession(button) {
 
 
 function openDeletePopup(button) {
-    window.delMissionId = $(button).data("sessionid");
+    window.delSessionId = $(button).data("sessionid");
     OpenPopup("#deleteWindow");
 }
 

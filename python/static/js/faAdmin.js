@@ -27,6 +27,11 @@ function setPermissionLevel(select) {
   });
 }
 
+function cleanup() {
+    jQuery.post("/cleanup", {}, function(data, status, jqXHR) {
+        window.location.href = "index.html"
+    });
+}
 $("#getout").hide();
 UpdateLoginButton();
 LoadUsers();
