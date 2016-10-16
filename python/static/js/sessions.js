@@ -72,6 +72,25 @@ function LoadData() {
     });
 }
 
+function editSession(button) {
+        window.location.href = "sessionForm.html?sessionId=" + $(button).data("sessionid");
+}
+
+
+function openDeletePopup(button) {
+    window.delMissionId = $(button).data("sessionid");
+    OpenPopup("#deleteWindow");
+}
+
+function deleteSession() {
+    var sessionId = window.delSessionId;
+    var data = {sessionId:sessionId};
+    jQuery.post("/deleteSession", JSON.stringify(data), function(data, status, jqXHR) {
+            window.location.href = "index.html";
+    });
+
+}
 if(getPermissionLevel() < 2) {
     $("#AddButton").hide()
 }
+

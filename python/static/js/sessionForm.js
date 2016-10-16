@@ -3,6 +3,30 @@ $( "#missionName" ).autocomplete({
   select: function( event, ui ) { addMission(ui.item.value);}
 });
 
+function loadSession() {
+    //load mission if exists
+    var queryDict = getQueryDict();
+
+    if(queryDict['sessionId'] != null) {
+        jQuery.get("/sessions", queryDict, function (data, status, jqXHR) {
+            var sessions = eval(data);
+            if(sessions.length > 0) {
+                var session = sessions[0]
+                $('.editMissionsTitle').append(' Edit Session');
+                $('#editMissionsHeader').children().append('Edit Session');
+                $("#sessionHost").val(session.host);
+                $("#sessionName").val(session.name);
+                $("#sessionPlayers").val(session.players);
+                $("#sessionDate").val(session.date);
+                $("#missionList").loadTemplate("sessionMissionTemplate.html", session.missionNamesList.map(function(item){return {missionName:item};}));
+            }
+        });
+    }else {
+
+                $('.editMissionsTitle').append(' Add Session');
+                $('#editMissionsHeader').children().append('Add Session');
+    }
+}
 function getMissionNames(request, response) {
     var params = {};
     params['name'] = request.term;
@@ -55,7 +79,7 @@ function saveSession() {
     params['missionNames'] = [];
     params['date'] = $("#sessionDate").val();
     $("#missionList").find(".missionNameDiv").toArray().forEach(function(item){
-    params['missionNames'].push(item.textContent)
+        params['missionNames'].push(item.textContent)
     });
 
     if (params['missionNames'].length == 0) {
@@ -77,3 +101,5 @@ function saveSession() {
 function MissionSaveError(string) {
     $("#errorEdit").text(string);
 }
+
+loadSession();

@@ -36,7 +36,7 @@ c.execute('''CREATE TABLE if not exists comments
              (id integer primary key, contents text, user text, createDate text, missionId integer)''')
 
 c.execute('''CREATE TABLE if not exists sessions
-             (id integer primary key, missionNames, date text, host text, name text, players integer)''')
+             (id integer primary key, missionNames text, date text, host text, name text, players integer)''')
 
 # Save (commit) the changes
 c.connection.commit()
@@ -52,6 +52,7 @@ from login import handleLogin
 from authors import handleAuthors
 from editSession import handleEditSession
 from deleteMission import handleMissionDelete
+from deleteSession import handleSessionDelete
 from session import handleGetSession
 from archive import handleArchive
 from move import handleMove
@@ -69,7 +70,8 @@ pathHandlers = {'missions': handleMissions, 'authors': handleAuthors, 'users': h
 postHandlers = {'deleteVersion': handleVersionDelete, 'login': handleLogin, 'signup': handleCreateUser,
                 'move': handleMove, 'archive': handleArchive, 'cleanup': handleCleanup, 'upload': handleUpload,
                 'saveMission': handleSaveMission, "setPermissionLevel": handlePermissionLevel,
-                "editSession": handleEditSession, "deleteMission": handleMissionDelete}
+                "editSession": handleEditSession, "deleteSession": handleSessionDelete,
+                "deleteMission": handleMissionDelete}
 
 
 # HTTPRequestHandler class

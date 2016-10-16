@@ -13,7 +13,14 @@
     </td>
 </tr>
 <tr id="descRow" class="row descRow">
-    <td data-content="missionNamesList" data-format="missionNameListFormatter" class="cellDropdown" colspan="10">
+    <td class="cellDropdown" colspan="10">
+        <div data-content="missionNamesList" data-format="missionNameListFormatter"></div>
+        <ul class="buttons" data-class='editClass'>
+            <li><a data-template-bind='[
+     {"attribute": "data-sessionId", "value": "id"}]' onclick="editSession(this)">Edit</a></li>
 
+            <li style="float:right"><a data-template-bind='[
+                {"attribute": "data-sessionId", "value": "id"}]' onclick="openDeletePopup(this)">Delete</a></li>
+        </ul>
     </td>
 </tr>
