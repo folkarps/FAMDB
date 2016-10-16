@@ -201,8 +201,16 @@ function updateFileLabel(uploadSystem) {
     }
     div.innerHTML = (text)
 }
-function getQueryDict() {
-    queryDict = {}
-   location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]})
-   return queryDict;
+function openDeletePopup(button) {
+    window.delMissionId = $(button).data("missionid");
+    OpenPopup("#deleteWindow");
+}
+
+function deleteMission() {
+    var missionId = window.delMissionId;
+    var data = {missionId:missionId};
+    jQuery.post("/deleteMission", JSON.stringify(data), function(data, status, jqXHR) {
+            window.location.href = "index.html";
+    });
+
 }

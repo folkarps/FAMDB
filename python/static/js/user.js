@@ -20,6 +20,7 @@ function getPermissionLevel() {
             return parseInt(parts[i].replace("permissionLevel=", ""));
         }
     }
+    return -1;
 }
 
 function Login() {

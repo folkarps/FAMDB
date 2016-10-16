@@ -25,10 +25,10 @@
     <nav>
         <ul>
             <li>
-                <a href="missionForm.html" id="AddButton">Add</a>
+                <a href="sessionForm.html" id="AddButton">Add</a>
             </li>
             <li>
-                <a href="sessions.html" id="sessionButton">Sessions</a>
+                <a href="index.html" id="missionButton">Missions</a>
             </li>
             <li>
                 <a href="admin.html" id="adminButton">Admin</a>
@@ -42,89 +42,11 @@
 </header><!-- NOTE: The wrapper div is centered via CSS. -->
 
 <div id="wrapper">
-    <section id="filters">
-        <div id="filtersHeader">
-            <h3>Filters</h3>
-
-            <p>These filters operate at the same time (an AND query). The
-                more filters you use, the more demanding the search.</p>
-        </div>
-
-        <form action="#" id="form_filters" method="post" name=
-                "form_filters">
-
-            <fieldset>
-                <legend align="left">Map</legend>
-                <select id=
-                                "islandSelected" name="islandSelected">
-                    <option>
-                        All Maps
-                    </option>
-                </select>
-            </fieldset>
-
-            <fieldset id="missionTypes">
-
-            </fieldset>
-
-            <fieldset>
-                <legend align="left">Slots</legend>
-                <input class="slots"
-                       id="slotsMin" maxlength="3" name="slotsMin" type="text"
-                       value="1"><label for="slotsMin">Min</label> <input class=
-                                                                                  "slots" id="slotsMax" maxlength="3"
-                                                                          name="slotsMax" type=
-                                                                                  "text" value="255"><label
-                    for="slotsMax">Max</label>
-            </fieldset>
-
-            <fieldset>
-                <legend align="left">Playcount</legend>
-                <input class="slots"
-                       id="playcountMin" maxlength="3" name="playcountMin" type="text"
-                       value="0"><label for="playcountMin">Min</label> <input class=
-                                                                                      "slots" id="playcountMax"
-                                                                              maxlength="3" name="playcountMax" type=
-                                                                                      "text" value="999"><label
-                    for="Max">Max</label>
-            </fieldset>
-
-            <fieldset>
-                <legend align="left">Filter</legend>
-                <label for=
-                               "searchText">Text</label><br>
-                <input class="searchBox" id="searchText" maxlength="36"
-                       name="searchText" type="text" value=""> <select id=
-                                                                               "authorSelected" name="authorSelected">
-                <option>
-                    All Authors
-                </option>
-            </select><br><br>
-                <table>
-                    <tr>
-                        <td><input id="missionAny" name="missionFilter" type=
-                                "radio" checked><label for="missionAll">All</label></td>
-                        <td><input id="missionWorking" name="missionFilter" type=
-                                "radio"><label for="missionWorking">Working</label></td>
-                    </tr>
-                    <tr>
-                        <td><input id="missionBroken" name="missionFilter" type=
-                                "radio"><label for="missionBroken">Broken</label></td>
-                        <td><input id="missionNeedsRevision" name="missionFilter" type=
-                                "radio"><label for="missionNeedsRevision">Revision</label></td>
-                    </tr>
-                </table>
-            </fieldset>
-            <input type="reset" value="Reset">&nbsp;<input id=
-                                                                   "submitButton" type="submit" value="Apply"><br>
-        </form>
-    </section>
 
     <section id="missionsList">
         <div id="missionsListHeader">
 
-            <h3>Missions<a href="missionForm.html">
-                <!--<i title="Add a new mission"  class="fa fa-plus-square-o fa-fw"></i>--></a></h3>
+            <h3>Sessions</h3>
         </div>
 
         <div id="missionsListTableContainer">
@@ -132,41 +54,22 @@
                     "missionTable">
                 <thead class="rowHeader">
                 <tr>
-                    <th class="cellHeaderMissions">
-                        <a href="#">Mission</a>
+                    <th class="cellHeaderSession">
+                        <a href="#">Session</a>
                     </th>
 
-                    <th class="cellHeaderType">
-                        <a href="#">Type</a>
+                    <th class="cellHeaderDate">
+                        <a href="#">Date</a>
                     </th>
 
-                    <th class="cellHeaderSlots">
-                        <a href="#">Slots</a>
+                    <th class="cellHeaderHost">
+                        <a href="#">Host</a>
                     </th>
 
-                    <th class="cellHeaderIsland">
-                        <a href="#">Island</a>
+                    <th class="cellHeaderPlayers">
+                        <a href="#">Players</a>
                     </th>
 
-                    <th class="cellHeaderPlayed">
-                        <a href="#">#</a>
-                    </th>
-
-                    <th class="cellHeaderLastPlayed">
-                        <a href="#">Last</a>
-                    </th>
-
-                    <th class="cellHeaderAuthor">
-                        <a href="#">Author(s)</a>
-                    </th>
-
-                    <th class="cellHeaderModified">
-                        <a href="#">Modified</a>
-                    </th>
-
-                    <th class="cellHeaderBroken">&nbsp;</th>
-
-                    <th class="cellHeaderRevision">&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody></tbody>
@@ -264,7 +167,7 @@
             </li>
 
             <li>
-                <a href="#" id="deleteWindowOk" onclick="deleteMission()">Yes</a>
+                <a href="#" id="deleteWindowOk" onclick="DeleteRow()">Yes</a>
             </li>
         </ul>
     </buttongroup>
@@ -273,18 +176,11 @@
 <div class="backgroundPopup" id="backgroundPopup"></div>
 <script src="js/jquery-2.1.0.js" type="text/javascript"></script>
 <script src="js/types.js" type="text/javascript"></script>
-<script>
-        GetIslandsList("#islandSelected");
-        GenerateMissionTypesCheckbox("#missionTypes");
-
-
-</script>
-<script src="js/parse-1.2.16.min.js" type="text/javascript"></script>
 <script src="js/moment.min.js" type="text/javascript"></script>
 <script src="js/popup.js" type="text/javascript"></script>
 <script src="js/user.js" type="text/javascript"></script>
 <script src="js/jquery.tablesorter.js" type="text/javascript"></script>
-<script src="js/missions.js" type="text/javascript"></script>
+<script src="js/sessions.js" type="text/javascript"></script>
 <script src="js/common.js" type="text/javascript"></script>
 <script src="js/init.js" type="text/javascript"></script>
 <script src="js/jquery.loadTemplate-1.5.0.js" type="text/javascript"></script>

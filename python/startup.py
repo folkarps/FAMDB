@@ -36,7 +36,7 @@ c.execute('''CREATE TABLE if not exists comments
              (id integer primary key, contents text, user text, createDate text, missionId integer)''')
 
 c.execute('''CREATE TABLE if not exists sessions
-             (id integer primary key, missionNames, date text, host text, isActive integer)''')
+             (id integer primary key, missionNames, date text, host text, name text, players integer)''')
 
 # Save (commit) the changes
 c.connection.commit()
@@ -50,6 +50,9 @@ from cleanup import handleCleanup
 from createUser import handleCreateUser
 from login import handleLogin
 from authors import handleAuthors
+from editSession import handleEditSession
+from deleteMission import handleMissionDelete
+from session import handleGetSession
 from archive import handleArchive
 from move import handleMove
 from missions import handleMissions
@@ -60,11 +63,13 @@ from urllib.parse import urlparse
 
 # add each of the path handlers to the pathHandler map
 
-pathHandlers = {'missions': handleMissions, 'authors': handleAuthors, 'users': handleUsers}
+pathHandlers = {'missions': handleMissions, 'authors': handleAuthors, 'users': handleUsers,
+                'sessions': handleGetSession}
 
 postHandlers = {'deleteVersion': handleVersionDelete, 'login': handleLogin, 'signup': handleCreateUser,
                 'move': handleMove, 'archive': handleArchive, 'cleanup': handleCleanup, 'upload': handleUpload,
-                'saveMission': handleSaveMission, "setPermissionLevel": handlePermissionLevel}
+                'saveMission': handleSaveMission, "setPermissionLevel": handlePermissionLevel,
+                "editSession": handleEditSession, "deleteMission": handleMissionDelete}
 
 
 # HTTPRequestHandler class

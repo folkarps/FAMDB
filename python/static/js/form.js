@@ -9,13 +9,6 @@ UpdateLoginButton();
 $("#missionAuthors").hide();
 $("#editMissionsAuthorToggle").hide();
 
-function getQueryDict() {
-    queryDict = {}
-   location.search.substr(1).split("&").forEach(function(item) {queryDict[item.split("=")[0]] = item.split("=")[1]})
-   return queryDict;
-}
-
-
 function LoadMission() {
     //load mission if exists
     var queryDict = getQueryDict();

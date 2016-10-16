@@ -11,7 +11,7 @@ def handleMissions(request):
     o = parse_qs(urlparse(request.path).query)
     query, params = constructQuery(o)
     # retrieve all the missions that match our parameters
-    c.execute('''select * from missions where ''' + query, params)
+    c.execute("select * from missions where " + query, params)
     missionsFromDb = c.fetchall()
 
     # if any missions were returned, return all versions associated with those missions
@@ -86,8 +86,8 @@ def constructQuery(params):
         missionTypeString = ["'{0}'".format(w) for w in params['missionTypes[]']]
         query.append(str.format("missionType in({})", ",".join(missionTypeString)))
     if "name" in params:
-        query.append("missionName  like '%?%'")
-        p.append(params['name'][0])
+        query.append("missionName  like ?")
+        p.append("%" + params['name'][0] + "%")
     if "playerMax" in params:
         query.append("missionPlayers  <= ? ")
         p.append(params['playerMax'][0])

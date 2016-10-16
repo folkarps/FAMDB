@@ -23,13 +23,6 @@
         <h1><img alt="Folk Arps" src="images/logo.png"></h1>
     </a>
 
-    <nav>
-        <ul>
-            <li>
-                <a href="missionForm.html" id="AddButton">Add</a>
-            </li>
-        </ul>
-    </nav>
 </header>
 <!-- NOTE: The wrapper div is centered via CSS. -->
 
@@ -42,6 +35,9 @@
         <ul>
             <li>
                 <a href="index.html">Browse Missions</a>
+                <br>
+                <br>
+                <br>
                 <a href="sessions.html">Browse Sessions</a>
             </li>
         </ul>
@@ -65,25 +61,33 @@
                 </div>
 
                 <div id="editMissionsContainerLeft">
+                    <label for="sessionName">Name</label>
+                    <br>
+                    <input id="sessionName" name="name" maxlength="56" type="text">
+                    <br>
                     <label for="sessionHost">Host</label>
                     <br>
                     <input id="sessionHost" name="host" maxlength="56" type="text">
                     <br>
-
-
+                    <span style="display:inline-block;">
+                        <label for="sessionPlayers">Players</label><br>
+                        <input class="slots" id="sessionPlayers" maxlength="3"
+                               name="players" size="3" type="text" value="">
+                         </span>
                 </div>
 
                 <div id="editMissionsContainerRight">
-                    <input type="search" id="missionName">
-                    <button onclick="addMission()">Add</button>
-                    <div id='jqxlistbox'>
-                        <button onclick="removeMission()">Remove</button>
-                    </div>
+                    <label for="missionName">Missions</label>
+                    <br>
+                    <input type="text" id="missionName">
+                    <div id="missionList"></div>
+                </div>
+                <div id="editMissionsContainerBottom">
                 </div>
 
                 <span id="errorEdit"></span>
                 <br>
-                <input id="missionSave" type="button" value="Save">
+                <input id="missionSave" type="button" value="Save" onclick="saveSession()">
                 <br>
             </form>
         </div>
@@ -94,19 +98,21 @@
 </div>
 
 <footer>
-    <p>&copy; 2014 <a href="http://www.folkarps.com">Folk ARPS</a>
+    <p>&copy; 2016 <a href="http://www.folkarps.com">Folk ARPS</a>
     </p>
 </footer>
 
 </body>
 <script src="js/jquery-2.1.0.js" type="text/javascript"></script>
-<script src="js/parse-1.2.16.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="js/jquery.loadTemplate-1.5.0.js" type="text/javascript"></script>
 <script src="js/moment.min.js" type="text/javascript"></script>
 <script src="js/popup.js" type="text/javascript"></script>
 <script src="js/user.js" type="text/javascript"></script>
 <script src="js/common.js" type="text/javascript"></script>
-<script src="js/form.js" type="text/javascript"></script>
 <script src="js/types.js" type="text/javascript"></script>
+<script src="js/sessionForm.js" type="text/javascript"></script>
 <!--<script src="js/add.js" type="text/javascript"></script>-->
 <script src="js/jquery.tablesorter.js" type="text/javascript"></script>
 

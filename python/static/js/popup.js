@@ -34,7 +34,3 @@ $(window).resize(function() {
     CenterPopup("#deleteWindow");
 });
 
-function DeletePopup(row) {
-    window.delRow = row;
-    OpenPopup("#deleteWindow");
-}
