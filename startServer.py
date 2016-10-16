@@ -1,4 +1,7 @@
+import os
+import sys
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+from pathlib import Path
 
 import utils
 from saveMission import handleSaveMission
@@ -17,12 +20,12 @@ c.execute('''CREATE TABLE if not exists missions
                missionAuthor text,
               missionModified text,
               framework text,
-               isBroken integer,
-              needsRevision integer,
+               isBroken integer default 0,
+              needsRevision integer default 0,
                missionPlayers int,
                missionType text,
                missionMap text,
-                playedCounter int,
+                playedCounter int default 0,
                 missionDesc text,
                 missionNotes text)''')
 
@@ -93,14 +96,36 @@ class mainRequestHandler(SimpleHTTPRequestHandler):
             postHandlers[path](self)
         return
 
+    def log_message(self, format, *args):
+        print("%s - - [%s] %s" %
+              (self.address_string(),
+               self.log_date_time_string(),
+               format % args))
+        return
+
 
 def run():
     print('starting server...')
 
     # Server settings
-    # Choose port 8080, for port 80, which is normally used for a http server, you need root access
-    server_address = ('', 8080)
+    server_address = ('', utils.port)
     httpd = HTTPServer(server_address, mainRequestHandler)
+
+    path = Path("famdb.pid")
+    if path.exists():
+        file = open("famdb.pid", "r")
+        pid = int(list(file)[0])
+        serverRunning = utils.isPidRunning(pid)
+        if serverRunning:
+            print('Fatal:Detecting server already running as pid:' + str(pid) + "\nPlease kill this first",
+                  file=sys.stderr)
+            return
+        else:
+            print('Warning:PID file detected, but no running process found, continuing')
+    file = open("famdb.pid", "w+")
+    file.write(str(os.getpid()))
+    file.close()
+
     print('running server...')
     httpd.serve_forever()
 

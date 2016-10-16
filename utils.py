@@ -3,17 +3,20 @@ import sqlite3
 from datetime import datetime
 from http import cookies
 
+import psutil
 from Crypto.Cipher import AES
 
 sessionGenKey = str.encode(datetime.today().ctime())
 
-__props = dict(line.strip().split('=') for line in open('folders.config'))
+__props = dict(line.strip().split('=') for line in open('config.config'))
 
 missionMainDir = __props['missionMainDir']
 missionMainArchive = __props['missionMainArchive']
 
 missionMakerDir = __props['missionMakerDir']
 missionMakerArchive = __props['missionMakerArchive']
+
+port = int(__props['port'])
 
 
 def getCursor():
@@ -79,3 +82,12 @@ def checkUserPermissions(user: User, requiredPermissionLevel=-1, missionId=None,
         else:
             authorMatch = user.login in mission['missionAuthor']
     return collector(user.permissionLevel >= requiredPermissionLevel, authorMatch)
+
+
+def isPidRunning(pid):
+    try:
+        p = psutil.Process(pid)
+    except psutil.NoSuchProcess:
+        return False
+    else:
+        return True
