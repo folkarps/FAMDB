@@ -20,8 +20,10 @@ def handleCreateUser(request):
                   [login, sha256_crypt.encrypt(passw), email, date.today(), 0])
         c.execute('''select * from users where login = ?''', [login])
         user = c.fetchone()
+        if user['id'] == 1:
+            c.execute("update users set permissionLevel = 3 where id = 1")
         cookie = cookies.SimpleCookie()
-        cookie['sessionId'] = utils.userToSessionId(user)
+        cookie['sessionId'] = utils.userRowToSessionId(user)
         request.send_response(200)
         # python has horrible cookie management
         request.send_header('set-cookie', cookie.output(header=''))

@@ -37,13 +37,15 @@ class User:
         self.login = login
 
 
-def userToSessionId(user):
+def userRowToSessionId(user):
     return bytes.decode(
         base64.b64encode(AES.new(sessionGenKey).encrypt(user['id'].to_bytes(16, byteorder='little'))))
 
 
 def getCurrentUser(request):
     C = cookies.SimpleCookie()
+    if request.headers["cookie"] is None:
+        return None
     C.load(request.headers["cookie"])
     if 'sessionId' not in C:
         return None

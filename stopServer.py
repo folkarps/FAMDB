@@ -11,6 +11,7 @@ def stop():
         file = open("famdb.pid")
         pid = int(list(file)[0])
         serverRunning = utils.isPidRunning(pid)
+        file.close()
         if serverRunning:
             os.kill(pid, signal.SIGKILL)
             os.remove("famdb.pid")
