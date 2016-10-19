@@ -20,7 +20,7 @@ def handleLogin(request):
         return
     if sha256_crypt.verify(passw, user['password']):
         cookie = cookies.SimpleCookie()
-        cookie['sessionId'] = utils.userToSessionId(user)
+        cookie['sessionId'] = utils.userRowToSessionId(user)
         request.send_response(200)
         request.send_header('set-cookie', cookie.output(header=''))
         cookie = cookies.SimpleCookie()
