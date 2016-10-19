@@ -86,6 +86,7 @@ class mainRequestHandler(SimpleHTTPRequestHandler):
         if path in pathHandlers:
             pathHandlers[path](self)
         else:
+            self.path = "/static" + self.path
             super().do_GET()
         return
 
