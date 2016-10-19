@@ -160,3 +160,4 @@ function MissionSaveError(string) {
 }
 
 LoadMission();
+GetMissionAuthor();
