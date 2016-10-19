@@ -2,10 +2,14 @@ function UpdateLoginButton() {
     if(document.cookie.includes("sessionId")) {
         $("#LogoutButton").html("<i class='fa fa-sign-out'></i>Logout");
         $("#AddButton").show();
+        if(getPermissionLevel() < 1) {
+            $("#adminButton").hide()
+        }
     }
     else {
         $("#LogoutButton").html("<i class='fa fa-sign-in'></i>Login");
         $("#AddButton").hide();
+        $("#adminButton").hide()
     }
 }
 
