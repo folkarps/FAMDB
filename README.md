@@ -15,6 +15,12 @@ Issues can be reported at https://github.com/Raptoer/FAMDB/issues
 
 Usage
 =====
+After python 3.5+, pip and git have been installed run
+sudo pip install -e git+git://github.com/Raptoer/FAMDB.git@master#egg=FAMDB
+This will download FAMDB to the current directory.
+Then run 
+pip install -r requirementsPosix.txt or pip install -r requirementsWindows.txt depending on your environment
+windows users will then have to install pycrypt manually using a command that I lost.
 
 Starting the server:
 python main.py start
