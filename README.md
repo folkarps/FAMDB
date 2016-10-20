@@ -16,6 +16,7 @@ Issues can be reported at https://github.com/Raptoer/FAMDB/issues
 Usage
 =====
 After python 3.5+, pip and git have been installed run
+
 sudo pip install -e git+git://github.com/Raptoer/FAMDB.git@master#egg=FAMDB
 
 This will download FAMDB to the current directory.
