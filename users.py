@@ -11,7 +11,7 @@ def handleUsers(request):
 
     userDtos = [dict(x) for x in allUsers]
 
-    if user is None:
+    if user is None or user.permissionLevel < 1:
         request.wfile.write("".encode())
         return
 
