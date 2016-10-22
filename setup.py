@@ -2,16 +2,10 @@ from distutils.core import setup
 
 setup(
     name='FAMDB',
-    version='2',
-    package_dir={'': ''},
+    version='2.0.2-alpha',
     url='https://github.com/Raptoer/FAMDB',
     license='',
     author='abarton',
     author_email='Raptoer@gmail.com',
-    description='Arma mission database',
-    packages=[
-        'passlib',
-        'pycrypto',
-        'psutil'
-    ]
+    description='Arma mission database'
 )
