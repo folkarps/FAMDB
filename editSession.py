@@ -13,11 +13,16 @@ def toParams(editSessionJson, sessionId):
     return params
 
 
-def handleEditSession(request):
+def handleEditSession(environ, start_response):
     c = utils.getCursor()
-    editSessionString = request.rfile.read1(99999999).decode()
+    editSessionString = utils.environToContents(environ)
     editSessionJson = json.loads(editSessionString)
     sessionDate = editSessionJson['date']
+
+    # if you're a low admin
+    if not utils.checkUserPermissions(environ['user'], 2):
+        start_response("403 Permission Denied", [])
+        return ["Access Denied".encode()]
 
     if 'id' not in editSessionJson:
         c.execute("insert into sessions (date) values (?)", [sessionDate])
@@ -34,7 +39,5 @@ def handleEditSession(request):
                   [sessionDate, mission])
     c.connection.commit()
     c.connection.close()
-    request.send_header("location", sessionId)
-    request.send_response(201)
-    request.end_headers()
-    return
+    start_response("201 Created", [])
+    return [("location:" + str(sessionId)).encode()]

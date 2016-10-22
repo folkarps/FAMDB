@@ -26,34 +26,32 @@ def constructQuery(missionJson):
     return " , ".join(queryParts), params
 
 
-def handleSaveMission(request):
+def handleSaveMission(environ, start_response):
     c = utils.getCursor()
-    missionJsonString = request.rfile.read1(99999999).decode()
+    missionJsonString = utils.environToContents(environ)
     missionJson = json.loads(missionJsonString)
     # create a blank row, then update that row so that we don't have 2 different statements
     if 'missionId' not in missionJson:
         c.execute("insert into missions (missionName) values (?)", [missionJson['missionName']])
         c.execute("select max(id) from missions")
         missionId = c.fetchone()[0]
-        hasPermissions = utils.checkUserPermissions(utils.getCurrentUser(request), 0)
+        hasPermissions = utils.checkUserPermissions(environ['user'], 0)
     else:
         missionId = missionJson['missionId']
         c.execute("select * from missions where id = ?", [missionId])
         mission = c.fetchone()
         if mission is None:
-            request.wfile.write("Stop trying to edit a mission that doesn't exist".encode())
-        hasPermissions = utils.checkUserPermissions(utils.getCurrentUser(request), 2, missionId)
+            return ["Stop trying to edit a mission that doesn't exist".encode()]
+        hasPermissions = utils.checkUserPermissions(environ['user'], 2, missionId)
 
     if not hasPermissions:
-        request.wfile.write("Access denied".encode())
-        return
+        start_response("403 Permission Denied", [])
+        return ["Access Denied"]
     query, params = constructQuery(missionJson)
     params.append(missionId)
 
     c.execute("update missions set " + query + "where id=?", params)
     c.connection.commit()
     c.connection.close()
-    request.send_header("location", missionId)
-    request.send_response(201)
-    request.end_headers()
-    return
+    start_response("201 Created", [])
+    return [("location=" + str(missionId)).encode()]

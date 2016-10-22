@@ -1,19 +1,19 @@
 import json
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import parse_qs
 
 import utils
 
 
-def handleGetSession(request):
+def handleGetSession(environ, start_response):
     c = utils.getCursor()
-    o = parse_qs(urlparse(request.path).query)
+    o = parse_qs(environ['QUERY_STRING'])
     if "sessionId" in o:
         c.execute("select * from sessions where id = ?", [o['sessionId'][0]])
     else:
         c.execute("select * from sessions")
     sessions = c.fetchall()
 
-    user = utils.getCurrentUser(request)
+    user = environ['user']
     sessionDtos = [dict(x) for x in sessions]
     for x in sessionDtos:
         x['missionNamesList'] = x['missionNames'].split(",")
@@ -21,4 +21,5 @@ def handleGetSession(request):
             if user.permissionLevel >= 2:
                 x['allowedToEdit'] = True
 
-    request.wfile.write(json.dumps(sessionDtos).encode())
+    start_response("200 OK", [])
+    return [json.dumps(sessionDtos).encode()]

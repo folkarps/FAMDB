@@ -3,19 +3,17 @@ import json
 import utils
 
 
-def handleVersionDelete(request):
+def handleVersionDelete(environ, start_response):
     c = utils.getCursor()
-    missionJsonString = request.rfile.read1(99999999).decode()
+    missionJsonString = utils.environToContents(environ)
     missionJson = json.loads(missionJsonString)
     missionId = missionJson['missionId']
     versionId = missionJson['versionId']
     origin = missionJson['origin']
     # if you're a low admin or this is your mission
-    if not utils.checkUserPermissions(utils.getCurrentUser(request), 2, missionId):
-        request.send_response(500)
-        request.end_headers()
-        request.wfile.write("Access Denied".encode())
-        return
+    if not utils.checkUserPermissions(environ['user'], 2, missionId):
+        start_response("403 Permission Denied", [])
+        return ["Access Denied"]
 
     if origin == 'main':
         property = 'toBeDeletedMain'
@@ -25,6 +23,6 @@ def handleVersionDelete(request):
     c.execute('''update versions set ''' + property + ''' = 1 where id = ?''', [versionId])
     c.connection.commit()
     c.connection.close()
-    request.send_response(200)
-    request.end_headers()
-    return
+
+    start_response("200 OK", [])
+    return []

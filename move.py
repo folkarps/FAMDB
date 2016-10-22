@@ -5,19 +5,17 @@ from shutil import copyfile
 import utils
 
 
-def handleMove(request):
-    user = utils.getCurrentUser(request)
-    missionJsonString = request.rfile.read1(99999999).decode()
+def handleMove(environ, start_response):
+    user = environ['user']
+    missionJsonString = utils.environToContents(environ)
     missionJson = json.loads(missionJsonString)
     missionId = missionJson['missionId']
     versionId = missionJson['versionId']
     # If you're a MM user and this is your mission, or you're a low admin
     if not (utils.checkUserPermissions(user, 1, missionId=missionId, collector=utils.AND) or utils.checkUserPermissions(
             user, 2)):
-        request.send_response(500)
-        request.end_headers()
-        request.wfile.write("Access Denied".encode())
-        return
+        start_response("403 Permission Denied", [])
+        return ["Access Denied"]
 
     c = utils.getCursor()
     c.execute("select name from versions where id = ?", [versionId])
@@ -29,6 +27,5 @@ def handleMove(request):
         c.connection.commit()
         c.connection.close()
 
-    request.send_response(200)
-    request.end_headers()
-    return
+    start_response("200 OK", [])
+    return []

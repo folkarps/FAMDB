@@ -1,21 +1,21 @@
 import itertools
 import json
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import parse_qs
 
 import utils
 
 
-def handleMissions(request):
+def handleMissions(environ, start_response):
     c = utils.getCursor()
 
-    o = parse_qs(urlparse(request.path).query)
+    o = parse_qs(environ['QUERY_STRING'])
     query, params = constructQuery(o)
     # retrieve all the missions that match our parameters
     c.execute("select * from missions where " + query, params)
     missionsFromDb = c.fetchall()
 
     # if any missions were returned, return all versions associated with those missions
-    if (len(missionsFromDb) > 0):
+    if len(missionsFromDb) > 0:
         ids = [str(x['id']) for x in missionsFromDb]
         # sqlite can't take lists, so we need to transform it into a string
         #    then format the string into the query so that it doesn't get treated as a string
@@ -32,15 +32,14 @@ def handleMissions(request):
     #  we want a map so that we can do key access
     versionMap = dict(versionsGroupedByMission)
 
-    user = utils.getCurrentUser(request)
+    user = environ['user']
 
     # transform the row objects into objects that can be serialized
     m = [toDto(x, versionMap, user) for x in missionsFromDb]
     encode = json.dumps(m).encode()
-    request.send_response(200)
-    request.end_headers()
-    request.wfile.write(encode)
-    return
+
+    start_response("200 OK", [])
+    return [encode]
 
 
 # copy the variables out of the non-serializable db object into a blank object

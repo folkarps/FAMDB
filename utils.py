@@ -1,12 +1,12 @@
 import base64
 import sqlite3
-from datetime import datetime
-from http import cookies
+from http.cookies import SimpleCookie
 
 import psutil
+from Crypto import Random
 from Crypto.Cipher import AES
 
-sessionGenKey = str.encode(datetime.today().ctime())
+sessionGenKey = Random.new().read(AES.block_size)
 
 __props = dict(line.strip().split('=') for line in open('config.config'))
 
@@ -38,29 +38,34 @@ class User:
 
 
 def userRowToSessionId(user):
-    return bytes.decode(
-        base64.b64encode(AES.new(sessionGenKey).encrypt(user['id'].to_bytes(16, byteorder='little'))))
+    return base64.b64encode(AES.new(sessionGenKey).encrypt(user['sessionKey'])).decode()
 
 
-def getCurrentUser(request):
-    C = cookies.SimpleCookie()
-    if request.headers["cookie"] is None:
+def getCurrentUser(cookie):
+    if 'sessionId' not in cookie:
         return None
-    C.load(request.headers["cookie"])
-    if 'sessionId' not in C:
-        return None
-    sessionId = C['sessionId'].value
+    sessionId = cookie['sessionId'].value
 
-    userId = int.from_bytes(AES.new(sessionGenKey).decrypt(base64.b64decode(sessionId)), byteorder='little')
+    try:
+        sessionKey = AES.new(sessionGenKey).decrypt(base64.b64decode(sessionId))
+        c = getCursor()
+        c.execute('''select * from users where sessionKey = ?''', [sessionKey])
+        user = c.fetchone()
+        if user is None:
+            return None
+        return User(user['email'], user['permissionLevel'], user['login'])
+    except:
+        return None
 
-    if userId > 9223372036854775807:
-        return None
-    c = getCursor()
-    c.execute('''select * from users where id = ?''', [userId])
-    user = c.fetchone()
-    if user is None:
-        return None
-    return User(user['email'], user['permissionLevel'], user['login'])
+
+def environToContents(environ):
+    try:
+        length = int(environ.get('CONTENT_LENGTH', '0'))
+    except ValueError:
+        length = 0
+    if length != 0:
+        return environ['wsgi.input'].read(length).decode()
+    return ""
 
 
 def AND(one: bool, two: bool):
@@ -93,3 +98,13 @@ def isPidRunning(pid):
         return False
     else:
         return True
+
+
+def handleBadSessionIds(environ):
+    if environ['user'] is None:
+        cookie = SimpleCookie(environ['HTTP_COOKIE'])
+        if 'sessionId' in cookie:
+            return [('Set-Cookie', 'sessionId=;expires=Thu, 01 Jan 1970 00:00:00 GMT;MaxAge=-1')]
+        return []
+    else:
+        return []

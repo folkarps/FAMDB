@@ -50,13 +50,13 @@
      {"attribute": "data-missionId", "value": "id"}]' onclick="editMission(this)">Edit</a></li>
 
             <li>
-                <label for="fileinput" class="fileInputLabel">
+                <label data-template-bind='[{"attribute": "for", "value": "fileUploadId"}]' class="fileInputLabel">
                     Browse
                 </label>
                 <span></span>
                 <input onchange="updateFileLabel(this)"
                        data-template-bind='[{"attribute": "data-missionId", "value": "id"}]' style="display:none"
-                       type="file" id="fileinput"
+                       type="file" data-id="fileUploadId"
                        multiple="multiple"/>
                 <a onclick="uploadFile(this)">Submit</a>
             </li>

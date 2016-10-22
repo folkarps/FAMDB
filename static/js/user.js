@@ -57,7 +57,7 @@ function SignUp() {
                 $("#errorSignup").text(data);
             }
     }).fail(function(data, status, jqXHR) {
-        alert(data.responseText);
+        $("#errorSignup").text(data.responseText);
   });
 }
 

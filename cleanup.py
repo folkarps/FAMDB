@@ -5,14 +5,12 @@ import shutil
 import utils
 
 
-def handleCleanup(request):
+def handleCleanup(environ, start_response):
     c = utils.getCursor()
     # if you're a low admin
-    if not utils.checkUserPermissions(utils.getCurrentUser(request), 2):
-        request.send_response(500)
-        request.end_headers()
-        request.wfile.write("Access Denied".encode())
-        return
+    if not utils.checkUserPermissions(environ['user'], 2):
+        start_response("403 Permission Denied", [])
+        return ["Access Denied"]
 
     for origin in ['main', 'missionMaker']:
         if origin == 'main':
@@ -48,6 +46,5 @@ def handleCleanup(request):
     c.connection.commit()
     c.connection.close()
 
-    request.send_response(200)
-    request.end_headers()
-    return
+    start_response("200 OK", [])
+    return []

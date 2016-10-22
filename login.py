@@ -7,29 +7,28 @@ from passlib.hash import sha256_crypt
 import utils
 
 
-def handleLogin(request):
+def handleLogin(environ, start_response):
     c = utils.getCursor()
-    loginJsonString = request.rfile.read1(99999999).decode()
+    loginJsonString = utils.environToContents(environ)
     loginJson = json.loads(loginJsonString)
     login = loginJson['login']
     passw = loginJson['password']
     c.execute('''select * from users where login = ?''', [login])
     user = c.fetchone()
     if user is None:
-        request.wfile.write("No user with this login".encode())
-        return
+        start_response("500 Internal Server Response", [])
+        return ["No user with this login".encode()]
     if sha256_crypt.verify(passw, user['password']):
         cookie = cookies.SimpleCookie()
-        cookie['sessionId'] = utils.userToSessionId(user)
-        request.send_response(200)
-        request.send_header('set-cookie', cookie.output(header=''))
+        cookie['sessionId'] = utils.userRowToSessionId(user)
+        header1 = ('set-cookie', cookie.output(header=''))
         cookie = cookies.SimpleCookie()
         cookie['permissionLevel'] = user['permissionLevel']
-        request.send_header('set-cookie', cookie.output(header=''))
-        request.end_headers()
+        header2 = ('set-cookie', cookie.output(header=''))
+        start_response("200 OK", [header1, header2])
         c.execute("update users set lastLogin = ?", [date.today()])
         c.connection.commit()
         c.connection.close()
     else:
-        request.wfile.write("incorrect password".encode())
-    return
+        return ["incorrect password".encode()]
+    return []

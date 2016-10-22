@@ -11,7 +11,6 @@ function LoadData() {
     var mapVal = $("#islandSelected").val();
     var authorVal = $("#authorSelected").val();
     var gameVal = $("#gameSelected").val();
-    var MissionObject = Parse.Object.extend("Missions");
     var searchVal = $("#searchText").val();
     var params = {};
     params["map"] = mapVal;
@@ -60,6 +59,9 @@ function LoadData() {
             if(!item.allowedToEdit) {
                 item.editClass = 'hideMe';
             }
+            item.missionDesc = item.missionDesc.replace("\n", "<br/>");
+            item.missionNotes = item.missionNotes.replace("\n", "<br/>");
+            item.fileUploadId = "fileUpload" + item.id;
         })
 
         $("#missionTable > tbody").loadTemplate("missionTemplate.html",
@@ -173,7 +175,7 @@ function editMission(button) {
 }
 
 function uploadFile(submitButton){
-    var button = $(submitButton).siblings("#fileinput")[0];
+    var button = $(submitButton).siblings("input")[0];
     var files = button.files;
     for(var i=0; i<files.length; i++){
         var file = files[i];

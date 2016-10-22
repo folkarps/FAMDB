@@ -3,7 +3,7 @@ import json
 import utils
 
 
-def handleSessionDelete(request):
+def handleSessionDelete(environ, start_response):
     c = utils.getCursor()
 
     sessionJsonString = request.rfile.read1(99999999).decode()
@@ -11,14 +11,11 @@ def handleSessionDelete(request):
     sessionId = sessionJson['sessionId']
 
     if not utils.checkUserPermissions(utils.getCurrentUser(request), 2):
-        request.send_response(500)
-        request.end_headers()
-        request.wfile.write("Access Denied")
-        return
+        start_response("403 Permission Denied", [])
+        return ["Access Denied"]
 
     c.execute("delete from sessions where id = ?", [sessionId])
     c.connection.commit()
     c.connection.close()
-    request.send_response(200)
-    request.end_headers()
-    return
+    start_response("200 OK", [])
+    return []

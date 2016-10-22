@@ -3,8 +3,8 @@ import json
 import utils
 
 
-def handleUsers(request):
-    user = utils.getCurrentUser(request)
+def handleUsers(environ, start_response):
+    user = environ['user']
     c = utils.getCursor()
     c.execute("select id, login, permissionLevel, lastLogin, email from users")
     allUsers = c.fetchall()
@@ -12,8 +12,8 @@ def handleUsers(request):
     userDtos = [dict(x) for x in allUsers]
 
     if user is None:
-        request.wfile.write("".encode())
-        return
+        start_response("403 Permission Denied", [])
+        return ["Access Denied"]
 
     if user is not None and user.permissionLevel > 2:
         for x in userDtos:
@@ -23,5 +23,5 @@ def handleUsers(request):
             x['permissionLevels'] = x['permissionLevel']
 
     encode = json.dumps(userDtos).encode()
-    request.wfile.write(encode)
-    return
+    start_response("200 OK", [])
+    return [encode]

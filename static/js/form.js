@@ -140,7 +140,7 @@ function WriteMission() {
     }
 
     jQuery.post("/saveMission", JSON.stringify(data),  function (data, status, jqXHR) {
-        data = data.replace("location: ", "");
+        data = data.replace("location=", "");
         data = data.replace(/(?:\r\n|\r|\n).*/g, "");
         if(status == "success") {
             window.location.href = "index.html?missionId="+data;
@@ -160,3 +160,4 @@ function MissionSaveError(string) {
 }
 
 LoadMission();
+GetMissionAuthor();
