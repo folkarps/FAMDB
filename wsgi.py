@@ -25,12 +25,8 @@ handlers = {'deleteVersion': handleVersionDelete, 'login': handleLogin, 'signup'
             "deleteMission": handleMissionDelete, 'missions': handleMissions, 'authors': handleAuthors,
             'users': handleUsers, 'sessions': handleGetSession}
 
-from handleDbStart import initDb
 
-initDb()
-
-
-def handleWSGI(environ, start_response):
+def wsgi(environ, start_response):
     path = environ['PATH_INFO']
     simplePath = path.replace("/", "")
     cookie = SimpleCookie(environ['HTTP_COOKIE'])
