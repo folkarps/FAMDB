@@ -10,7 +10,7 @@ import utils
 
 def handleCreateUser(environ, start_response):
     c = utils.getCursor()
-    loginJsonString = utils.environToContents(environ).decode()
+    loginJsonString = utils.environToContents(environ)
     signUpJson = json.loads(loginJsonString)
     login = signUpJson['login']
     email = signUpJson['email']

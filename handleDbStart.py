@@ -1,3 +1,6 @@
+from Crypto import Random
+from Crypto.Cipher import AES
+
 import utils
 
 
@@ -32,6 +35,14 @@ def initDb():
 
     c.execute('''CREATE TABLE if not exists sessions
                  (id integer primary key, missionNames text, date text, host text, name text, players integer)''')
+
+    c.execute("select * from users where sessionKey is null")
+
+    usersWithout = c.fetchall()
+
+    for user in usersWithout:
+        sessionKey = Random.new().read(AES.block_size)
+        c.execute("update users set sessionKey = ? where id = ?", [sessionKey, user['id']])
 
     # Save (commit) the changes
     c.connection.commit()
