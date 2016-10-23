@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='FAMDB',
-    version='2.0.4-alpha',
+    version='2.0.5-alpha',
     url='https://github.com/Raptoer/FAMDB',
     license='',
     author='abarton',
