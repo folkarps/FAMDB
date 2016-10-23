@@ -2,7 +2,7 @@ function LoadUsers()
 {
   $("#missionTable > tbody").html("");
 
-    jQuery.get("/users", "", function (data, status, jqXHR)
+    jQuery.get("users", "", function (data, status, jqXHR)
     {
 
         var users = eval(data);
@@ -21,14 +21,14 @@ function setPermissionLevel(select) {
     var user = {};
     user.permissionLevel = $(select).val();
     user.id = $(select).data("userid");
-    jQuery.post("/setPermissionLevel", JSON.stringify(user), function (data, status, jqXHR) {
+    jQuery.post("setPermissionLevel", JSON.stringify(user), function (data, status, jqXHR) {
     }).fail(function(data, status, jqXHR) {
         alert(data.responseText);
   });
 }
 
 function cleanup() {
-    jQuery.post("/cleanup", {}, function(data, status, jqXHR) {
+    jQuery.post("cleanup", {}, function(data, status, jqXHR) {
         window.location.href = "index.html"
     });
 }

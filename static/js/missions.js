@@ -38,7 +38,7 @@ function LoadData() {
     params["game"] = gameVal;
 
 
-    jQuery.get("/missions", params, function (data, status, jqXHR)
+    jQuery.get("missions", params, function (data, status, jqXHR)
     {
         //clear out the table
         $("#missionTable > tbody").html("");
@@ -147,7 +147,7 @@ function archiveVersion(mission, origin) {
     data.missionId = $(mission).data("missionid");
     data.versionId = $(mission).data("versionid");
     data.origin = origin;
-    jQuery.post("/archive", JSON.stringify(data), function (data, status, jqXHR) {
+    jQuery.post("archive", JSON.stringify(data), function (data, status, jqXHR) {
             window.location.href = "index.html?missionId=" + $(mission).data("missionid");
         });
 }
@@ -156,7 +156,7 @@ function deleteVersion(mission, origin) {
     data.missionId = $(mission).data("missionid");
     data.versionId = $(mission).data("versionid");
     data.origin = origin;
-    jQuery.post("/deleteVersion", JSON.stringify(data), function (data, status, jqXHR) {
+    jQuery.post("deleteVersion", JSON.stringify(data), function (data, status, jqXHR) {
             window.location.href = "index.html?missionId=" + $(mission).data("missionid");
         });
 }
@@ -165,7 +165,7 @@ function moveVersion(mission) {
     var data = {}
     data.missionId = $(mission).data("missionid");
     data.versionId = $(mission).data("versionid");
-    jQuery.post("/move", JSON.stringify(data), function (data, status, jqXHR) {
+    jQuery.post("move", JSON.stringify(data), function (data, status, jqXHR) {
             window.location.href = "index.html?missionId=" + $(mission).data("missionid");
         });
 }
@@ -179,7 +179,7 @@ function uploadFile(submitButton){
     var files = button.files;
     for(var i=0; i<files.length; i++){
         var file = files[i];
-        var url = '/upload?missionId=' + $(button).data("missionid");
+        var url = 'upload?missionId=' + $(button).data("missionid");
         var xhr = new XMLHttpRequest();
         var fd = new FormData();
         xhr.open("POST", url, true);
@@ -212,7 +212,7 @@ function openDeletePopup(button) {
 function deleteMission() {
     var missionId = window.delMissionId;
     var data = {missionId:missionId};
-    jQuery.post("/deleteMission", JSON.stringify(data), function(data, status, jqXHR) {
+    jQuery.post("deleteMission", JSON.stringify(data), function(data, status, jqXHR) {
             window.location.href = "index.html";
     });
 

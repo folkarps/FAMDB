@@ -2,7 +2,7 @@
 function LoadData() {
 
 
-    jQuery.get("/sessions", [], function (data, status, jqXHR)
+    jQuery.get("sessions", [], function (data, status, jqXHR)
     {
         //clear out the table
         $("#missionTable > tbody").html("");
@@ -85,7 +85,7 @@ function openDeletePopup(button) {
 function deleteSession() {
     var sessionId = window.delSessionId;
     var data = {sessionId:sessionId};
-    jQuery.post("/deleteSession", JSON.stringify(data), function(data, status, jqXHR) {
+    jQuery.post("deleteSession", JSON.stringify(data), function(data, status, jqXHR) {
             window.location.href = "index.html";
     });
 

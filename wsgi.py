@@ -35,6 +35,8 @@ def wsgi(environ, start_response):
         return handlers[simplePath](environ, start_response)
     else:
         responseHeaders = utils.handleBadSessionIds(environ)
-        with open('static' + path, mode="rb", ) as stream:
+        if path == '/':
+            path = '/index.html'
+        with open(utils.currentPath + '/static' + path, mode="rb", ) as stream:
             start_response('200 OK', responseHeaders)
             return [stream.read()]

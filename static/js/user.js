@@ -30,7 +30,7 @@ function getPermissionLevel() {
 function Login() {
     $("#errorLogin").text("");
     var data = JSON.stringify({login:$("#loginName").val(), password:$("#PasswordInput").val() })
-    jQuery.post("/login", data, function( data ) {
+    jQuery.post("login", data, function( data ) {
             //refresh current page with new cookies so that the buttons are correct
             //if cookie is set, login was accepted, else display data as error message
             if(isLoggedIn()) {
@@ -48,7 +48,7 @@ function Login() {
 function SignUp() {
     $("#errorSignup").text("");
     var data = JSON.stringify({login:$("#signupName").val(), password:$("#signupPassword").val(), email: $("#signupEmail").val()})
-    jQuery.post("/signup", data, function (data) {
+    jQuery.post("signup", data, function (data) {
 
             //refresh current page with new cookies so that the buttons are correct
             //if cookie is set, login was accepted, else display data as error message
@@ -92,7 +92,7 @@ $("#forgottonPassword").click(function() {
 $("#forgottenWindowOk").click(function() {
 	$("#errorForgot").text("");
 
-	jQuery.post("/forgotPass", data, function (data) {
+	jQuery.post("forgotPass", data, function (data) {
         //if data returned anything it would be an error message
     });
 

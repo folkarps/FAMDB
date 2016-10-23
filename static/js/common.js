@@ -2,7 +2,7 @@
 
 // Function to populate #authorsSelected dropdown field with all authors from the DB
 function GetMissionAuthor(preSelect) {
-    jQuery.get("/authors", null, function (data, status, jqXHR) {
+    jQuery.get("authors", null, function (data, status, jqXHR) {
         arr = eval(data);
         for (var y = 0;y < arr.length;y++) {
             $("#authorSelected").append("<option>" +

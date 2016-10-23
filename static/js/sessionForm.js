@@ -8,7 +8,7 @@ function loadSession() {
     var queryDict = getQueryDict();
 
     if(queryDict['sessionId'] != null) {
-        jQuery.get("/sessions", queryDict, function (data, status, jqXHR) {
+        jQuery.get("sessions", queryDict, function (data, status, jqXHR) {
             var sessions = eval(data);
             if(sessions.length > 0) {
                 var session = sessions[0]
@@ -30,7 +30,7 @@ function loadSession() {
 function getMissionNames(request, response) {
     var params = {};
     params['name'] = request.term;
-    jQuery.get("/missions", params, function(data, status, jqXHR) {
+    jQuery.get("missions", params, function(data, status, jqXHR) {
         json = eval(data);
         values = []
         json.forEach(function(item) {values.push(item.missionName)});
@@ -87,7 +87,7 @@ function saveSession() {
         return false;
     }
 
-    jQuery.post("/editSession", JSON.stringify(params), function(data, status, jqXHR) {
+    jQuery.post("editSession", JSON.stringify(params), function(data, status, jqXHR) {
 
         data = data.replace("location: ", "");
         data = data.replace(/(?:\r\n|\r|\n).*/g, "");

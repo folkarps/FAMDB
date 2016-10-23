@@ -14,7 +14,7 @@ function LoadMission() {
     var queryDict = getQueryDict();
 
     if(queryDict['missionId'] != null) {
-        jQuery.get("/missions", queryDict, function (data, status, jqXHR) {
+        jQuery.get("missions", queryDict, function (data, status, jqXHR) {
             var missions = eval(data);
             if(missions.length > 0) {
                 var mission = missions[0]
@@ -139,7 +139,7 @@ function WriteMission() {
         data.missionId = getQueryDict()['missionId'];
     }
 
-    jQuery.post("/saveMission", JSON.stringify(data),  function (data, status, jqXHR) {
+    jQuery.post("saveMission", JSON.stringify(data),  function (data, status, jqXHR) {
         data = data.replace("location=", "");
         data = data.replace(/(?:\r\n|\r|\n).*/g, "");
         if(status == "success") {

@@ -1,4 +1,5 @@
 import base64
+import os
 import sqlite3
 from http.cookies import SimpleCookie
 
@@ -7,8 +8,8 @@ from Crypto import Random
 from Crypto.Cipher import AES
 
 sessionGenKey = Random.new().read(AES.block_size)
-
-__props = dict(line.strip().split('=') for line in open('config.config'))
+currentPath = os.path.dirname(os.path.realpath(__file__))
+__props = dict(line.strip().split('=') for line in open(currentPath + '/config.config'))
 
 missionMainDir = __props['missionMainDir']
 missionMainArchive = __props['missionMainArchive']
@@ -20,7 +21,7 @@ port = int(__props['port'])
 
 
 def getCursor():
-    conn = sqlite3.connect('famdb.db', detect_types=sqlite3.PARSE_DECLTYPES)
+    conn = sqlite3.connect(currentPath + '/famdb.db', detect_types=sqlite3.PARSE_DECLTYPES)
     conn.row_factory = sqlite3.Row
     c = conn.cursor()
     return c
