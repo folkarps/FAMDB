@@ -7,7 +7,7 @@ function loadSession() {
     //load mission if exists
     var queryDict = getQueryDict();
 
-    if(queryDict['sessionId'] != null) {
+    if(queryDict['famdbSessionId'] != null) {
         jQuery.get("sessions", queryDict, function (data, status, jqXHR) {
             var sessions = eval(data);
             if(sessions.length > 0) {
