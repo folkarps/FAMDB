@@ -1,5 +1,5 @@
 function UpdateLoginButton() {
-    if(document.cookie.includes("sessionId")) {
+    if(document.cookie.includes("famdbSessionId")) {
         $("#LogoutButton").html("<i class='fa fa-sign-out'></i>Logout");
         $("#AddButton").show();
         if(getPermissionLevel() < 1) {
@@ -14,7 +14,7 @@ function UpdateLoginButton() {
 }
 
 function isLoggedIn() {
-    return document.cookie.includes("sessionId");
+    return document.cookie.includes("famdbSessionId");
 }
 
 function getPermissionLevel() {
@@ -52,7 +52,7 @@ function SignUp() {
 
             //refresh current page with new cookies so that the buttons are correct
             //if cookie is set, login was accepted, else display data as error message
-            if(document.cookie.includes("sessionId")) {
+            if(document.cookie.includes("famdbSessionId")) {
                 HidePopup("#loginWindow");
                 $("#signupScreen").hide();
                 $("#loginScreen").show();
@@ -77,7 +77,7 @@ function RefreshPage() {
 $('#LogoutButton').click(function() {
     if (isLoggedIn()) {
         //delete session cookie
-        $.removeCookie('sessionId', { path: '/' });
+        $.removeCookie('famdbSessionId', { path: '/' });
         UpdateLoginButton();
         RefreshPage();
     }
