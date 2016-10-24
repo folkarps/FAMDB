@@ -38,6 +38,7 @@ def wsgi(environ, start_response):
         return handlers[simplePath](environ, start_response)
     else:
         responseHeaders = utils.handleBadSessionIds(environ)
+        responseHeaders.append(('Cache-Control', 'max-age=86400'))
         if path == '/':
             path = '/index.html'
         with open(utils.currentPath + '/static' + path, mode="rb", ) as stream:
