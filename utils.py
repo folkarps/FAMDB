@@ -39,23 +39,34 @@ class User:
 
 
 def userRowToSessionId(user):
-    return base64.b64encode(AES.new(sessionGenKey).encrypt(user['sessionKey'])).decode()
+    decode = base64.b64encode(AES.new(sessionGenKey).encrypt(user['sessionKey'])).decode()
+    print("using sessionGenKey: " + base64.b64encode(sessionGenKey).decode() + " to encrypt: " + base64.b64encode(
+        user['sessionKey']).decode() + " results in " + decode)
+    return decode
 
 
 def getCurrentUser(cookie):
     if 'famdbSessionId' not in cookie:
+        print("instead found" + cookie.output())
         return None
     sessionId = cookie['famdbSessionId'].value
 
     try:
-        sessionKey = AES.new(sessionGenKey).decrypt(base64.b64decode(sessionId))
+
+        decode = base64.b64decode(sessionId)
+
+        print("using sessionGenKey: " + base64.b64encode(
+            sessionGenKey).decode() + " to decrypt: " + sessionId + " results in " + base64.b64encode(AES.new(
+            sessionGenKey).decrypt(decode)).decode())
+        sessionKey = AES.new(sessionGenKey).decrypt(decode)
         c = getCursor()
         c.execute('''select * from users where sessionKey = ?''', [sessionKey])
         user = c.fetchone()
         if user is None:
             return None
         return User(user['email'], user['permissionLevel'], user['login'])
-    except:
+    except Exception as exc:
+        print("error getting current User: {0}".format(exc))
         return None
 
 
@@ -102,10 +113,10 @@ def isPidRunning(pid):
 
 
 def handleBadSessionIds(environ):
-    if environ['user'] is None:
+    if environ['user'] is None and "HTTP_COOKIE" in environ:
         cookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'famdbSessionId' in cookie:
-            print (environ['HTTP_COOKIE'])
+            print(environ['HTTP_COOKIE'])
             return [('Set-Cookie', 'famdbSessionId=;expires=Thu, 01 Jan 1970 00:00:00 GMT;MaxAge=-1')]
         return []
     else:

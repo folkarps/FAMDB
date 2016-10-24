@@ -29,8 +29,11 @@ handlers = {'deleteVersion': handleVersionDelete, 'login': handleLogin, 'signup'
 def wsgi(environ, start_response):
     path = environ['PATH_INFO']
     simplePath = path.replace("/", "")
-    cookie = SimpleCookie(environ['HTTP_COOKIE'])
-    environ['user'] = utils.getCurrentUser(cookie)
+    if "HTTP_COOKIE" in environ:
+        cookie = SimpleCookie(environ['HTTP_COOKIE'])
+        environ['user'] = utils.getCurrentUser(cookie)
+    else:
+        environ['user'] = None
     if simplePath in handlers:
         return handlers[simplePath](environ, start_response)
     else:
