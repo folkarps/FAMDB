@@ -20,7 +20,7 @@ def handleLogin(environ, start_response):
         return ["No user with this login".encode()]
     if sha256_crypt.verify(passw, user['password']):
         cookie = cookies.SimpleCookie()
-        cookie['sessionId'] = utils.userRowToSessionId(user)
+        cookie['famdbSessionId'] = utils.userRowToSessionId(user)
         header1 = ('set-cookie', cookie.output(header=''))
         cookie = cookies.SimpleCookie()
         cookie['permissionLevel'] = user['permissionLevel']
