@@ -6,11 +6,11 @@ import utils
 def handleSessionDelete(environ, start_response):
     c = utils.getCursor()
 
-    sessionJsonString = request.rfile.read1(99999999).decode()
+    sessionJsonString = utils.environToContents(environ)
     sessionJson = json.loads(sessionJsonString)
     sessionId = sessionJson['sessionId']
 
-    if not utils.checkUserPermissions(utils.getCurrentUser(request), 2):
+    if not utils.checkUserPermissions(environ['user'], 2):
         start_response("403 Permission Denied", [])
         return ["Access Denied"]
 
