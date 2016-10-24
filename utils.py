@@ -4,10 +4,7 @@ import sqlite3
 from http.cookies import SimpleCookie
 
 import psutil
-from Crypto import Random
-from Crypto.Cipher import AES
 
-sessionGenKey = Random.new().read(AES.block_size)
 currentPath = os.path.dirname(os.path.realpath(__file__))
 __props = dict(line.strip().split('=') for line in open(currentPath + '/config.config'))
 
@@ -39,28 +36,18 @@ class User:
 
 
 def userRowToSessionId(user):
-    decode = base64.b64encode(AES.new(sessionGenKey).encrypt(user['sessionKey'])).decode()
-    print("using sessionGenKey: " + base64.b64encode(sessionGenKey).decode() + " to encrypt: " + base64.b64encode(
-        user['sessionKey']).decode() + " results in " + decode)
-    return decode
+    return base64.b64encode(user['sessionKey']).decode()
 
 
 def getCurrentUser(cookie):
     if 'famdbSessionId' not in cookie:
-        print("instead found" + cookie.output())
         return None
     sessionId = cookie['famdbSessionId'].value
 
     try:
-
         decode = base64.b64decode(sessionId)
-
-        print("using sessionGenKey: " + base64.b64encode(
-            sessionGenKey).decode() + " to decrypt: " + sessionId + " results in " + base64.b64encode(AES.new(
-            sessionGenKey).decrypt(decode)).decode())
-        sessionKey = AES.new(sessionGenKey).decrypt(decode)
         c = getCursor()
-        c.execute('''select * from users where sessionKey = ?''', [sessionKey])
+        c.execute('''select * from users where sessionKey = ?''', [decode])
         user = c.fetchone()
         if user is None:
             return None
@@ -116,7 +103,6 @@ def handleBadSessionIds(environ):
     if environ['user'] is None and "HTTP_COOKIE" in environ:
         cookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'famdbSessionId' in cookie:
-            print(environ['HTTP_COOKIE'])
             return [('Set-Cookie', 'famdbSessionId=;expires=Thu, 01 Jan 1970 00:00:00 GMT;MaxAge=-1')]
         return []
     else:
