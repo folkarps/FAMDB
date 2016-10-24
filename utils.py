@@ -43,7 +43,7 @@ def userRowToSessionId(user):
 
 
 def getCurrentUser(cookie):
-    if 'sessionId' not in cookie:
+    if 'famdbSessionId' not in cookie:
         return None
     sessionId = cookie['famdbSessionId'].value
 
@@ -103,9 +103,9 @@ def isPidRunning(pid):
 
 def handleBadSessionIds(environ):
     if environ['user'] is None:
-        print (environ['HTTP_COOKIE'])
         cookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'famdbSessionId' in cookie:
+            print (environ['HTTP_COOKIE'])
             return [('Set-Cookie', 'famdbSessionId=;expires=Thu, 01 Jan 1970 00:00:00 GMT;MaxAge=-1')]
         return []
     else:
