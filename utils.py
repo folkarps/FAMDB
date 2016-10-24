@@ -103,6 +103,7 @@ def isPidRunning(pid):
 
 def handleBadSessionIds(environ):
     if environ['user'] is None:
+        print (environ['HTTP_COOKIE'])
         cookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'famdbSessionId' in cookie:
             return [('Set-Cookie', 'famdbSessionId=;expires=Thu, 01 Jan 1970 00:00:00 GMT;MaxAge=-1')]
