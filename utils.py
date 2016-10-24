@@ -45,7 +45,7 @@ def userRowToSessionId(user):
 def getCurrentUser(cookie):
     if 'sessionId' not in cookie:
         return None
-    sessionId = cookie['sessionId'].value
+    sessionId = cookie['famdbSessionId'].value
 
     try:
         sessionKey = AES.new(sessionGenKey).decrypt(base64.b64decode(sessionId))
