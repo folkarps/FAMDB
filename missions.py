@@ -24,18 +24,17 @@ def handleMissions(environ, start_response):
         c.execute(str.format('''select * from versions where missionId in ({}) order by missionId''', idParameter))
         versionsFromDb = c.fetchall()
         # group the mission by their mission Id
-        versionsGroupedByMission = list(itertools.groupby(versionsFromDb, lambda x: x['missionId']))
+        versionsGroupedByMission = {}
+        for k, g in itertools.groupby(versionsFromDb, lambda x: x['missionId']):
+            versionsGroupedByMission[k] = list(g)
     else:
         versionsGroupedByMission = []
 
-    # groupby has returned these as a list of tuple(missionId, list(version))
-    #  we want a map so that we can do key access
-    versionMap = dict(versionsGroupedByMission)
 
     user = environ['user']
 
     # transform the row objects into objects that can be serialized
-    m = [toDto(x, versionMap, user) for x in missionsFromDb]
+    m = [toDto(x, versionsGroupedByMission, user) for x in missionsFromDb]
     encode = json.dumps(m).encode()
 
     start_response("200 OK", [])

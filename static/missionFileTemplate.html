@@ -1,7 +1,7 @@
-<div>
-    <div style="display:inline-block" data-class="mmExistsClass">
+<div class="missionVersionOuter">
+    <div class="missionVersionInner" data-class="mmExistsClass">
 
-        <div style="display:inline-block" data-content="name"></div>
+        <div style="display:inline-block;width:80%" data-content="name"></div>
 
         <img src="images/archive.png" alt="Archive" data-class="toBeArchivedMMClass" data-template-bind='[
             {"attribute": "data-missionId", "value": "missionId"}, {"attribute": "data-versionId", "value": "id"}]'
@@ -17,9 +17,9 @@
             {"attribute": "data-missionId", "value": "missionId"}, {"attribute": "data-versionId", "value": "id"}]'
              class="moveButton" onclick="moveVersion(this)"/>
     </div>
-    <div style="display:inline-block;float:right" data-class="mainExistsClass">
+    <div class="missionVersionInner" style="float:right;" data-class="mainExistsClass">
 
-        <div style="display:inline-block;padding-bottom:0.25em" data-content="name"></div>
+        <div style="display:inline-block;text-align:left" data-content="name"></div>
         <img src="images/archive.png" alt="Archive" data-class="toBeArchivedMainClass" data-template-bind='[
             {"attribute": "data-missionId", "value": "missionId"}, {"attribute": "data-versionId", "value": "id"}]'
              class="archiveButton"

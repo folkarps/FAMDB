@@ -789,21 +789,24 @@ buttongroup a:hover,nav a:active {
     width: 1.5em;
     background-color:#eaa724;
     padding: 0.25em;
-    margin: 0.25em
+    margin: 0.25em;
+    vertical-align: middle;
 }
 .deleteButton{
     height: 1.5em;
     width: 1.5em;
     background-color:#eaa724;
     padding: 0.25em;
-    margin: 0.25em
+    margin: 0.25em;
+    vertical-align: middle;
 }
 .moveButton{
     height: 1.5em;
     width: 1.5em;
     background-color:#eaa724;
     padding: 0.25em;
-    margin: 0.25em
+    margin: 0.25em;
+    vertical-align: middle;
 }
 
 .hideMe {
@@ -814,4 +817,15 @@ buttongroup a:hover,nav a:active {
 .sessionMission {
     padding-top:5px;
     padding-bottom:5px;
+}
+
+.missionVersionOuter {
+    border:1px solid #eaa724;
+    line-height: 2.4em;
+}
+
+.missionVersionInner {
+    display:inline-block;
+    margin:5px;
+    width:45%;
 }
