@@ -77,7 +77,7 @@ function RefreshPage() {
 $('#LogoutButton').click(function() {
     if (isLoggedIn()) {
         //delete session cookie
-        $.removeCookie('famdbSessionId', { path: '/' });
+        $.removeCookie('famdbSessionId');
         UpdateLoginButton();
         RefreshPage();
     }
