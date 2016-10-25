@@ -44,11 +44,17 @@ def handleMissions(environ, start_response):
 # copy the variables out of the non-serializable db object into a blank object
 def toDto(missionFromDb, verionsGrouped, user: utils.User):
     dto = toDtoHelper(missionFromDb)
+
+    dto['allowedToMove'] = False
+    dto['allowedToEdit'] = False
+    dto['allowedToVersion'] = False
+    dto['allowedToArchive'] = False
     if user is not None:
         if user.permissionLevel >= 2:
             dto['allowedToMove'] = True
             dto['allowedToEdit'] = True
             dto['allowedToVersion'] = True
+            dto['allowedToArchive'] = True
         if user.login in missionFromDb['missionAuthor']:
             dto['allowedToEdit'] = True
             dto['allowedToVersion'] = True

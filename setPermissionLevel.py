@@ -23,3 +23,4 @@ def handlePermissionLevel(environ, start_response):
     else:
         start_response("403 Permission Denied", [])
         return ["Access Denied".encode()]
+    return []

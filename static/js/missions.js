@@ -6,6 +6,9 @@
 //move mission
 //saveMission
 
+function isArchivedOrDeleted(version) {
+}
+
 function LoadData() {
     var sessionVal = $("#sessionSelected").val();
     var mapVal = $("#islandSelected").val();
@@ -79,15 +82,30 @@ function LoadData() {
                     if(!(version.existsOnMM == 1 && version.existsOnMain == 0) || !item.allowedToMove) {
                         version.mmExistsMainDoesNotClass = 'hideMe';
                     }
-                    if((version.toBeArchivedMM == 1
-                        || version.toBeDeletedMM) || !item.allowedToVersion) {
-                        version.toBeArchivedMMClass = 'hideMe';
-                        version.toBeDeletedMMClass = 'hideMe';
+
+                    version.toBeArchivedMMClass = 'hideMe';
+                    version.toBeArchivedMainClass = 'hideMe';
+                    version.toBeDeletedMainClass = 'hideMe';
+                    version.toBeDeletedMMClass = 'hideMe';
+                    if(item.allowedToVersion) {
+                        if(version.toBeArchivedMM != 1
+                            && version.toBeDeletedMM != 1) {
+                            version.toBeDeletedMMClass = '';
+                        }
+                        if(version.toBeArchivedMain != 1
+                            && version.toBeDeletedMain != 1) {
+                            version.toBeDeletedMainClass = '';
+                        }
                     }
-                    if((version.toBeArchivedMain == 1
-                        || version.toBeDeletedMain == 1) || !item.allowedToVersion) {
-                        version.toBeArchivedMainClass = 'hideMe';
-                        version.toBeDeletedMainClass = 'hideMe';
+                    if(item.allowedToArchive) {
+                        if(version.toBeArchivedMM != 1
+                            && version.toBeDeletedMM != 1) {
+                            version.toBeArchivedMMClass = '';
+                        }
+                        if(version.toBeArchivedMain != 1
+                            && version.toBeDeletedMain != 1) {
+                            version.toBeArchivedMainClass = '';
+                        }
                     }
                 });
                 $($("#missionTable").find("[data-missionIdBlah=" + item.id + "]")).loadTemplate("missionFileTemplate.html", item.versions);

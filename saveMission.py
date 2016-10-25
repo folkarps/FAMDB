@@ -54,4 +54,4 @@ def handleSaveMission(environ, start_response):
     c.connection.commit()
     c.connection.close()
     start_response("201 Created", [])
-    return [("location=" + str(missionId)).encode()]
+    return [(str(missionId)).encode()]
