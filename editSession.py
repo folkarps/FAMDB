@@ -31,10 +31,24 @@ def handleEditSession(environ, start_response):
     else:
         sessionId = editSessionJson['id']
 
+    c.execute("select missionNames from sessions where id = ?", [sessionId])
+    existingMissionNames = c.fetchone()
+
     c.execute("update sessions set missionNames = ?, host = ?, name = ?, players = ? where id = ? ",
               toParams(editSessionJson, sessionId))
     missions = editSessionJson['missionNames']
-    for mission in missions:
+
+    newMissions = []
+
+    if existingMissionNames is not None:
+        existingMissionNames = existingMissionNames['missionNames'].split(",")
+        for mission in missions:
+            if mission in existingMissionNames:
+                existingMissionNames.remove(mission)
+            else:
+                newMissions.append(mission)
+
+    for mission in newMissions:
         c.execute("update missions set playedCounter = playedCounter+1, lastPlayed=? where missionName =?",
                   [sessionDate, mission])
     c.connection.commit()
