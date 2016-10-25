@@ -13,8 +13,8 @@ def handleAuthors(environ, start_response):
     authors = c.fetchall()
 
     authorDto = [split(x['missionAuthor']) for x in authors]
-    authorDto = [item for sublist in authorDto for item in sublist]
-    authorDto = list(set(authorDto))
+    authorDto = [item.strip() for sublist in authorDto for item in sublist]
+    authorDto = list(sorted(set(authorDto), key=lambda s: s.lower()))
     encode = json.dumps(authorDto).encode()
     start_response("200 OK", [])
     return [encode]
