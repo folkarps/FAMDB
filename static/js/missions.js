@@ -20,6 +20,9 @@ function LoadData() {
     params["author"] = authorVal;
     params["isBroken"] = $("#missionBroken:checked").val();
     params["needsRevision"] = $("#missionNeedsRevision:checked").val();
+    params["working"] = $("#missionWorking:checked").val();
+    params["new"] = $("#missionNew:checked").val();
+    params["needsTransfer"] = $("#missionNeedsTransfer:checked").val();
 
 
     var checkboxes = $("#missionTypes").find(':checkbox');

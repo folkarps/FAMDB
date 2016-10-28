@@ -9,8 +9,20 @@ def handleMissions(environ, start_response):
     c = utils.getCursor()
 
     o = parse_qs(environ['QUERY_STRING'])
-    query, params = constructQuery(o)
+
+    missionIds = None
+    if "new" in o:
+        fancyQuery = "select missionId from versions join missions on versions.missionId = missions.id where versions.createDate > missions.lastPlayed and existsOnMain = 1 and tobeDeletedMain = 0"
+        c.execute(fancyQuery)
+        missionIds = c.fetchall()
+    if "needsTransfer" in o:
+        fancyQuery = "select missionId from versions where existsOnMain = 0 and existsOnMM = 1 and toBeDeletedMM = 0"
+        c.execute(fancyQuery)
+        missionIds = c.fetchall()
+
+    query, params = constructQuery(o, missionIds)
     # retrieve all the missions that match our parameters
+
     c.execute("select * from missions where " + query, params)
     missionsFromDb = c.fetchall()
 
@@ -74,7 +86,7 @@ def toDtoHelper(version):
     return dict(version)
 
 
-def constructQuery(params):
+def constructQuery(params, missionIds: list):
     query = []
     p = []
     if ("map" in params) and (params['map'][0] != 'All Maps'):
@@ -85,10 +97,15 @@ def constructQuery(params):
         p.append(params['author'][0])
     if "isBroken" in params:
         query.append("isBroken = ?")
-        p.append(params['isBroken'][0])
+        p.append(1)
     if "needsRevision" in params:
         query.append("needsRevision = ?")
-        p.append(params['needsRevision'][0])
+        p.append(1)
+    if "working" in params:
+        query.append("needsRevision = ?")
+        p.append(0)
+        query.append("isBroken = ?")
+        p.append(0)
     if "missionTypes[]" in params:
         missionTypeString = ["'{0}'".format(w) for w in params['missionTypes[]']]
         query.append(str.format("missionType in({})", ",".join(missionTypeString)))
@@ -104,4 +121,7 @@ def constructQuery(params):
     if "missionId" in params:
         query.append("id  = ? ")
         p.append(params['missionId'][0])
+    if missionIds is not None:
+        missionIdString = ["'{0}'".format(w['missionId']) for w in missionIds]
+        query.append(str.format("id in({})", ",".join(missionIdString)))
     return " AND ".join(query), p
