@@ -6,9 +6,9 @@ ArmAx missions database written in python3 and jQuery
 FAMDB is designed to simplify the lives of admins and hosts.
 
 Users can create and edit mission descriptions, upload mission versions, and
-schedule deletion or archival of specific versions of missions.
+schedule deletion of specific versions of missions.
 
-Admins can move missions from the mission making server (MM server) to the main server
+Admins can move missions from the mission making server (MM server) to the main server, archive missions,
 and create sessions with specific missions.
 
 Issues can be reported at https://github.com/Raptoer/FAMDB/issues
@@ -26,6 +26,8 @@ pip install -r requirementsPosix.txt or pip install -r requirementsWindows.txt d
 
 windows users will then have to install pycrypt manually using a command that I lost.
 
+FAMDB runs as a WSGI server. This means it can be run using either apache's mod_wsgi (as we do) or a wsgi server built into python.
+
 Starting the server:
 python main.py start
 
@@ -40,9 +42,9 @@ Configuration
 =============
 in the file config.config there are a number of properties:
 * 4 folders, 2 for the missions and 2 for archives
-* Port on which the server should run
+* Port on which the built in server should run. This is ignored if using an external wsgi server.
  
-Please ensure that the user running the server has permissions to access these folders
+Please ensure that the user running the server has permissions to access these folders, as well as the entire famdb folder structure.
 
 Database
 ========
