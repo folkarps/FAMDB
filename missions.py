@@ -67,10 +67,10 @@ def toDto(missionFromDb, verionsGrouped, user: utils.User):
             dto['allowedToEdit'] = True
             dto['allowedToVersion'] = True
             dto['allowedToArchive'] = True
-        if user.login in missionFromDb['missionAuthor']:
+        if user.login in missionFromDb['missionAuthor'].split(","):
             dto['allowedToEdit'] = True
             dto['allowedToVersion'] = True
-        if user.login in missionFromDb['missionAuthor'] and user.permissionLevel >= 1:
+        if user.login in missionFromDb['missionAuthor'].split(",") and user.permissionLevel >= 1:
             dto['allowedToMove'] = True
             dto['allowedToEdit'] = True
             dto['allowedToVersion'] = True

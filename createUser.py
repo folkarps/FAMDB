@@ -16,6 +16,15 @@ def handleCreateUser(environ, start_response):
     email = signUpJson['email']
     passw = signUpJson['password']
     c.execute('''select * from users where login = ? or email = ?''', [login, email])
+    if login == '':
+        start_response("500 Internal Server Error", [])
+        return ["Did you think you were funny making a blank user name?".encode()]
+    if email == '':
+        start_response("500 Internal Server Error", [])
+        return ["Did you think you were funny making a blank email?".encode()]
+    if passw == '':
+        start_response("500 Internal Server Error", [])
+        return ["Did you think you were funny making a blank password?".encode()]
     if c.fetchone() is None:
         from Crypto import Random
         sessionKey = Random.new().read(AES.block_size)

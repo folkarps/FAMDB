@@ -86,7 +86,7 @@ def checkUserPermissions(user: User, requiredPermissionLevel=-1, missionId=None,
         if mission is None or user.permissionLevel < 0:
             authorMatch = False
         else:
-            authorMatch = user.login in mission['missionAuthor']
+            authorMatch = user.login in mission['missionAuthor'].split(",")
     return collector(user.permissionLevel >= requiredPermissionLevel, authorMatch)
 
 

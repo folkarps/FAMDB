@@ -41,6 +41,7 @@ def handleSaveMission(environ, start_response):
         c.execute("select * from missions where id = ?", [missionId])
         mission = c.fetchone()
         if mission is None:
+            start_response("500 Internal Server Response", [])
             return ["Stop trying to edit a mission that doesn't exist".encode()]
         hasPermissions = utils.checkUserPermissions(environ['user'], 2, missionId)
 

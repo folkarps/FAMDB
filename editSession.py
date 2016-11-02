@@ -40,7 +40,7 @@ def handleEditSession(environ, start_response):
 
     newMissions = []
 
-    if existingMissionNames is not None:
+    if existingMissionNames['missionNames'] is not None:
         existingMissionNames = existingMissionNames['missionNames'].split(",")
         for mission in missions:
             if mission in existingMissionNames:

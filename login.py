@@ -31,5 +31,6 @@ def handleLogin(environ, start_response):
         c.connection.commit()
         c.connection.close()
     else:
+        start_response("500 Internal Server Response", [])
         return ["incorrect password".encode()]
     return []
