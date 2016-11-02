@@ -11,7 +11,7 @@ def handleLogin(environ, start_response):
     c = utils.getCursor()
     loginJsonString = utils.environToContents(environ)
     loginJson = json.loads(loginJsonString)
-    login = loginJson['login']
+    login = loginJson['login'].strip()
     passw = loginJson['password']
     c.execute('''select * from users where login = ?''', [login])
     user = c.fetchone()
