@@ -22,6 +22,12 @@ def handleUpload(environ, start_response):
         return ["Content-Type header doesn't contain boundary".encode()]
     boundary = content_type.split("=")[1].encode()
     remainbytes = int(environ.get('CONTENT_LENGTH', '0'))
+
+    if remainbytes > (20 * 1024):
+        start_response("500 Internal Server Error", [])
+        return ["20 MB is the max size".encode()]
+
+
     line = environ['wsgi.input'].readline()
     remainbytes -= len(line)
     if not boundary in line:
@@ -35,7 +41,17 @@ def handleUpload(environ, start_response):
     if not fn:
         start_response("500 Internal Server Error", [])
         return ["Can't find out file name...".encode()]
+
     fileName = fn[0]
+
+    # protect from filesystem roaming
+    fileName = fileName.replace("..", "")
+
+    if not fileName.endswith(".pbo"):
+        start_response("500 Internal Server Error", [])
+        return ["Only .pbo files are allowed".encode()]
+
+
     fullPath = os.path.join(utils.missionMakerDir, fileName).replace("\n", "")
     line = environ['wsgi.input'].readline()
     remainbytes -= len(line)
