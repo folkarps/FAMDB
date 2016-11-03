@@ -12,8 +12,8 @@ def handleCreateUser(environ, start_response):
     c = utils.getCursor()
     loginJsonString = utils.environToContents(environ)
     signUpJson = json.loads(loginJsonString)
-    login = signUpJson['login']
-    email = signUpJson['email']
+    login = signUpJson['login'].strip()
+    email = signUpJson['email'].strip()
     passw = signUpJson['password']
     c.execute('''select * from users where login = ? or email = ?''', [login, email])
     if login == '':
