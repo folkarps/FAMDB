@@ -78,7 +78,6 @@ def handleUpload(environ, start_response):
             out.write(preline)
             preline = line
             
-    os.chown(fullPath, utils.uidForFiles, utils.gidForFiles)
     # rest of the properties are set by defaults in the table
     c.execute(
         "insert into versions(missionId, name, createDate) values (?, ?, ?)",
