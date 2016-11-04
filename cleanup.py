@@ -46,6 +46,7 @@ def handleCleanup(environ, start_response):
         c.execute(
             "update versions set " + existsProperty + " = 0, " + toBeArchivedProperty + " = 0, " + toBeDeletedProperty + " = 0 where " +
             toBeArchivedProperty + " = 1 or " + toBeDeletedProperty + " = 1")
+    c.execute("delete from versions where existsOnMM = 0 and existsOnMain = 0")
     c.connection.commit()
     c.connection.close()
 
