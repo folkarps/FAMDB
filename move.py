@@ -23,7 +23,6 @@ def handleMove(environ, start_response):
     fileName = c.fetchone()[0]
     if Path(utils.missionMakerDir + "/" + fileName).is_file():
         copyfile(utils.missionMakerDir + "/" + fileName, utils.missionMainDir + "/" + fileName)
-        os.chown(utils.missionMainDir + "/" + fileName, utils.uidForFiles, utils.gidForFiles)
         c.execute("update versions set existsOnMain=1 where id = ?", [versionId])
         c.connection.commit()
         c.connection.close()
