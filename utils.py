@@ -15,7 +15,8 @@ missionMakerDir = __props['missionMakerDir']
 missionMakerArchive = __props['missionMakerArchive']
 
 port = int(__props['port'])
-
+uidForFiles = int(__props['userForFiles'])
+gidForFiles = int(__props['groupForFiles'])
 
 def getCursor():
     conn = sqlite3.connect(currentPath + '/famdb.db', detect_types=sqlite3.PARSE_DECLTYPES)
