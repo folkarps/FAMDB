@@ -38,11 +38,15 @@ def handleCleanup(environ, start_response):
         c.execute('''select * from versions where ''' + toBeDeletedProperty + ''' = 1''')
         toBeDeleted = c.fetchall()
         for deleteMe in toBeDeleted:
-            os.remove(os.path.join(missionDirPrefix, deleteMe['name']))
-
+            try:
+                os.remove(os.path.join(missionDirPrefix, deleteMe['name']))
+            except OSError:
+                pass
+            
         c.execute(
             "update versions set " + existsProperty + " = 0, " + toBeArchivedProperty + " = 0, " + toBeDeletedProperty + " = 0 where " +
             toBeArchivedProperty + " = 1 or " + toBeDeletedProperty + " = 1")
+    c.execute("delete from versions where existsOnMM = 0 and existsOnMain = 0")
     c.connection.commit()
     c.connection.close()
 

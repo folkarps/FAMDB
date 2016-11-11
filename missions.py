@@ -12,7 +12,7 @@ def handleMissions(environ, start_response):
 
     missionIds = None
     if "new" in o:
-        fancyQuery = "select missionId from versions join missions on versions.missionId = missions.id where versions.createDate > missions.lastPlayed and existsOnMain = 1 and tobeDeletedMain = 0"
+        fancyQuery = "select missionId from versions join missions on versions.missionId = missions.id where (versions.createDate > missions.lastPlayed or missions.lastPlayed is null) and existsOnMain = 1 and tobeDeletedMain = 0"
         c.execute(fancyQuery)
         missionIds = c.fetchall()
     if "needsTransfer" in o:

@@ -23,7 +23,7 @@ def handleUpload(environ, start_response):
     boundary = content_type.split("=")[1].encode()
     remainbytes = int(environ.get('CONTENT_LENGTH', '0'))
 
-    if remainbytes > (20 * 1024):
+    if remainbytes > (20 * 1024 * 1024):
         start_response("500 Internal Server Error", [])
         return ["20 MB is the max size".encode()]
 
@@ -77,6 +77,7 @@ def handleUpload(environ, start_response):
         else:
             out.write(preline)
             preline = line
+            
     # rest of the properties are set by defaults in the table
     c.execute(
         "insert into versions(missionId, name, createDate) values (?, ?, ?)",

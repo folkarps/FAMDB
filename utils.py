@@ -16,7 +16,6 @@ missionMakerArchive = __props['missionMakerArchive']
 
 port = int(__props['port'])
 
-
 def getCursor():
     conn = sqlite3.connect(currentPath + '/famdb.db', detect_types=sqlite3.PARSE_DECLTYPES)
     conn.row_factory = sqlite3.Row
