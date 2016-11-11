@@ -220,6 +220,10 @@ function uploadFile(submitButton){
     }
 }
 
+function downloadVersion(button) {
+        window.location.href = "download?versionId=" + $(button).data("versionid");
+}
+
 function updateFileLabel(uploadSystem) {
     var div = $(uploadSystem).siblings("span")[0];
     var files = uploadSystem.files;

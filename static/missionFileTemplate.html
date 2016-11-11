@@ -1,4 +1,11 @@
 <div class="missionVersionOuter">
+
+    <div style="display:inline-block">
+        <img src="images/download.png" alt="Download" data-template-bind='[
+            {"attribute": "data-missionId", "value": "missionId"}, {"attribute": "data-versionId", "value": "id"}]'
+             class="moveButton" onclick="downloadVersion(this)"/>
+    </div>
+
     <div class="missionVersionInner" data-class="mmExistsClass">
 
         <div style="display:inline-block;width:80%" data-content="name"></div>
