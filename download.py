@@ -14,5 +14,5 @@ def handleDownload(environ, start_response):
     else:
         dir = utils.missionMakerDir
     with open(dir + "/" + version['name'], mode="rb", ) as stream:
-        start_response('200 OK', [('Content-Disposition', 'attachment'), ('filename', version['name'])])
+        start_response('200 OK', [('Content-Disposition', 'attachment; filename="' + version['name'] + '"')])
         return [stream.read()]
