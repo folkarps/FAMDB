@@ -207,8 +207,12 @@ function uploadFile(submitButton){
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // Every thing ok, file uploaded
-                console.log(xhr.responseText); // handle response.
                 window.location.href = "index.html?missionId=" + $(button).data("missionid");
+            }else {
+                if(xhr.status == 500) {
+                    var span = $($(submitButton).siblings(".uploadErrorMessage")[0])[0];
+                    span.innerText = xhr.responseText;
+                }
             }
         };
         fd.append("upload_file", file);

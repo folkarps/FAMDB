@@ -47,6 +47,8 @@ def handleEditSession(environ, start_response):
                 existingMissionNames.remove(mission)
             else:
                 newMissions.append(mission)
+    else:
+        newMissions = missions
 
     for mission in newMissions:
         c.execute("update missions set playedCounter = playedCounter+1, lastPlayed=? where missionName =?",
