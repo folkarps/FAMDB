@@ -134,7 +134,8 @@ function LoadData() {
             widgetZebra: {
                 css: ["normal-row", "odd"]
             },
-            cssChildRow: "descRow"
+            cssChildRow: "descRow",
+            emptyTo: 'emptyMin'
         });
         if(getQueryDict()['missionId'] != null) {
             table = $("#missionTable > tbody");
