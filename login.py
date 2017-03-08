@@ -25,7 +25,6 @@ def handleLogin(environ, start_response):
         cookie = cookies.SimpleCookie()
         cookie['permissionLevel'] = user['permissionLevel']
         header2 = ('set-cookie', cookie.output(header=''))
-        print("returning to user:" + utils.userRowToSessionId(user))
         start_response("200 OK", [header1, header2])
         c.execute("update users set lastLogin = ?", [date.today()])
         c.connection.commit()

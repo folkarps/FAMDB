@@ -36,8 +36,12 @@ def handleCreateUser(environ, start_response):
         if user['id'] == 1:
             c.execute("update users set permissionLevel = 3 where id = 1")
         cookie = cookies.SimpleCookie()
-        cookie['sessionId'] = utils.userRowToSessionId(user)
-        start_response("200 OK", [('set-cookie', cookie.output(header=''))])
+        cookie['famdbSessionId'] = utils.userRowToSessionId(user)
+        header1 = ('set-cookie', cookie.output(header=''))
+        cookie = cookies.SimpleCookie()
+        cookie['permissionLevel'] = user['permissionLevel']
+        header2 = ('set-cookie', cookie.output(header=''))
+        start_response("200 OK", [header1, header2])
         c.connection.commit()
         c.connection.close()
         return []
