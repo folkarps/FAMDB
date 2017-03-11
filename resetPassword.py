@@ -9,7 +9,6 @@ def handleResetPassword(environ, start_response):
     c = utils.getCursor()
     o = parse_qs(environ['QUERY_STRING'])
     if "email" in o:
-        # create random password, email random password to user's email
         c.execute("select * from users where email = ?", [o['email'][0]])
         user = c.fetchone()
         if user is None:
@@ -38,21 +37,19 @@ def handleResetPassword(environ, start_response):
         return ["No email supplied".encode()]
 
 
-# -*- coding: utf-8 -*-
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
 def connect_to_server():
-    server = smtplib.SMTP(utils.emailServer, 587)
+    server = smtplib.SMTP(utils.emailServer, utils.emailPort)
     server.ehlo()
     server.starttls()
     server.login(utils.emailAddress, utils.emailPassword)
     return server
 
 
-# customise this one
 def create_msg(message_name, message_text, email_from, email_to):
     msg = MIMEMultipart()
     msg['Subject'] = message_name

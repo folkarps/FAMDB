@@ -97,7 +97,7 @@ $("#forgottenWindowOk").click(function() {
 
 	jQuery.post("resetPassword?email=" + val, "", function (data) {
         //if data returned anything it would be an error message
-        if(data == null) {
+        if(data == null || data.length == 0) {
             $("#forgottenScreen").hide();
             $("#loginScreen").show();
         }else {

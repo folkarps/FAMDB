@@ -17,6 +17,7 @@ serverAddress = __props['serverAddress']
 emailAddress = __props['emailAddress']
 emailPassword = __props['emailPassword']
 emailServer = __props['emailServer']
+emailPort = __props['emailPort']
 
 port = int(__props['port'])
 
