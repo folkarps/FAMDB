@@ -38,6 +38,10 @@ def initDb():
 
     c.execute("select * from users where sessionKey is null")
 
+    try:
+        c.execute('''ALTER TABLE users add resetPwLink text''')
+    except:
+        pass
     usersWithout = c.fetchall()
 
     for user in usersWithout:

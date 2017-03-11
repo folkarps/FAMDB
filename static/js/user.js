@@ -92,19 +92,17 @@ $("#forgottonPassword").click(function() {
 $("#forgottenWindowOk").click(function() {
 	$("#errorForgot").text("");
 
-	jQuery.post("forgotPass", data, function (data) {
-        //if data returned anything it would be an error message
-    });
 
     var val = $("#forgottonUsername").val();
-    Parse.User.requestPasswordReset(val, {
-        success: function() {
+
+	jQuery.post("resetPassword?email=" + val, "", function (data) {
+        //if data returned anything it would be an error message
+        if(data == null) {
             $("#forgottenScreen").hide();
             $("#loginScreen").show();
-        },
-		error: function(error) {
-			$("#errorForgot").text(error.message);
-		}
+        }else {
+			$("#errorForgot").text(data);
+        }
     });
 });
 $('#forgottenWindowCancel').click(function() {

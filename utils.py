@@ -13,6 +13,10 @@ missionMainArchive = __props['missionMainArchive']
 
 missionMakerDir = __props['missionMakerDir']
 missionMakerArchive = __props['missionMakerArchive']
+serverAddress = __props['serverAddress']
+emailAddress = __props['emailAddress']
+emailPassword = __props['emailPassword']
+emailServer = __props['emailServer']
 
 port = int(__props['port'])
 
