@@ -21,7 +21,7 @@ def handleResetPassword(environ, start_response):
 
             email = create_msg(
                 message_name='FAMDB password reset',
-                message_text='To reset your password go to: ' + utils.serverAddress + '/changePassword?link=' + updateLink,
+                message_text='To reset your password go to: ' + utils.serverAddress + '/changePassword.html?link=' + updateLink,
                 email_from=utils.emailAddress,
                 email_to=user['email']
             )
