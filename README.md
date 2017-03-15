@@ -43,6 +43,11 @@ Configuration
 in the file config.config there are a number of properties:
 * 4 folders, 2 for the missions and 2 for archives
 * Port on which the built in server should run. This is ignored if using an external wsgi server.
+* email address for the recover password feature
+* email password for the recover password feature
+* email Server for the recover password feature
+* email sever for the recover password feature
+* external server address for the recover password feature
  
 Please ensure that the user running the server has permissions to access these folders, as well as the entire famdb folder structure.
 
