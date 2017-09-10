@@ -1,3 +1,4 @@
+from http import cookies
 from http.cookies import SimpleCookie
 
 import utils
@@ -42,6 +43,15 @@ def wsgi(environ, start_response):
         return handlers[simplePath](environ, start_response)
     else:
         responseHeaders = utils.handleBadSessionIds(environ)
+
+        permissionCookie = SimpleCookie(environ['HTTP_COOKIE'])
+        if 'permissionLevel' in permissionCookie:
+            cookiePermissionLevel = permissionCookie['permissionLevel'].value
+            if str(environ['user'].permissionLevel) != cookiePermissionLevel:
+                cookie = cookies.SimpleCookie()
+                cookie['permissionLevel'] = environ['user'].permissionLevel
+                responseHeaders.append(('set-cookie', cookie.output(header='')))
+
         responseHeaders.append(('Cache-Control', 'max-age=86400'))
         if path == '/':
             path = '/index.html'
