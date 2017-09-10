@@ -19,6 +19,7 @@ from resetPassword import handleResetPassword
 from saveMission import handleSaveMission
 from session import handleGetSession
 from setPermissionLevel import handlePermissionLevel
+from sync import handleSync
 from upload import handleUpload
 from users import handleUsers
 
@@ -28,7 +29,7 @@ handlers = {'deleteVersion': handleVersionDelete, 'login': handleLogin, 'signup'
             "editSession": handleEditSession, "deleteSession": handleSessionDelete,
             "deleteMission": handleMissionDelete, 'missions': handleMissions, 'authors': handleAuthors,
             'users': handleUsers, 'sessions': handleGetSession, 'download': handleDownload,
-            'resetPassword': handleResetPassword, 'changePasswordInternal': handleChangePassword}
+            'resetPassword': handleResetPassword, 'changePasswordInternal': handleChangePassword, 'sync': handleSync}
 
 
 def wsgi(environ, start_response):

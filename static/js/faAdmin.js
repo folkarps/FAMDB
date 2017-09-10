@@ -32,6 +32,12 @@ function cleanup() {
         window.location.href = "index.html"
     });
 }
+
+function sync() {
+    jQuery.post("sync", {}, function(data, status, jqXHR) {
+        window.location.href = "index.html"
+    });
+}
 $("#getout").hide();
 UpdateLoginButton();
 LoadUsers();
