@@ -5,6 +5,8 @@ ArmAx missions database written in python3 and jQuery
 
 FAMDB is designed to simplify the lives of admins and hosts.
 
+FolkArps's instance of FAMDB can be seen at http://server.folkarps.com/famdb/
+
 Users can create and edit mission descriptions, upload mission versions, and
 schedule deletion of specific versions of missions.
 
@@ -43,6 +45,11 @@ Configuration
 in the file config.config there are a number of properties:
 * 4 folders, 2 for the missions and 2 for archives
 * Port on which the built in server should run. This is ignored if using an external wsgi server.
+* email address for the recover password feature
+* email password for the recover password feature
+* email Server for the recover password feature
+* email sever for the recover password feature
+* external server address for the recover password feature
  
 Please ensure that the user running the server has permissions to access these folders, as well as the entire famdb folder structure.
 
@@ -59,3 +66,5 @@ Credits
 * Tigershark
 * Wolfenswan
 * Pooter
+
+For help contact Pooter on discord at Pooter#7054 or on the FolkArps discord (www.folkarps.com)
