@@ -170,7 +170,10 @@ function archiveVersion(mission, origin) {
     data.versionId = $(mission).data("versionid");
     data.origin = origin;
     jQuery.post("archive", JSON.stringify(data), function (data, status, jqXHR) {
-            window.location.href = "index.html?missionId=" + $(mission).data("missionid");
+        if(status == "success") {
+                $(mission).siblings(".deleteButton").remove()
+                $(mission).remove()
+            }
         });
 }
 function deleteVersion(mission, origin) {
@@ -179,7 +182,11 @@ function deleteVersion(mission, origin) {
     data.versionId = $(mission).data("versionid");
     data.origin = origin;
     jQuery.post("deleteVersion", JSON.stringify(data), function (data, status, jqXHR) {
-            window.location.href = "index.html?missionId=" + $(mission).data("missionid");
+            if(status == "success") {
+                $(mission).siblings(".archiveButton").remove()
+                $(mission).remove()
+            }
+
         });
 }
 
@@ -188,7 +195,10 @@ function moveVersion(mission) {
     data.missionId = $(mission).data("missionid");
     data.versionId = $(mission).data("versionid");
     jQuery.post("move", JSON.stringify(data), function (data, status, jqXHR) {
-            window.location.href = "index.html?missionId=" + $(mission).data("missionid");
+            var img = $(mission);
+            var parent = img.parent().parent();
+            var children = parent.children(".hideMe")
+            children.removeClass("hideMe");
         });
 }
 
