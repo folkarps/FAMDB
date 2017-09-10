@@ -18,7 +18,7 @@ function isLoggedIn() {
 }
 
 function getPermissionLevel() {
-    parts = document.cookie.split(" ");
+    var parts = document.cookie.split(" ");
     for(var i = 0; i < parts.length; i++) {
         if(parts[i].includes("permissionLevel")) {
             return parseInt(parts[i].replace("permissionLevel=", ""));
