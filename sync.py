@@ -9,10 +9,20 @@ import utils
 
 def sanatizeFileName(x: str):
     x = x.replace('fa3_', '')
-    x = re.sub(r'(a|c)\d+', "", x)
-    x = re.sub(r'v(t)?\d+.*', "", x)
+    x = re.sub(r'(a|c|z|x|w|r)+\d+', "", x)
+    x = re.sub(r'v(t)*\d+.*', "", x)
     x = x.replace("_", "")
     x = x.lower()
+    return x
+
+
+def sanatizeMissionName(x: str):
+    x = x.lower()
+    x = x.replace(' ', '')
+    x = x.replace('\'', '')
+    x = x.replace('(', '')
+    x = x.replace(')', '')
+    x = x.replace('/', '')
     return x
 
 
@@ -66,7 +76,7 @@ def handleSync(environ, start_response):
         # if not
         # add to db
         for mission in missions:
-            sanitizedName = mission['missionName'].lower().replace(' ', '')
+            sanitizedName = sanatizeMissionName(mission['missionName'])
             if sanitizedName in filesGroupedByMissionName:
 
                 filesForThisMission = filesGroupedByMissionName[sanitizedName]
@@ -100,7 +110,7 @@ def handleSync(environ, start_response):
         # if not
         # add to db
         for mission in missions:
-            sanitizedName = mission['missionName'].lower().replace(' ', '')
+            sanitizedName = sanatizeMissionName(mission['missionName'])
             if sanitizedName in filesGroupedByMissionName:
 
                 filesForThisMission = filesGroupedByMissionName[sanitizedName]
