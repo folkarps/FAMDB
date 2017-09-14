@@ -48,7 +48,7 @@ def wsgi(environ, start_response):
         permissionCookie = SimpleCookie(environ['HTTP_COOKIE'])
         if 'permissionLevel' in permissionCookie:
             cookiePermissionLevel = permissionCookie['permissionLevel'].value
-            if str(environ['user'].permissionLevel) != cookiePermissionLevel:
+            if environ['user'] is not None and str(environ['user'].permissionLevel) != cookiePermissionLevel:
                 cookie = cookies.SimpleCookie()
                 cookie['permissionLevel'] = environ['user'].permissionLevel
                 responseHeaders.append(('set-cookie', cookie.output(header='')))
