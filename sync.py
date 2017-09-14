@@ -1,7 +1,18 @@
 import itertools
+import os
+import re
+from datetime import date
 from pathlib import Path
 
 import utils
+
+
+def sanatizeFileName(x: str):
+    x = x.replace('fa3_', '')
+    x = re.sub(r'(a|c)\d+', "", x)
+    x = re.sub(r'v(t)?\d+.*', "", x)
+    x = x.replace("_", "")
+    return x
 
 
 def handleSync(environ, start_response):
@@ -29,13 +40,80 @@ def handleSync(environ, start_response):
             if not existsOnMain and not existsOnMM:
                 c.execute(str.format('''delete from versions where id = {}''', version['id']))
 
-        # group the mission by their mission Id
-        versionsGroupedByMission = {}
-        for k, g in itertools.groupby(versionsFromDb, lambda x: x['missionId']):
-            versionsGroupedByMission[k] = list(g)
+        c.connection.commit()
+        c.connection.close()
+
+        c = utils.getCursor()
+
+        c.execute('''select id, missionName from missions''')
+
+        missions = c.fetchall()
+        fileNames = os.listdir(utils.missionMakerDir)
+
+        filesGroupedByMissionName = {}
+        for k, g in itertools.groupby(fileNames, lambda x: sanatizeFileName(x)):
+            filesGroupedByMissionName[k] = list(g)
+
+        c.execute('''select name from versions''')
+        versionRows = c.fetchall()
+        versions = [x['name'] for x in versionRows]
+
+        # for each db mission
+        # find all files that match
+        # for each file
+        # find out if file is in db
+        # if not
+        # add to db
+        for mission in missions:
+            sanitizedName = mission['missionName'].lower().replace(' ', '')
+            if sanitizedName in filesGroupedByMissionName:
+
+                filesForThisMission = filesGroupedByMissionName[sanitizedName]
+                for fileForThisMission in filesForThisMission:
+                    if not fileForThisMission in versions:
+                        c.execute(
+                            "insert into versions(missionId, name, createDate) values (?, ?, ?)",
+                            [mission['id'], fileForThisMission, date.today()])
+
+                    c.execute("update versions set existsOnMM = 1 where name = ?", [fileForThisMission])
 
         c.connection.commit()
         c.connection.close()
+
+        c = utils.getCursor()
+
+        fileNames = os.listdir(utils.missionMainDir)
+
+        filesGroupedByMissionName = {}
+        for k, g in itertools.groupby(fileNames, lambda x: sanatizeFileName(x)):
+            filesGroupedByMissionName[k] = list(g)
+
+        c.execute('''select name from versions''')
+        versionRows = c.fetchall()
+        versions = [x['name'] for x in versionRows]
+
+        # for each db mission
+        # find all files that match
+        # for each file
+        # find out if file is in db
+        # if not
+        # add to db
+        for mission in missions:
+            sanitizedName = mission['missionName'].lower().replace(' ', '')
+            if sanitizedName in filesGroupedByMissionName:
+
+                filesForThisMission = filesGroupedByMissionName[sanitizedName]
+                for fileForThisMission in filesForThisMission:
+                    if not fileForThisMission in versions:
+                        c.execute(
+                            "insert into versions(missionId, name, createDate, existsOnMM) values (?, ?, ?, ?)",
+                            [mission['id'], fileForThisMission, date.today(), False])
+                    c.execute("update versions set existsOnMain = 1 where name = ?", [fileForThisMission])
+
+        c.connection.commit()
+        c.connection.close()
+
+
     else:
         start_response("403 Permission Denied", [])
         return ["Access Denied".encode()]
