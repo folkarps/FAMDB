@@ -12,6 +12,7 @@ def sanatizeFileName(x: str):
     x = re.sub(r'(a|c)\d+', "", x)
     x = re.sub(r'v(t)?\d+.*', "", x)
     x = x.replace("_", "")
+    x = x.lower()
     return x
 
 
