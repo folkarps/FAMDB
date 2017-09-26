@@ -9,6 +9,7 @@ def toParams(editSessionJson, sessionId):
     params.append(editSessionJson['host'])
     params.append(editSessionJson['name'])
     params.append(editSessionJson['players'])
+    params.append(editSessionJson['date'])
     params.append(sessionId)
     return params
 
@@ -34,7 +35,7 @@ def handleEditSession(environ, start_response):
     c.execute("select missionNames from sessions where id = ?", [sessionId])
     existingMissionNames = c.fetchone()
 
-    c.execute("update sessions set missionNames = ?, host = ?, name = ?, players = ? where id = ? ",
+    c.execute("update sessions set missionNames = ?, host = ?, name = ?, players = ?, date = ? where id = ? ",
               toParams(editSessionJson, sessionId))
     missions = editSessionJson['missionNames']
 
