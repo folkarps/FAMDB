@@ -6,8 +6,8 @@ function LoadUsers()
     {
 
         var users = eval(data);
-        $("#missionTable > tbody").loadTemplate("userTemplate.html",
-            users);
+        var contents = $.render.userTmpl(users);
+        $("#missionTable > tbody").html(contents);
     });
 }
 function HideAll()
