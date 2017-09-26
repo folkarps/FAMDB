@@ -65,13 +65,8 @@ function LoadData() {
             if(!item.allowedToEdit) {
                 item.editClass = 'hideMe';
             }
-            item.missionDesc = item.missionDesc.replace("\n", "<br/>");
-            item.missionNotes = item.missionNotes.replace("\n", "<br/>");
             item.fileUploadId = "fileUpload" + item.id;
         })
-
-        $("#missionTable > tbody").loadTemplate("missionTemplate.html",
-            missions);
 
         missions.forEach(function(item) {
             if(item.versions != null) {
@@ -111,9 +106,11 @@ function LoadData() {
                         }
                     }
                 });
-                $($("#missionTable").find("[data-missionIdBlah=" + item.id + "]")).loadTemplate("missionFileTemplate.html", item.versions);
             }
         })
+
+        var contents = $.render.missionTmpl(missions);
+        $("#missionTable > tbody").html(contents);
 
 
         // Hide all description rows

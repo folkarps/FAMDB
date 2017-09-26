@@ -14,12 +14,6 @@ function LoadData() {
                 item.editClass = 'hideMe';
             }
         })
-        $.addTemplateFormatter("missionNameListFormatter",
-            function(value, template) {
-                var stringValue = "";
-                value.forEach(function(name) {stringValue += name + "<br/>"});
-                return stringValue;
-            });
         $("#missionTable > tbody").loadTemplate("sessionTemplate.html",
             missions);
 
