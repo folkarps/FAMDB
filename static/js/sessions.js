@@ -14,8 +14,8 @@ function LoadData() {
                 item.editClass = 'hideMe';
             }
         })
-        $("#missionTable > tbody").loadTemplate("sessionTemplate.html",
-            missions);
+        var contents = $.render.sessionTmpl(missions);
+        $("#missionTable > tbody").html(contents);
 
 
 

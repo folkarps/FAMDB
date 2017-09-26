@@ -18,7 +18,8 @@ function loadSession() {
                 $("#sessionName").val(session.name);
                 $("#sessionPlayers").val(session.players);
                 $("#sessionDate").val(session.date);
-                $("#missionList").loadTemplate("sessionMissionTemplate.html", session.missionNamesList.map(function(item){return {missionName:item};}));
+                var contents = $.render.sessionMissionTmpl(session.missionNamesList.map(function(item){return {missionName:item};}));
+                $("#missionList").html(contents);
             }
         });
     }else {
