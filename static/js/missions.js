@@ -141,6 +141,10 @@ function LoadData() {
             cellMissions = $($(item).prev().children()[0]).find("i")[0];
             $(cellMissions).toggleClass("fa-chevron-down fa-chevron-up")
             $(item).toggle();
+            $('html, body').animate({
+                scrollTop: $(cellMissions).offset().top
+            }, 500);
+
 
         }
 
