@@ -39,6 +39,7 @@ def wsgi(environ, start_response):
         cookie = SimpleCookie(environ['HTTP_COOKIE'])
         environ['user'] = utils.getCurrentUser(cookie)
     else:
+        environ['HTTP_COOKIE'] = None
         environ['user'] = None
     if simplePath in handlers:
         return handlers[simplePath](environ, start_response)

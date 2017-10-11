@@ -5,13 +5,12 @@
 
     <title>Folk ARPS | Missions DB</title>
     <link href="css/normalize.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link href="css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/font-awesome.css">
     <!-- NOTE: The link to Google fonts is optional and commented-out by default. -->
     <link href=
                   'http://fonts.googleapis.com/css?family=Ubuntu:300,500|Ubuntu+Condensed'
           rel='stylesheet' type='text/css'>
-    <link href="css/main.css" rel="stylesheet">
-    <link href="css/responsive.css" rel="stylesheet">
     <!-- <meta name="viewport" content"width=device-width, initial-scale=1.0"> -->
     <meta content="initial-scale=1.0" name="viewport">
 </head>
@@ -40,13 +39,10 @@
     </nav>
 </header><!-- NOTE: The wrapper div is centered via CSS. -->
 
-<div id="wrapper">
+<div>
     <section id="filters">
         <div id="filtersHeader">
             <h3>Filters</h3>
-
-            <p>These filters operate at the same time (an AND query). The
-                more filters you use, the more demanding the search.</p>
         </div>
 
         <form action="#" id="form_filters" method="post" name=
@@ -169,9 +165,8 @@
                         <a href="#">Modified</a>
                     </th>
 
-                    <th class="cellHeaderBroken">&nbsp;</th>
-
-                    <th class="cellHeaderRevision">&nbsp;</th>
+                    <th class="cellHeaderStatus">&nbsp;
+                        <a href="#">Status</a></th>
                 </tr>
                 </thead>
                 <tbody></tbody>
@@ -281,6 +276,7 @@
 <script>
         GetIslandsList("#islandSelected");
         GenerateMissionTypesCheckbox("#missionTypes");
+        GetStatuses("#statusSearch");
 
 
 </script>

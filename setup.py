@@ -2,8 +2,14 @@ from distutils.core import setup
 
 setup(
     name='FAMDB',
-    version='2.0.7-alpha',
+    version='2.1',
     url='https://github.com/Raptoer/FAMDB',
+    install_requires=[
+        'discord.py',
+        'passlib',
+        'pycrypto',
+        'psutil',
+    ],
     license='',
     author='abarton',
     author_email='Raptoer@gmail.com',

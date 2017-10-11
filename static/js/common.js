@@ -8,6 +8,9 @@ function GetMissionAuthor(preSelect) {
             $("#authorSelected").append("<option>" +
             arr[y] +
             "</option>");
+            $("#missionAuthorSearch").append("<option>" +
+            arr[y] +
+            "</option>");
         }
     });
 }

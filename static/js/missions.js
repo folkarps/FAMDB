@@ -128,11 +128,11 @@ function LoadData() {
             // sort on the first column and third column, order asc
             widgets: ["zebra"], // initialize zebra striping of the table
             sortList: [[0,0]], // Sort table alphabetically by default
-            widgetZebra: {
-                css: ["normal-row", "odd"]
-            },
             cssChildRow: "descRow",
-            emptyTo: 'emptyMin'
+            emptyTo: 'emptyMin',
+            cssAsc           : 'fa fa-sort-asc',
+            cssDesc          : 'fa fa-sort-desc',
+            cssNone          : 'fa fa-sort',
         });
         if(getQueryDict()['missionId'] != null) {
             table = $("#missionTable > tbody");
@@ -196,6 +196,18 @@ function moveVersion(mission) {
     data.missionId = $(mission).data("missionid");
     data.versionId = $(mission).data("versionid");
     jQuery.post("move", JSON.stringify(data), function (data, status, jqXHR) {
+            var img = $(mission);
+            var parent = img.parent().parent();
+            var children = parent.children(".hideMe")
+            children.removeClass("hideMe");
+        });
+}
+
+function requestTransfer(mission) {
+    var data = {}
+    data.missionId = $(mission).data("missionid");
+    data.versionId = $(mission).data("versionid");
+    jQuery.post("requestTransfer", JSON.stringify(data), function (data, status, jqXHR) {
             var img = $(mission);
             var parent = img.parent().parent();
             var children = parent.children(".hideMe")

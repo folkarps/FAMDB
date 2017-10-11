@@ -22,7 +22,8 @@ def initDb():
                    missionMap text,
                     playedCounter int default 0,
                     missionDesc text,
-                    missionNotes text)''')
+                    missionNotes text,
+                    status varchar(24) default 'WIP')''')
 
     c.execute('''CREATE TABLE if not exists users
                  (id integer primary key, login text, email text, password text, createDate text, lastLogin text, permissionLevel integer, sessionKey text)''')

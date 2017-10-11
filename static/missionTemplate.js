@@ -23,8 +23,8 @@ $.templates("missionTmpl", `<tr class='row' id={{:id}}>
     <td class='cellModified'>
         <div>{{>missionModified}}</div>
     </td>
-    <td class='cellBroken'><i title='Broken' class='{{:brokenClass}}'></i></td>
-    <td class='cellRevision'><i title='Revision' class='{{:revisionClass}}'></i></td>
+    <td class='cellStatus'
+        <div>{{>status}}</div>
 </tr>
 <tr id='descRow' class='row descRow' data-missionId={{:id}}>
     <td data-id='id' class='cellDropdown' colspan='10'>

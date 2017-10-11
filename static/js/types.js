@@ -1,18 +1,8 @@
-var missionTypes = ["Adversarial","Coop","Coop (ZEUS)","Afterparty"];
+var missionTypes = ["Adversarial","Coop","Coop (ZEUS)","Afterparty", "Race"];
 var islands = ["Altis","Tanoa","Stratis","Malden","Virtual Reality"];
-var games = ["Arma 3"];
-var session = ["Vanilla"];
+var statuses = ["Broken", "WIP", "Ready", "Testing"];
 
 
-function GetGamesList(parent) {
-    "use strict";
-    $.each(games, function (key, value) {
-        $(parent).append($("<option/>", {
-            value: value,
-            text: value
-        }));
-    });
-}
 function GetIslandsList(parent) {
     "use strict";
 
@@ -22,19 +12,20 @@ function GetIslandsList(parent) {
             text: value
         }));
     });
-} 
-function GetSessionsList(parent) {
+}
+function GetMissionTypesList(parent) {
     "use strict";
-    $.each(session, function (key, value) {
+    $.each(missionTypes, function (key, value) {
         $(parent).append($("<option/>", {
             value: value,
             text: value
         }));
     });
-} 
-function GetMissionTypesList(parent) {
+}
+
+function GetStatuses(parent) {
     "use strict";
-    $.each(missionTypes, function (key, value) {
+    $.each(statuses, function (key, value) {
         $(parent).append($("<option/>", {
             value: value,
             text: value

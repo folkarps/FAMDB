@@ -57,6 +57,7 @@ def handleMissions(environ, start_response):
 def toDto(missionFromDb, verionsGrouped, user: utils.User):
     dto = toDtoHelper(missionFromDb)
 
+    dto['missionAuthor'] = (dto['missionAuthor'][:8] + '..') if len(dto['missionAuthor']) > 8 else dto['missionAuthor']
     dto['allowedToMove'] = False
     dto['allowedToEdit'] = False
     dto['allowedToVersion'] = False

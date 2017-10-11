@@ -8,11 +8,12 @@ $.templates("versionTmpl", `<div class="missionVersionOuter">
     <div class="missionVersionInner" class='{{:mmExistsClass}}'>
 
         <div style="display:inline-block;width:80%">{{>name}}</div>
-
-        <img src="images/archive.png" alt="Archive" class='archiveButton {{:toBeArchivedMMClass}}' data-missionId={{:missionId}} data-versionId={{:id}}
-             onclick="archiveVersion(this, 'missionMaking')"/>
         <img src="images/delete.png" alt="Delete" class='deleteButton {{:toBeDeletedMMClass}}'  data-missionId={{:missionId}} data-versionId={{:id}}
              onclick="deleteVersion(this, 'missionMaking')"/>
+    </div>
+    <div style="display:inline-block" class='{{:mmExistsMainDoesNotClass}}'>
+        <img src="images/requestTransfer.png" alt="Move"  data-missionId={{:missionId}} data-versionId={{:id}}
+             class="moveButton" onclick="requestTransfer(this)"/>
     </div>
     <div style="display:inline-block" class='{{:mmExistsMainDoesNotClass}}'>
         <img src="images/move.png" alt="Move"  data-missionId={{:missionId}} data-versionId={{:id}}
@@ -21,8 +22,6 @@ $.templates("versionTmpl", `<div class="missionVersionOuter">
     <div class="missionVersionInner {{:mainExistsClass}}" style="float:right;">
 
         <div style="display:inline-block;text-align:left">{{>name}}</div>
-        <img src="images/archive.png" alt="Archive" class="archiveButton {{:toBeArchivedMainClass}}" data-missionId={{:missionId}} data-versionId={{:id}}
-             onclick="archiveVersion(this, 'main')"/>
         <img src="images/delete.png" alt="Delete" class="deleteButton {{:toBeDeletedMainClass}}"  data-missionId={{:missionId}} data-versionId={{:id}}
              onclick="deleteVersion(this, 'main')"/>
 
