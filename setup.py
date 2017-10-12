@@ -10,7 +10,7 @@ setup(
         'pycrypto',
         'psutil',
     ],
-    license='',
+    license='MIT',
     author='abarton',
     author_email='Raptoer@gmail.com',
     description='Arma mission database'

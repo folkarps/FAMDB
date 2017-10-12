@@ -14,19 +14,7 @@ def constructQuery(missionJson):
         params.append(missionJson[part])
 
     if missionJson['isBroken']:
-        queryParts.append("isBroken=?")
-        params.append(1)
-    else:
-        queryParts.append("isBroken=?")
-        params.append(0)
-
-
-    if missionJson['needsRevision']:
-        queryParts.append("needsRevision=?")
-        params.append(1)
-    else:
-        queryParts.append("needsRevision=?")
-        params.append(0)
+        queryParts.append("status='Broken'")
 
     queryParts.append("missionModified=?")
     params.append(date.today())

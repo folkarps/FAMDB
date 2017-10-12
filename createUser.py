@@ -1,7 +1,9 @@
 import json
+import re
 from datetime import date
 from http import cookies
 
+import requests
 from Crypto.Cipher import AES
 from passlib.hash import sha256_crypt
 
@@ -14,6 +16,20 @@ def handleCreateUser(environ, start_response):
     signUpJson = json.loads(loginJsonString)
     login = signUpJson['login'].strip()
     email = signUpJson['email'].strip()
+    discordId = signUpJson['discordId'].strip()
+
+    regexp = re.compile(r'[a-zA-Z]')
+    if regexp.search(discordId):
+        start_response("500 Internal Server Error", [])
+        return ["Discord ID, not Discord user tag."
+                " <a href='https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-'>"
+                " See This</a>".encode()]
+    if discordId == '':
+        start_response("500 Internal Server Error", [])
+        return ["Discord ID required."
+                " <a href='https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-'>"
+                " See This</a>".encode()]
+
     passw = signUpJson['password']
     c.execute('''select * from users where login = ? or email = ?''', [login, email])
     if login == '':
@@ -29,8 +45,8 @@ def handleCreateUser(environ, start_response):
         from Crypto import Random
         sessionKey = Random.new().read(AES.block_size)
         c.execute(
-            '''insert into users (login, password, email, lastLogin, permissionLevel, sessionKey) values (?, ?, ?, ?, ?, ?)''',
-            [login, sha256_crypt.encrypt(passw), email, date.today(), 0, sessionKey])
+            '''insert into users (login, password, email, lastLogin, permissionLevel, sessionKey, discordId) values (?, ?, ?, ?, ?, ?, ?)''',
+            [login, sha256_crypt.encrypt(passw), email, date.today(), 0, sessionKey, discordId])
         c.execute('''select * from users where login = ?''', [login])
         user = c.fetchone()
         if user['id'] == 1:
@@ -44,6 +60,13 @@ def handleCreateUser(environ, start_response):
         start_response("200 OK", [header1, header2])
         c.connection.commit()
         c.connection.close()
+
+        if utils.discordHookUrl != '':
+            payload = {
+                'content': 'Comrads! Welcome our new mission maker  <@' + discordId
+                           + '>. Hopefully they will a great many missions to our cause!'}
+
+            r = requests.post(utils.discordHookUrl, data=payload)
         return []
     else:
         start_response("500 Internal Server Error", [])

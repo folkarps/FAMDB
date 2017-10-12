@@ -1,6 +1,4 @@
 import json
-from pathlib import Path
-from shutil import copyfile
 
 import requests
 
@@ -13,12 +11,13 @@ def authorToUser(author):
     return c.fetchone()[0]
 
 
-def handleMove(environ, start_response):
+def handleReject(environ, start_response):
     user = environ['user']
     missionJsonString = utils.environToContents(environ)
     missionJson = json.loads(missionJsonString)
     missionId = missionJson['missionId']
     versionId = missionJson['versionId']
+    comment = missionJson['comment']
     # If you're a MM user and this is your mission, or you're a low admin
     if not (utils.checkUserPermissions(user, 1, missionId=missionId, collector=utils.AND) or utils.checkUserPermissions(
             user, 2)):
@@ -29,13 +28,9 @@ def handleMove(environ, start_response):
     c.execute("select name from versions where id = ?", [versionId])
 
     fileName = c.fetchone()[0]
-    if Path(utils.missionMakerDir + "/" + fileName).is_file():
-        copyfile(utils.missionMakerDir + "/" + fileName, utils.missionMainDir + "/" + fileName)
-        c.execute("update versions set existsOnMain=1 where id = ?", [versionId])
 
-        c.execute("update missions set status ='Ready' where id = ?", [missionId])
-        c.connection.commit()
-        c.connection.close()
+    c.execute("update missions set status ='WIP' where id = ?", [missionId])
+    c.execute("insert into comments (versionId, userId, comment) values (?,?,?)", versionId, user.id, comment)
 
     if utils.discordHookUrl != '':
         c.execute("select missionAuthor from missions where id = ?", [missionId])
@@ -43,7 +38,7 @@ def handleMove(environ, start_response):
         missionAuthorDiscordIds = filter(None, [authorToUser(author) for author in missionFromDb[0].split(",")])
         missionAuthorDiscordIds = ['<@' + discordId + ">" for discordId in missionAuthorDiscordIds]
 
-        payload = {'content': 'Rejoice  ' + ' '.join(missionAuthorDiscordIds) + '! ' + fileName + ' has been accepted'}
+        payload = {'content': 'Despair  ' + ' '.join(missionAuthorDiscordIds) + '! ' + fileName + ' has been rejected'}
 
         r = requests.post(utils.discordHookUrl, data=payload)
 

@@ -47,7 +47,7 @@ function Login() {
 
 function SignUp() {
     $("#errorSignup").text("");
-    var data = JSON.stringify({login:$("#signupName").val(), password:$("#signupPassword").val(), email: $("#signupEmail").val()})
+    var data = JSON.stringify({login:$("#signupName").val(), password:$("#signupPassword").val(), email: $("#signupEmail").val(), discordId:$("#discordId").val()})
     jQuery.post("signup", data, function (data) {
 
             //refresh current page with new cookies so that the buttons are correct
@@ -58,10 +58,10 @@ function SignUp() {
                 $("#loginScreen").show();
                 UpdateLoginButton();
             }else {
-                $("#errorSignup").text(data);
+                $("#errorSignup").html(data);
             }
     }).fail(function(data, status, jqXHR) {
-        $("#errorSignup").text(data.responseText);
+        $("#errorSignup").html(data.responseText);
   });
 }
 

@@ -3,6 +3,8 @@ import re
 from datetime import date
 from urllib.parse import parse_qs
 
+import requests
+
 import utils
 
 
@@ -10,6 +12,7 @@ def handleUpload(environ, start_response):
     c = utils.getCursor()
     o = parse_qs(environ['QUERY_STRING'])
     missionId = o['missionId'][0]
+    minorVersion = o['minor'][0] == "on"
     if not utils.checkUserPermissions(environ['user'], 2, missionId):
         start_response("403 Permission Denied", [])
         return ["Access Denied"]
@@ -26,7 +29,6 @@ def handleUpload(environ, start_response):
     if remainbytes > (20 * 1024 * 1024):
         start_response("500 Internal Server Error", [])
         return ["20 MB is the max size".encode()]
-
 
     line = environ['wsgi.input'].readline()
     remainbytes -= len(line)
@@ -50,7 +52,6 @@ def handleUpload(environ, start_response):
     if not fileName.endswith(".pbo"):
         start_response("500 Internal Server Error", [])
         return ["Only .pbo files are allowed".encode()]
-
 
     fullPath = os.path.join(utils.missionMakerDir, fileName).replace("\n", "")
     line = environ['wsgi.input'].readline()
@@ -77,11 +78,23 @@ def handleUpload(environ, start_response):
         else:
             out.write(preline)
             preline = line
-            
+
     # rest of the properties are set by defaults in the table
     c.execute(
-        "insert into versions(missionId, name, createDate) values (?, ?, ?)",
-        [missionId, fileName, date.today()])
+        "insert into versions(missionId, name, createDate,minorVersion) values (?, ?, ?,?)",
+        [missionId, fileName, date.today(), minorVersion])
+    if minorVersion:
+
+        if utils.discordHookUrl != '':
+            c.execute("select missionName, missionAuthor from missions where id = ?", [missionId])
+            missionStuff = c.fetchone()
+            missionName = missionStuff[0]
+            missionAuthor = missionStuff[1]
+            payload = {'content': '@<&' + utils.discordAdminRoleId + '> Rejoice Comrades! ' + missionAuthor
+                                  + ' has made minor changes to ' +
+                                  missionName + '. This needs to be accepted'}
+
+            r = requests.post(utils.discordHookUrl, data=payload)
     c.connection.commit()
     c.connection.close()
 

@@ -53,30 +53,28 @@ def handleMissions(environ, start_response):
     return [encode]
 
 
+def addPermissions(version, movePermission, editPermission):
+    version['allowedToMove'] = movePermission
+    version['allowedToEdit'] = editPermission
+    return version
+
 # copy the variables out of the non-serializable db object into a blank object
 def toDto(missionFromDb, verionsGrouped, user: utils.User):
     dto = toDtoHelper(missionFromDb)
-
     dto['missionAuthor'] = (dto['missionAuthor'][:8] + '..') if len(dto['missionAuthor']) > 8 else dto['missionAuthor']
-    dto['allowedToMove'] = False
     dto['allowedToEdit'] = False
     dto['allowedToVersion'] = False
-    dto['allowedToArchive'] = False
+    allowedToMove = False
+    allowedToEdit = False
     if user is not None:
-        if user.permissionLevel >= 2:
-            dto['allowedToMove'] = True
-            dto['allowedToEdit'] = True
-            dto['allowedToVersion'] = True
-            dto['allowedToArchive'] = True
-        if user.login in missionFromDb['missionAuthor'].split(","):
-            dto['allowedToEdit'] = True
-            dto['allowedToVersion'] = True
-        if user.login in missionFromDb['missionAuthor'].split(",") and user.permissionLevel >= 1:
-            dto['allowedToMove'] = True
-            dto['allowedToEdit'] = True
-            dto['allowedToVersion'] = True
+        allowedToEdit = user.permissionLevel >= 2 or user.login in missionFromDb['missionAuthor'].split(",")
+        allowedToMove = user.permissionLevel >= 2 or (
+        user.login in missionFromDb['missionAuthor'].split(",") and user.permissionLevel >= 1)
+        dto['allowedToEdit'] = allowedToEdit
     if dto['id'] in verionsGrouped:
         versionsForThisMission = [toDtoHelper(version) for version in verionsGrouped[dto['id']]]
+        versionsForThisMission = [addPermissions(version, allowedToMove, allowedToEdit) for version in
+                                  versionsForThisMission]
         finalVersion = sorted(versionsForThisMission, key=lambda x: x['createDate'])
         dto['versions'] = finalVersion
 
@@ -96,17 +94,9 @@ def constructQuery(params, missionIds: list):
     if ("author" in params) and (params['author'][0] != 'All Authors'):
         query.append("missionAuthor = ?")
         p.append(params['author'][0])
-    if "isBroken" in params:
-        query.append("isBroken = ?")
-        p.append(1)
-    if "needsRevision" in params:
-        query.append("needsRevision = ?")
-        p.append(1)
-    if "working" in params:
-        query.append("needsRevision = ?")
-        p.append(0)
-        query.append("isBroken = ?")
-        p.append(0)
+    if "status" in params and (params['status'][0] != 'All Statuses'):
+        query.append("status = ?")
+        p.append(params['status'][0])
     if "missionTypes[]" in params:
         missionTypeString = ["'{0}'".format(w) for w in params['missionTypes[]']]
         query.append(str.format("missionType in({})", ",".join(missionTypeString)))

@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import requests
+
 import utils
 
 
@@ -22,10 +24,20 @@ def handleTransfer(environ, start_response):
     fileName = c.fetchone()[0]
     if Path(utils.missionMakerDir + "/" + fileName).is_file():
         c.execute("update missions set status='Testing' where id = ?", [missionId])
-        self.send_message(message.channel, msg)
-        c.connection.commit()
-        c.connection.close()
+        c.execute("update versions set requestedTransfer=1 where id = ?", [versionId])
 
-    # \ write to discord
+    if utils.discordHookUrl != '':
+        c.execute("select missionName, missionAuthor from missions where id = ?", [missionId])
+        missionStuff = c.fetchone()
+        missionName = missionStuff[0]
+        missionAuthor = missionStuff[1]
+        payload = {'content': '@<&' + utils.discordAdminRoleId + '> Rejoice Comrades! ' + missionAuthor
+                              + ' has prepared a new adventure for us!\n' +
+                              missionName + ' now has ' + fileName + ' requested for transfer'}
+
+        r = requests.post(utils.discordHookUrl, data=payload)
+
+    c.connection.commit()
+    c.connection.close()
     start_response("200 OK", [])
     return []

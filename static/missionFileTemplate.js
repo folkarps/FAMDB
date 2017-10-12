@@ -5,27 +5,39 @@ $.templates("versionTmpl", `<div class="missionVersionOuter">
              class="moveButton" onclick="downloadVersion(this)"/>
     </div>
 
-    <div class="missionVersionInner" class='{{:mmExistsClass}}'>
+    {{if existsOnMM}}
+        <div class="missionVersionInner">
 
-        <div style="display:inline-block;width:80%">{{>name}}</div>
-        <img src="images/delete.png" alt="Delete" class='deleteButton {{:toBeDeletedMMClass}}'  data-missionId={{:missionId}} data-versionId={{:id}}
-             onclick="deleteVersion(this, 'missionMaking')"/>
-    </div>
-    <div style="display:inline-block" class='{{:mmExistsMainDoesNotClass}}'>
-        <img src="images/requestTransfer.png" alt="Move"  data-missionId={{:missionId}} data-versionId={{:id}}
-             class="moveButton" onclick="requestTransfer(this)"/>
-    </div>
-    <div style="display:inline-block" class='{{:mmExistsMainDoesNotClass}}'>
-        <img src="images/move.png" alt="Move"  data-missionId={{:missionId}} data-versionId={{:id}}
-             class="moveButton" onclick="moveVersion(this)"/>
-    </div>
-    <div class="missionVersionInner {{:mainExistsClass}}" style="float:right;">
+            <div style="display:inline-block;width:80%">{{>name}}</div>
+            {{if allowedToEdit && !toBeDeletedMM}}
+                <img src="images/delete.png" alt="Delete" class='deleteButton'  data-missionId={{:missionId}} data-versionId={{:id}}
+                     onclick="deleteVersion(this, 'missionMaking')"/>
+            {{/if}}
+        </div>
+    {{/if}}
+    {{if !existsOnMain && !requestedTransfer && allowedToEdit}}
+        <div style="display:inline-block">
+            <img src="images/requestTransfer.png" alt="RT"  data-missionId={{:missionId}} data-versionId={{:id}}
+                 class="moveButton" onclick="requestTransfer(this)"/>
+        </div>
+    {{/if}}
+    {{if !existsOnMain && allowedToMove}}
+        <div style="display:inline-block">
+            <img src="images/move.png" alt="Move"  data-missionId={{:missionId}} data-versionId={{:id}}
+                 class="moveButton" onclick="moveVersion(this)"/>
+        </div>
+    {{/if}}
+    {{if existsOnMain}}
+        <div class="missionVersionInner" style="float:right;">
 
-        <div style="display:inline-block;text-align:left">{{>name}}</div>
-        <img src="images/delete.png" alt="Delete" class="deleteButton {{:toBeDeletedMainClass}}"  data-missionId={{:missionId}} data-versionId={{:id}}
-             onclick="deleteVersion(this, 'main')"/>
+            <div style="display:inline-block;text-align:left;width:80%;">{{>name}}</div>
+            {{if allowedToEdit && !toBeDeletedMain}}
+                <img src="images/delete.png" alt="Delete" class="deleteButton"  data-missionId={{:missionId}} data-versionId={{:id}}
+                     onclick="deleteVersion(this, 'main')"/>
+             {{/if}}
 
-    </div>
+        </div>
+    {{/if}}
 
 
 </div>`);

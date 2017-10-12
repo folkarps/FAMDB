@@ -26,10 +26,11 @@ def initDb():
                     status varchar(24) default 'WIP')''')
 
     c.execute('''CREATE TABLE if not exists users
-                 (id integer primary key, login text, email text, password text, createDate text, lastLogin text, permissionLevel integer, sessionKey text)''')
+                 (id integer primary key, login text, email text, password text, createDate text, lastLogin text, permissionLevel integer, sessionKey text,
+                 discordId text)''')
     # Create table
     c.execute('''CREATE TABLE if not exists versions
-                 (id integer primary key, missionId integer, existsOnMM integer default 1, existsOnMain integer default 0, name text, createDate text, toBeArchivedMM integer default 0, toBeDeletedMM integer default 0, toBeDeletedMain integer default 0, toBeArchivedMain default 0)''')
+                 (id integer primary key, missionId integer, existsOnMM integer default 1, existsOnMain integer default 0, name text, createDate text, toBeDeletedMM integer default 0, toBeDeletedMain integer default 0, requestedTransfer default 0, minorVersion default 0)''')
 
     c.execute('''CREATE TABLE if not exists comments
                  (id integer primary key, contents text, user text, createDate text, missionId integer)''')

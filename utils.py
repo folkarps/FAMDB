@@ -18,6 +18,8 @@ emailAddress = __props['emailAddress']
 emailPassword = __props['emailPassword']
 emailServer = __props['emailServer']
 emailPort = __props['emailPort']
+discordHookUrl = __props['discordHookUrl']
+discordAdminRoleId = __props['discordAdminRoleId']
 
 port = int(__props['port'])
 
@@ -33,10 +35,11 @@ def getCursor():
 # 2 = low admin (full mission rights)
 # 3 = high admin (full rights)
 class User:
-    def __init__(self, email, permissionLevel, login):
+    def __init__(self, email, permissionLevel, login, id):
         self.email = email
         self.permissionLevel = permissionLevel
         self.login = login
+        self.id = id
 
 
 def userRowToSessionId(user):
@@ -55,7 +58,7 @@ def getCurrentUser(cookie):
         user = c.fetchone()
         if user is None:
             return None
-        return User(user['email'], user['permissionLevel'], user['login'])
+        return User(user['email'], user['permissionLevel'], user['login'], user['id'])
     except Exception as exc:
         print("error getting current User: {0}".format(exc))
         return None

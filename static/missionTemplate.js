@@ -43,23 +43,27 @@ $.templates("missionTmpl", `<tr class='row' id={{:id}}>
         <div>{{>missionNotes}}</div>
         </p>
 
-        <ul class='buttons' data-class='editClass'>
+        {{if allowedToEdit}}
+        <ul class='buttons'>
             <li><a data-missionId={{:id}} onclick='editMission(this)'>Edit</a></li>
 
             <li>
-                <label for='{{:fileUploadId}}' class='fileInputLabel'>
+                <label for='fileUpload{{:id}}' class='fileInputLabel'>
                     Browse
                 </label>
                 <span></span>
-                <input id='{{:fileUploadId}}' onchange='updateFileLabel(this)' data-missionId='{{:id}}'
+                <input id='fileUpload{{:id}}' onchange='updateFileLabel(this)' data-missionId='{{:id}}'
                        style='display:none'
                        type='file'
                        multiple='multiple'/>
                 <a onclick='uploadFile(this)'>Submit</a>
+                <input id='fileUploadMinor{{:id}}' type='checkbox'></input>
+                <label for='fileUploadMinor{{:id}}'>Minor Version</label>
                 <span class='uploadErrorMessage'></span>
             </li>
             <li style='float:right'><a data-missionId='{{:id}}' onclick='openDeletePopup(this)'>Delete</a></li>
         </ul>
+        {{/if}}
         <!--mission templates go here using compositing -->
         {{for versions tmpl="versionTmpl"/}}
     </td>

@@ -94,27 +94,12 @@
                 <option>
                     All Authors
                 </option>
-            </select><br><br>
-                <table>
-                    <tr>
-                        <td><input id="missionAny" name="missionFilter" type=
-                                "radio" checked><label for="missionAny">All</label></td>
-                        <td><input id="missionWorking" name="missionFilter" type=
-                                "radio"><label for="missionWorking">Working</label></td>
-                    </tr>
-                    <tr>
-                        <td><input id="missionBroken" name="missionFilter" type=
-                                "radio"><label for="missionBroken">Broken</label></td>
-                        <td><input id="missionNeedsRevision" name="missionFilter" type=
-                                "radio"><label for="missionNeedsRevision">Revision</label></td>
-                    </tr>
-                    <tr>
-                        <td><input id="missionNew" name="missionFilter" type=
-                                "radio"><label for="missionBroken">New</label></td>
-                        <td><input id="missionNeedsTransfer" name="missionFilter" type=
-                                "radio"><label for="missionNeedsTransfer">Needs Transfer</label></td>
-                    </tr>
-                </table>
+            </select>
+                <select id="status" name="status">
+                    <option>
+                        All Statuses
+                    </option>
+                </select>
             </fieldset>
             <input type="reset" value="Reset">&nbsp;<input id=
                                                                    "submitButton" type="submit" value="Apply"><br>
@@ -239,6 +224,10 @@
         <label for="email">Email</label><br>
         <input class="searchBox" id="signupEmail" maxlength="56" name=
                 "email" type="email" value=""><br>
+        <a href="https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-">Discord
+            Id</a>
+        <input class="searchBox" id="discordId" maxlength="56" name=
+                "discordId" type="text" value=""><br>
         <span id="errorSignup"></span>
         <buttongroup>
             <ul>
@@ -276,7 +265,7 @@
 <script>
         GetIslandsList("#islandSelected");
         GenerateMissionTypesCheckbox("#missionTypes");
-        GetStatuses("#statusSearch");
+        GetStatuses("#status");
 
 
 </script>

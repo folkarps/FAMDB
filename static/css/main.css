@@ -830,7 +830,7 @@ buttongroup a:hover,nav a:active {
 .missionVersionInner {
     display:inline-block;
     margin:5px;
-    width:44%;
+    width:42%;
 }
 
 @media screen and (min-width: 1024px) {

@@ -10,19 +10,13 @@ function isArchivedOrDeleted(version) {
 }
 
 function LoadData() {
-    var sessionVal = $("#sessionSelected").val();
     var mapVal = $("#islandSelected").val();
     var authorVal = $("#authorSelected").val();
-    var gameVal = $("#gameSelected").val();
     var searchVal = $("#searchText").val();
     var params = {};
     params["map"] = mapVal;
+    params["status"] = $("#status").val();
     params["author"] = authorVal;
-    params["isBroken"] = $("#missionBroken:checked").val();
-    params["needsRevision"] = $("#missionNeedsRevision:checked").val();
-    params["working"] = $("#missionWorking:checked").val();
-    params["new"] = $("#missionNew:checked").val();
-    params["needsTransfer"] = $("#missionNeedsTransfer:checked").val();
 
 
     var checkboxes = $("#missionTypes").find(':checkbox');
@@ -40,8 +34,6 @@ function LoadData() {
     params["name"] = searchVal;
     params["countMax"] = Number($("#playcountMax").val());
     params["countMin"] = Number($("#playcountMin").val());
-    params["session"] = sessionVal;
-    params["game"] = gameVal;
 
 
     jQuery.get("missions", params, function (data, status, jqXHR)
@@ -50,64 +42,7 @@ function LoadData() {
         $("#missionTable > tbody").html("");
 
         var missions = eval(data);
-        missions.forEach(function(item) {
-            //format data for template
-            if(item.isBroken == 1) {
-                item.brokenClass = 'fa fa-exclamation-triangle'
-            }else {
-                item.brokenClass = ''
-            }
-            if(item.needsRevision == 1) {
-                item.revisionClass = 'fa fa-exclamation-circle'
-            }else {
-                item.revisionClass = ''
-            }
-            if(!item.allowedToEdit) {
-                item.editClass = 'hideMe';
-            }
-            item.fileUploadId = "fileUpload" + item.id;
-        })
 
-        missions.forEach(function(item) {
-            if(item.versions != null) {
-                item.versions.forEach(function(version) {
-                    if(version.existsOnMain == 0) {
-                        version.mainExistsClass = 'hideMe';
-                    }
-                    if(version.existsOnMM == 0) {
-                        version.mmExistsClass = 'hideMe';
-                    }
-                    if(!(version.existsOnMM == 1 && version.existsOnMain == 0) || !item.allowedToMove) {
-                        version.mmExistsMainDoesNotClass = 'hideMe';
-                    }
-
-                    version.toBeArchivedMMClass = 'hideMe';
-                    version.toBeArchivedMainClass = 'hideMe';
-                    version.toBeDeletedMainClass = 'hideMe';
-                    version.toBeDeletedMMClass = 'hideMe';
-                    if(item.allowedToVersion) {
-                        if(version.toBeArchivedMM != 1
-                            && version.toBeDeletedMM != 1) {
-                            version.toBeDeletedMMClass = '';
-                        }
-                        if(version.toBeArchivedMain != 1
-                            && version.toBeDeletedMain != 1) {
-                            version.toBeDeletedMainClass = '';
-                        }
-                    }
-                    if(item.allowedToArchive) {
-                        if(version.toBeArchivedMM != 1
-                            && version.toBeDeletedMM != 1) {
-                            version.toBeArchivedMMClass = '';
-                        }
-                        if(version.toBeArchivedMain != 1
-                            && version.toBeDeletedMain != 1) {
-                            version.toBeArchivedMainClass = '';
-                        }
-                    }
-                });
-            }
-        })
 
         var contents = $.render.missionTmpl(missions);
         $("#missionTable > tbody").html(contents);
@@ -184,7 +119,6 @@ function deleteVersion(mission, origin) {
     data.origin = origin;
     jQuery.post("deleteVersion", JSON.stringify(data), function (data, status, jqXHR) {
             if(status == "success") {
-                $(mission).siblings(".archiveButton").remove()
                 $(mission).remove()
             }
 
@@ -196,10 +130,9 @@ function moveVersion(mission) {
     data.missionId = $(mission).data("missionid");
     data.versionId = $(mission).data("versionid");
     jQuery.post("move", JSON.stringify(data), function (data, status, jqXHR) {
-            var img = $(mission);
-            var parent = img.parent().parent();
-            var children = parent.children(".hideMe")
-            children.removeClass("hideMe");
+            if(status == "success") {
+                $(mission).remove()
+            }
         });
 }
 
@@ -208,10 +141,10 @@ function requestTransfer(mission) {
     data.missionId = $(mission).data("missionid");
     data.versionId = $(mission).data("versionid");
     jQuery.post("requestTransfer", JSON.stringify(data), function (data, status, jqXHR) {
-            var img = $(mission);
-            var parent = img.parent().parent();
-            var children = parent.children(".hideMe")
-            children.removeClass("hideMe");
+            if(status == "success") {
+                $(mission).remove()
+            }
+
         });
 }
 
@@ -224,14 +157,15 @@ function uploadFile(submitButton){
     var files = button.files;
     for(var i=0; i<files.length; i++){
         var file = files[i];
-        var url = 'upload?missionId=' + $(button).data("missionid");
+        var missionId = $(button).data("missionid");
+        var url = 'upload?missionId=' + missionId + "&minor=" + $("#fileUploadMinor"+missionId).val();
         var xhr = new XMLHttpRequest();
         var fd = new FormData();
         xhr.open("POST", url, true);
         xhr.onreadystatechange = function() {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // Every thing ok, file uploaded
-                window.location.href = "index.html?missionId=" + $(button).data("missionid");
+                window.location.href = "index.html?missionId=" + missionId;
             }else {
                 if(xhr.status == 500) {
                     var span = $($(submitButton).siblings(".uploadErrorMessage")[0])[0];
