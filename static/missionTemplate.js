@@ -61,6 +61,7 @@ $.templates("missionTmpl", `<tr class='row' id={{:id}}>
                 <label for='fileUploadMinor{{:id}}'>Minor Version</label>
                 <span class='uploadErrorMessage'></span>
             </li>
+            <li style='float:right'><a data-missionId='{{:id}}' onclick='comment(this)'>Comment</a></li>
             <li style='float:right'><a data-missionId='{{:id}}' onclick='openDeletePopup(this)'>Delete</a></li>
         </ul>
         {{/if}}

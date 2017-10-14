@@ -152,6 +152,26 @@ function editMission(button) {
         window.location.href = "missionForm.html?missionId=" + $(button).data("missionid");
 }
 
+function comment(button) {
+
+    var object ={missionId:$(button).data("missionid"), showReject:(getPermissionLevel() > 1)}
+    var contents = $.render.commentTmpl([object]);
+    $(button).parents(".buttons").after(contents);
+}
+
+function submitComment(button) {
+    var data = {}
+    data.missionId = $(button).data("missionid");
+    data.comment = $("#comment" + data.missionId).val()
+    data.rejection = $("#reject" + data.missionId).val()
+    jQuery.post("comment", JSON.stringify(data), function (data, status, jqXHR) {
+            if(status == "success") {
+                $(button).parent().parent().remove()
+            }
+
+        });
+}
+
 function uploadFile(submitButton){
     var button = $(submitButton).siblings("input")[0];
     var files = button.files;

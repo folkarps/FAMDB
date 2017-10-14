@@ -2,10 +2,10 @@ from http import cookies
 from http.cookies import SimpleCookie
 
 import utils
-from archive import handleArchive
 from authors import handleAuthors
 from changePasswordInternal import handleChangePassword
 from cleanup import handleCleanup
+from comment import handleComment
 from createUser import handleCreateUser
 from deleteMission import handleMissionDelete
 from deleteSession import handleSessionDelete
@@ -25,13 +25,13 @@ from upload import handleUpload
 from users import handleUsers
 
 handlers = {'deleteVersion': handleVersionDelete, 'login': handleLogin, 'signup': handleCreateUser,
-            'move': handleMove, 'archive': handleArchive, 'cleanup': handleCleanup, 'upload': handleUpload,
+            'move': handleMove, 'cleanup': handleCleanup, 'upload': handleUpload,
             'saveMission': handleSaveMission, "setPermissionLevel": handlePermissionLevel,
             "editSession": handleEditSession, "deleteSession": handleSessionDelete,
             "deleteMission": handleMissionDelete, 'missions': handleMissions, 'authors': handleAuthors,
             'users': handleUsers, 'sessions': handleGetSession, 'download': handleDownload,
             'resetPassword': handleResetPassword, 'changePasswordInternal': handleChangePassword, 'sync': handleSync,
-            'requestTransfer': handleTransfer}
+            'requestTransfer': handleTransfer, 'comment': handleComment}
 
 
 def wsgi(environ, start_response):
