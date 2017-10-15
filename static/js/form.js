@@ -32,13 +32,7 @@ function LoadMission() {
                 $("#missionAuthors").val(mission.missionAuthor);
                 $("#missionDescription").val(mission.missionDesc);
                 $("#missionNotes").val(mission.missionNotes);
-
-                if (mission.isBroken == 1) {
-                    $("#missionBroken").prop('checked',true);
-                }
-                if (mission.needsRevision == 1) {
-                    $("#missionNeedsRevision").prop('checked',true);
-                }
+                $("#framework").val(mission.framework);
                 $("#loading").hide();
             }else {
                 setNewMission();
