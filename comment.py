@@ -1,5 +1,5 @@
 import json
-from datetime import date
+from datetime import datetime
 
 import requests
 
@@ -28,13 +28,16 @@ def handleComment(environ, start_response):
         return ["Access Denied"]
 
     c = utils.getCursor()
-    c.execute("select name from versions where id = (select max(id) from versions where missionId = ?)", [missionId])
+    c.execute("select name, id from versions where id = (select max(id) from versions where missionId = ?)",
+              [missionId])
 
-    fileName = c.fetchone()[0]
+    versionRow = c.fetchone()
+    fileName = versionRow[0]
+    versionId = versionRow[1]
 
     c.execute("update missions set status ='WIP' where id = ?", [missionId])
-    c.execute("insert into comments (missionId, user, contents, createDate) values (?,?,?,?)",
-              [missionId, user.login, comment, date.today()])
+    c.execute("insert into comments (missionId, user, contents, createDate, versionId) values (?,?,?,?, ?)",
+              [missionId, user.login, comment, datetime.now(), versionId])
 
     if utils.discordHookUrl != '':
         c.execute("select missionName, missionAuthor from missions where id = ?", [missionId])

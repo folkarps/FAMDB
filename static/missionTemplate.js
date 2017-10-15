@@ -32,6 +32,12 @@ $.templates("missionTmpl", `<tr class='row' id={{:id}}>
         <div class='cellDropdownSubtitle'>Framework</div>
         <br>
         <div >{{>framework}}</div>
+        </p>
+        <p class='fullInfo'>
+        <div class='cellDropdownSubtitle'>Author</div>
+        <br>
+        <div >{{>missionAuthor}}</div>
+        </p>
         <p class='fullInfo'>
         <div class='cellDropdownSubtitle'>Description</div>
         <br>

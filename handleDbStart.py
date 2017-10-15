@@ -33,7 +33,7 @@ def initDb():
                  (id integer primary key, missionId integer, existsOnMM integer default 1, existsOnMain integer default 0, name text, createDate text, toBeDeletedMM integer default 0, toBeDeletedMain integer default 0, requestedTransfer default 0, minorVersion default 0)''')
 
     c.execute('''CREATE TABLE if not exists comments
-                 (id integer primary key autoincrement, contents text, user text, createDate text, missionId integer)''')
+                 (id integer primary key autoincrement, contents text, user text, createDate text, missionId integer, versionId integer)''')
 
     c.execute('''CREATE TABLE if not exists sessions
                  (id integer primary key, missionNames text, date text, host text, name text, players integer)''')

@@ -1,3 +1,4 @@
+import functools
 import itertools
 import json
 from urllib.parse import parse_qs
@@ -10,17 +11,7 @@ def handleMissions(environ, start_response):
 
     o = parse_qs(environ['QUERY_STRING'])
 
-    missionIds = None
-    if "new" in o:
-        fancyQuery = "select missionId from versions join missions on versions.missionId = missions.id where (versions.createDate > missions.lastPlayed or missions.lastPlayed is null) and existsOnMain = 1 and tobeDeletedMain = 0"
-        c.execute(fancyQuery)
-        missionIds = c.fetchall()
-    if "needsTransfer" in o:
-        fancyQuery = "select missionId from versions where existsOnMain = 0 and existsOnMM = 1 and toBeDeletedMM = 0"
-        c.execute(fancyQuery)
-        missionIds = c.fetchall()
-
-    query, params = constructQuery(o, missionIds)
+    query, params = constructQuery(o)
     # retrieve all the missions that match our parameters
 
     c.execute("select * from missions where " + query, params)
@@ -39,14 +30,23 @@ def handleMissions(environ, start_response):
         versionsGroupedByMission = {}
         for k, g in itertools.groupby(versionsFromDb, lambda x: x['missionId']):
             versionsGroupedByMission[k] = list(g)
+
+        c.execute(str.format('''select * from comments where missionId in ({}) order by versionId''', idParameter))
+
+        commentsFromDb = c.fetchall()
+        # group the comments by their mission Id
+        commentsGroupedByMission = {}
+        for k, g in itertools.groupby(commentsFromDb, lambda x: x['missionId']):
+            commentsGroupedByMission[k] = list(g)
+
     else:
         versionsGroupedByMission = []
-
+        commentsGroupedByMission = []
 
     user = environ['user']
 
     # transform the row objects into objects that can be serialized
-    m = [toDto(x, versionsGroupedByMission, user) for x in missionsFromDb]
+    m = [toDto(x, versionsGroupedByMission, commentsGroupedByMission, user) for x in missionsFromDb]
     encode = json.dumps(m).encode()
 
     start_response("200 OK", [])
@@ -58,8 +58,9 @@ def addPermissions(version, movePermission, editPermission):
     version['allowedToEdit'] = editPermission
     return version
 
+
 # copy the variables out of the non-serializable db object into a blank object
-def toDto(missionFromDb, verionsGrouped, user: utils.User):
+def toDto(missionFromDb, verionsGrouped, commentsGrouped, user: utils.User):
     dto = toDtoHelper(missionFromDb)
     dto['missionAuthor'] = (dto['missionAuthor'][:8] + '..') if len(dto['missionAuthor']) > 8 else dto['missionAuthor']
     dto['allowedToEdit'] = False
@@ -69,23 +70,59 @@ def toDto(missionFromDb, verionsGrouped, user: utils.User):
     if user is not None:
         allowedToEdit = user.permissionLevel >= 2 or user.login in missionFromDb['missionAuthor'].split(",")
         allowedToMove = user.permissionLevel >= 2 or (
-        user.login in missionFromDb['missionAuthor'].split(",") and user.permissionLevel >= 1)
+            user.login in missionFromDb['missionAuthor'].split(",") and user.permissionLevel >= 1)
         dto['allowedToEdit'] = allowedToEdit
     if dto['id'] in verionsGrouped:
         versionsForThisMission = [toDtoHelper(version) for version in verionsGrouped[dto['id']]]
         versionsForThisMission = [addPermissions(version, allowedToMove, allowedToEdit) for version in
                                   versionsForThisMission]
-        finalVersion = sorted(versionsForThisMission, key=lambda x: x['createDate'])
-        dto['versions'] = finalVersion
+
+        if dto['id'] in commentsGrouped:
+            commentsForThisMission = [toDtoHelper(comment) for comment in commentsGrouped[dto['id']]]
+            for comment in commentsForThisMission:
+                comment['isComment'] = True
+            unsortedData = versionsForThisMission + commentsForThisMission
+        else:
+            unsortedData = versionsForThisMission
+
+        finalData = sorted(unsortedData, key=functools.cmp_to_key(cmpVersionAndComents))
+        dto['versions'] = finalData
 
     return dto
+
+
+# version 1 before version 2
+# comment 1 before comment 2
+# comment with version 1 after version 1, but before version 2
+def cmpVersionAndComents(one, two):
+    if 'isComment' in one:
+        if 'isComment' in two:
+            # both comments
+            if one['versionId'] == two['versionId']:
+                # both comments, and same version, sort by commentId
+                return 1 if one['id'] > two['id'] else -1
+            else:
+                # both comments, but different versions, sort by versionId
+                return 1 if one['versionId'] > two['versionId'] else -1
+        else:
+            # one is a comment, but two is not, sort by versionId
+            return 1 if one['versionId'] >= two['id'] else -1
+    else:
+        if 'isComment' in two:
+            # one is not a comment, two is
+            return 1 if one['id'] >= two['versionId'] else -1
+        else:
+            # neither is a comment
+            return 1 if one['id'] > two['id'] else -1
+
+
 
 
 def toDtoHelper(version):
     return dict(version)
 
 
-def constructQuery(params, missionIds: list):
+def constructQuery(params):
     query = []
     p = []
     if ("map" in params) and (params['map'][0] != 'All Maps'):
@@ -112,7 +149,4 @@ def constructQuery(params, missionIds: list):
     if "missionId" in params:
         query.append("id  = ? ")
         p.append(params['missionId'][0])
-    if missionIds is not None:
-        missionIdString = ["'{0}'".format(w['missionId']) for w in missionIds]
-        query.append(str.format("id in({})", ",".join(missionIdString)))
     return " AND ".join(query), p

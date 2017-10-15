@@ -1,4 +1,12 @@
-$.templates("versionTmpl", `<div class="missionVersionOuter">
+$.templates("versionTmpl", `
+{{if isComment}}
+<div class="missionVersionOuter">
+
+    {{:contents}}
+</div>
+
+{{else}}
+<div class="missionVersionOuter">
 
     <div style="display:inline-block">
         <img src="images/download.png" alt="Download" data-missionId={{:missionId}} data-versionId={{:id}}
@@ -40,4 +48,5 @@ $.templates("versionTmpl", `<div class="missionVersionOuter">
     {{/if}}
 
 
-</div>`);
+</div>
+{{/if}}`);
