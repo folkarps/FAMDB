@@ -13,8 +13,7 @@ def handleTransfer(environ, start_response):
     missionId = missionJson['missionId']
     versionId = missionJson['versionId']
     # If you're a MM user and this is your mission, or you're a low admin
-    if not (utils.checkUserPermissions(user, 1, missionId=missionId, collector=utils.AND) or utils.checkUserPermissions(
-            user, 2)):
+    if not utils.checkUserPermissions(environ['user'], 1, missionId):
         start_response("403 Permission Denied", [])
         return ["Access Denied"]
 
@@ -31,7 +30,7 @@ def handleTransfer(environ, start_response):
         missionStuff = c.fetchone()
         missionName = missionStuff[0]
         missionAuthor = missionStuff[1]
-        payload = {'content': '@<&' + utils.discordAdminRoleId + '> Rejoice Comrades! ' + missionAuthor
+        payload = {'content': '<@&' + utils.discordAdminRoleId + '> Rejoice Comrades! ' + missionAuthor
                               + ' has prepared a new adventure for us!\n' +
                               missionName + ' now has ' + fileName + ' requested for transfer'}
 
