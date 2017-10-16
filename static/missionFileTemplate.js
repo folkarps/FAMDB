@@ -2,7 +2,8 @@ $.templates("versionTmpl", `
 {{if isComment}}
 <div class="missionVersionOuter">
 
-    {{:contents}}
+    <div style="border-bottom:"> {{:user}} Said:</div>
+    <div class="commentContents"> {{:contents}}</div>
 </div>
 
 {{else}}
