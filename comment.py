@@ -9,7 +9,8 @@ import utils
 def authorToUser(author):
     c = utils.getCursor()
     c.execute("select discordId from users where login = ?", [author])
-    return c.fetchone()[0]
+    user = c.fetchone()
+    return None if user is None else user[0]
 
 
 def handleComment(environ, start_response):
