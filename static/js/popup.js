@@ -6,7 +6,7 @@ function CenterPopup(divname) {
     var popupWidth = $(divname).width();
     //centering
     $(divname).css({
-        "position": "absolute",
+        "position": "fixed",
         "top": windowHeight / 2 - popupHeight / 2,
         "left": windowWidth / 2 - popupWidth / 2
     });
