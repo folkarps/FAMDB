@@ -1,3 +1,4 @@
+import os
 from http import cookies
 from http.cookies import SimpleCookie
 
@@ -55,10 +56,16 @@ def wsgi(environ, start_response):
                 cookie = cookies.SimpleCookie()
                 cookie['permissionLevel'] = environ['user'].permissionLevel
                 responseHeaders.append(('set-cookie', cookie.output(header='')))
-
-        responseHeaders.append(('Cache-Control', 'max-age=86400'))
         if path == '/':
             path = '/index.html'
-        with open(utils.currentPath + '/static' + path, mode="rb", ) as stream:
+        filePath = utils.currentPath + '/static' + path
+        with open(filePath, mode="rb", ) as stream:
+            statbuf = os.stat(filePath)
+            print("Modification time: {}".format(statbuf.st_mtime))
+            if 'HTTP_IF_NONE_MATCH' in environ:
+                if environ['HTTP_IF_NONE_MATCH'] == str(statbuf.st_mtime):
+                    start_response('304 NOT MODIFIED', responseHeaders)
+                    return [''.encode()]
+            responseHeaders.append(('ETag', str(statbuf.st_mtime)))
             start_response('200 OK', responseHeaders)
             return [stream.read()]
