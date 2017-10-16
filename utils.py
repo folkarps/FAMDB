@@ -9,10 +9,8 @@ currentPath = os.path.dirname(os.path.realpath(__file__))
 __props = dict(line.strip().split('=') for line in open(currentPath + '/config.config'))
 
 missionMainDir = __props['missionMainDir']
-missionMainArchive = __props['missionMainArchive']
 
 missionMakerDir = __props['missionMakerDir']
-missionMakerArchive = __props['missionMakerArchive']
 serverAddress = __props['serverAddress']
 emailAddress = __props['emailAddress']
 emailPassword = __props['emailPassword']
