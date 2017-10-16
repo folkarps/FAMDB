@@ -90,7 +90,7 @@ def handleUpload(environ, start_response):
             missionStuff = c.fetchone()
             missionName = missionStuff[0]
             missionAuthor = missionStuff[1]
-            payload = {'content': '@<&' + utils.discordAdminRoleId + '> Rejoice Comrades! ' + missionAuthor
+            payload = {'content': '<@&' + utils.discordAdminRoleId + '> Rejoice Comrades! ' + missionAuthor
                                   + ' has made minor changes to ' +
                                   missionName + '. This needs to be accepted'}
 
