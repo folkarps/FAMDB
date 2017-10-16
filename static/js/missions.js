@@ -164,9 +164,9 @@ function submitComment(button) {
     data.missionId = $(button).data("missionid");
     data.comment = $("#comment" + data.missionId).val()
     data.rejection = $("#reject" + data.missionId).val()
-    jQuery.post("comment", JSON.stringify(data), function (data, status, jqXHR) {
+    jQuery.post("comment", JSON.stringify(data), function (returnData, status, jqXHR) {
             if(status == "success") {
-                $(button).parent().parent().remove()
+                window.location.href = "index.html?missionId=" + data.missionId;
             }
 
         });
