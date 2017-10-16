@@ -704,7 +704,7 @@ POPUP
 /* hack for internet explorer 6*/
 /*height:200px;*/
     width:408px;
-    border-width:2px 0;
+    border-width:2px 2px;
     border-style:solid;
     border-color:#eaa724;
     background-color:#0f0f0f;
