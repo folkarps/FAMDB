@@ -61,7 +61,6 @@ def wsgi(environ, start_response):
         filePath = utils.currentPath + '/static' + path
         with open(filePath, mode="rb", ) as stream:
             statbuf = os.stat(filePath)
-            print("Modification time: {}".format(statbuf.st_mtime))
             if 'HTTP_IF_NONE_MATCH' in environ:
                 if environ['HTTP_IF_NONE_MATCH'] == str(statbuf.st_mtime):
                     start_response('304 NOT MODIFIED', responseHeaders)
