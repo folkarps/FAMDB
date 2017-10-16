@@ -1,11 +1,11 @@
 missionMainDir=/Path/to/main/dir
-missionMainArchive=/Path/to/main/archive/dir
 missionMakerDir=/Path/to/missionMaking/dir
-missionMakerArchive=/Path/to/missionMaking/archive/dir
 port=8080
 emailAddress=
 emailPassword=
 emailServer=
 emailPort=25
-serverAddress=ab.autoreturn.com:10001
-discordHookUrl=https://discordapp.com/api/webhooks/367704495653650442/DrHSikxM72a4iME58pCoyhwTjK4ypz6jFtG1Yse7bMdSMckSzAXnS6vIwsSjef0EQHAx
+serverAddress=
+discordHookUrl=
+discordAdminRoleId=
+
