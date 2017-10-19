@@ -4,11 +4,11 @@ from datetime import date
 import utils
 
 
-def constructQuery(missionJson):
+def constructQuery(missionJson, newMission, user):
     queryParts = []
     params = []
 
-    for part in ['missionAuthor', 'missionPlayers', 'missionMap', 'missionType', 'missionDesc', 'missionNotes',
+    for part in ['missionPlayers', 'missionMap', 'missionType', 'missionDesc', 'missionNotes',
                  'framework', 'missionName']:
         queryParts.append(part + "=?")
         params.append(missionJson[part])
@@ -18,6 +18,9 @@ def constructQuery(missionJson):
 
     queryParts.append("missionModified=?")
     params.append(date.today())
+    if newMission:
+        queryParts.append("missionAuthor=?")
+        params.append(user.login)
     return " , ".join(queryParts), params
 
 
@@ -30,8 +33,10 @@ def handleSaveMission(environ, start_response):
         c.execute("insert into missions (missionName) values (?)", [missionJson['missionName']])
         c.execute("select max(id) from missions")
         missionId = c.fetchone()[0]
+        newMission = True
         hasPermissions = utils.checkUserPermissions(environ['user'], 0)
     else:
+        newMission = False
         missionId = missionJson['missionId']
         c.execute("select * from missions where id = ?", [missionId])
         mission = c.fetchone()
@@ -43,7 +48,7 @@ def handleSaveMission(environ, start_response):
     if not hasPermissions:
         start_response("403 Permission Denied", [])
         return ["Access Denied"]
-    query, params = constructQuery(missionJson)
+    query, params = constructQuery(missionJson, newMission, environ['user'])
     params.append(missionId)
 
     c.execute("update missions set " + query + "where id=?", params)

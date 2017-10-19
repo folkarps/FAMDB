@@ -21,15 +21,11 @@ function LoadMission() {
                 $("#loading").show();
                 $('.editMissionsTitle').append(' Edit Mission');
                 $('#editMissionsHeader').children().append('Edit Mission');
-                $("#authorSelected").hide();
-                $("#missionAuthors").show();
                 $("#missionName").val(mission.missionName);
                 $("#missionIsland").val(mission.missionMap);
                 $("#missionType").val(mission.missionType);
                 $("#missionSlots").val(mission.missionPlayers);
                 $("#missionPlaycount").val(mission.playedCounter);
-                $("#authorSelected").val(mission.missionAuthor);
-                $("#missionAuthors").val(mission.missionAuthor);
                 $("#missionDescription").val(mission.missionDesc);
                 $("#missionNotes").val(mission.missionNotes);
                 $("#framework").val(mission.framework);
@@ -51,7 +47,6 @@ function LoadMission() {
 function setNewMission() {
         $('.editMissionsTitle').append(' Add Mission');
         $('#editMissionsHeader').children().append('Add Mission');
-        $("#editMissionsAuthorToggle").show();
 }
 
 function WriteMission() {
@@ -63,15 +58,7 @@ function WriteMission() {
     var missionType = $("#missionType").val();
     var missionSlots = Number($("#missionSlots").val());
     var missionPlaycount = Number($('#missionPlaycount').val());
-    var missionAuthor = "";
-    
-    // Only if the missionAuthors field is visible and not empty it is used to pass the author's name
-    if ($("#missionAuthors").is(":visible") && $("#missionAuthors") !== "") {
-        missionAuthor = $("#missionAuthors").val();
-    } else {
-        missionAuthor = $("#authorSelected").val();
-    }
-    
+
     var missionDescription = $("#missionDescription").val();
     var missionNotes = $("#missionNotes").val();
     var isBroken = $('#missionBroken').prop('checked');
@@ -100,11 +87,6 @@ function WriteMission() {
         return false;
     }
 
-    if (missionAuthor === "" || missionAuthor === null) {
-        MissionSaveError("Select or enter an author!");
-        return false;
-    }
-    
     if (missionDescription.trim().length < 1  || missionDescription === null) {
         MissionSaveError("Enter a description for your mission!");
         return false;
@@ -122,7 +104,6 @@ function WriteMission() {
     data.missionType = missionType;
     data.missionPlayers = missionSlots;
     data.playedCounter = missionPlaycount;
-    data.missionAuthor = missionAuthor;
     data.missionDesc = missionDescription;
     data.isBroken = isBroken;
     data.needsRevision = needsRevision;
@@ -154,4 +135,3 @@ function MissionSaveError(string) {
 }
 
 LoadMission();
-GetMissionAuthor();
