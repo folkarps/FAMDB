@@ -18,13 +18,8 @@ def handleCreateUser(environ, start_response):
     email = signUpJson['email'].strip()
     discordId = signUpJson['discordId'].strip()
 
-    regexp = re.compile(r'[a-zA-Z]')
-    if regexp.search(discordId):
-        start_response("500 Internal Server Error", [])
-        return ["Discord ID, not Discord user tag."
-                " <a href='https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-'>"
-                " See This</a>".encode()]
-    if discordId == '':
+    negativeRegex = re.compile(r'[0-9]{16}')
+    if not negativeRegex.match(discordId):
         start_response("500 Internal Server Error", [])
         return ["Discord ID required."
                 " <a href='https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-'>"
@@ -63,8 +58,8 @@ def handleCreateUser(environ, start_response):
 
         if utils.discordHookUrl != '':
             payload = {
-                'content': 'Comrads! Welcome our new mission maker  <@' + discordId
-                           + '>. Hopefully they will a great many missions to our cause!'}
+                'content': 'Comrades! Welcome our new mission maker  <@' + discordId
+                           + '>. Hopefully they add will a great many missions to our cause!'}
 
             r = requests.post(utils.discordHookUrl, data=payload)
         return []
