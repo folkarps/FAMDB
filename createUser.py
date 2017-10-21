@@ -1,3 +1,4 @@
+import html
 import json
 import re
 from datetime import date
@@ -14,8 +15,8 @@ def handleCreateUser(environ, start_response):
     c = utils.getCursor()
     loginJsonString = utils.environToContents(environ)
     signUpJson = json.loads(loginJsonString)
-    login = signUpJson['login'].strip()
-    email = signUpJson['email'].strip()
+    login = html.escape(signUpJson['login'].strip())
+    email = html.escape(signUpJson['email'].strip())
     discordId = signUpJson['discordId'].strip()
 
     negativeRegex = re.compile(r'[0-9]{16}')

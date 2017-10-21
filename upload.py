@@ -12,7 +12,7 @@ def handleUpload(environ, start_response):
     c = utils.getCursor()
     o = parse_qs(environ['QUERY_STRING'])
     missionId = o['missionId'][0]
-    minorVersion = o['minor'][0] == "on"
+    minorVersion = o['minor'][0] == "true"
     if not utils.checkUserPermissions(environ['user'], 2, missionId):
         start_response("403 Permission Denied", [])
         return ["Access Denied"]

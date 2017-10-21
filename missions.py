@@ -62,6 +62,7 @@ def addPermissions(version, movePermission, editPermission):
 # copy the variables out of the non-serializable db object into a blank object
 def toDto(missionFromDb, verionsGrouped, commentsGrouped, user: utils.User):
     dto = toDtoHelper(missionFromDb)
+    dto['missionAuthorLong'] = dto['missionAuthor']
     dto['missionAuthor'] = (dto['missionAuthor'][:8] + '..') if len(dto['missionAuthor']) > 8 else dto['missionAuthor']
     dto['allowedToEdit'] = False
     dto['allowedToVersion'] = False

@@ -1,13 +1,5 @@
 // Functions used to populate the main table
-
-
-//getMissions
-//uploadMission
-//move mission
-//saveMission
-
-function isArchivedOrDeleted(version) {
-}
+var blah = false;
 
 function LoadData() {
     var mapVal = $("#islandSelected").val();
@@ -69,7 +61,8 @@ function LoadData() {
             cssDesc          : 'fa fa-sort-desc',
             cssNone          : 'fa fa-sort',
         });
-        if(getQueryDict()['missionId'] != null) {
+        if (getQueryDict()['missionId'] != null && !blah) {
+            blah = true;
             table = $("#missionTable > tbody");
             children = table.children("[data-missionid=" +getQueryDict()['missionId'] + "] ");
             item = children[0];
@@ -162,8 +155,8 @@ function comment(button) {
 function submitComment(button) {
     var data = {}
     data.missionId = $(button).data("missionid");
-    data.comment = $("#comment" + data.missionId).val()
-    data.rejection = $("#reject" + data.missionId).val()
+    data.comment = $("#comment" + data.missionId).val();
+    data.rejection = $("#reject" + data.missionId).prop("checked");
     jQuery.post("comment", JSON.stringify(data), function (returnData, status, jqXHR) {
             if(status == "success") {
                 window.location.href = "index.html?missionId=" + data.missionId;
@@ -178,7 +171,7 @@ function uploadFile(submitButton){
     for(var i=0; i<files.length; i++){
         var file = files[i];
         var missionId = $(button).data("missionid");
-        var url = 'upload?missionId=' + missionId + "&minor=" + $("#fileUploadMinor"+missionId).val();
+        var url = 'upload?missionId=' + missionId + "&minor=" + $("#fileUploadMinor" + missionId).prop("checked");
         var xhr = new XMLHttpRequest();
         var fd = new FormData();
         xhr.open("POST", url, true);

@@ -1,3 +1,4 @@
+import html
 import json
 from datetime import date
 
@@ -11,7 +12,7 @@ def constructQuery(missionJson, newMission, user):
     for part in ['missionPlayers', 'missionMap', 'missionType', 'missionDesc', 'missionNotes',
                  'framework', 'missionName']:
         queryParts.append(part + "=?")
-        params.append(missionJson[part])
+        params.append(html.escape(missionJson[part]))
 
     if missionJson['isBroken']:
         queryParts.append("status='Broken'")

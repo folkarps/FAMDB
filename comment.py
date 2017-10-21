@@ -1,3 +1,4 @@
+import html
 import json
 from datetime import datetime
 
@@ -18,7 +19,7 @@ def handleComment(environ, start_response):
     missionJsonString = utils.environToContents(environ)
     missionJson = json.loads(missionJsonString)
     missionId = missionJson['missionId']
-    comment = missionJson['comment']
+    comment = html.escape(missionJson['comment'])
     rejection = True if 'rejection' in missionJson and missionJson['rejection'] == 'true' else False
     # If you're a MM user and this is your mission, or you're a low admin
     if rejection and not (

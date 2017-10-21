@@ -1,3 +1,4 @@
+// noinspection JSAnnotator
 $.templates("missionTmpl", `<tr class='row' id={{:id}}>
     <td class='cellMissions'><a href='#'><i style='float:left' id='chevron' class='fa fa-chevron-up'></i>
         <div>{{>missionName}}</div>
@@ -36,7 +37,7 @@ $.templates("missionTmpl", `<tr class='row' id={{:id}}>
         <p class='fullInfo'>
         <div class='cellDropdownSubtitle'>Author</div>
         <br>
-        <div >{{>missionAuthor}}</div>
+        <div >{{>missionAuthorLong}}</div>
         </p>
         <p class='fullInfo'>
         <div class='cellDropdownSubtitle'>Description</div>
@@ -49,8 +50,8 @@ $.templates("missionTmpl", `<tr class='row' id={{:id}}>
         <div>{{>missionNotes}}</div>
         </p>
 
-        {{if allowedToEdit}}
         <ul class='buttons'>
+        {{if allowedToEdit}}
             <li><a data-missionId={{:id}} onclick='editMission(this)'>Edit</a></li>
 
             <li>
@@ -67,12 +68,14 @@ $.templates("missionTmpl", `<tr class='row' id={{:id}}>
                 <label for='fileUploadMinor{{:id}}'>Minor Version</label>
                 <span class='uploadErrorMessage'></span>
             </li>
+        {{/if}}
             {{if hasOwnProperty('versions')}}
                 <li style='float:right'><a data-missionId='{{:id}}' onclick='comment(this)'>Comment</a></li>
             {{/if}}
+        {{if allowedToEdit}}
             <li style='float:right'><a data-missionId='{{:id}}' onclick='openDeletePopup(this)'>Delete</a></li>
-        </ul>
         {{/if}}
+        </ul>
         <!--mission templates go here using compositing -->
         {{for versions tmpl="versionTmpl"/}}
     </td>

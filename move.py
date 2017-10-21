@@ -29,13 +29,11 @@ def handleMove(environ, start_response):
     c.execute("select name from versions where id = ?", [versionId])
 
     fileName = c.fetchone()[0]
-    if Path(utils.missionMakerDir + "/" + fileName).is_file():
+    if Path(utils.missionMakerDir + "/" + fileName).exists():
         copyfile(utils.missionMakerDir + "/" + fileName, utils.missionMainDir + "/" + fileName)
         c.execute("update versions set existsOnMain=1 where id = ?", [versionId])
 
         c.execute("update missions set status ='Ready' where id = ?", [missionId])
-        c.connection.commit()
-        c.connection.close()
 
     if utils.discordHookUrl != '':
         c.execute("select missionAuthor from missions where id = ?", [missionId])
@@ -47,5 +45,7 @@ def handleMove(environ, start_response):
 
         r = requests.post(utils.discordHookUrl, data=payload)
 
+    c.connection.commit()
+    c.connection.close()
     start_response("200 OK", [])
     return []
