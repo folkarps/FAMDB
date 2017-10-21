@@ -20,8 +20,9 @@ def handleTransfer(environ, start_response):
     c = utils.getCursor()
     c.execute("SELECT name, minorVersion FROM versions WHERE id = ?", [versionId])
 
-    fileName = c.fetchone()[0]
-    minorVersion = c.fetchone()[1]
+    version = c.fetchone()
+    fileName = version[0]
+    minorVersion = version[1]
     if Path(utils.missionMakerDir + "/" + fileName).is_file():
         c.execute("update missions set status='Testing' where id = ?", [missionId])
         c.execute("update versions set requestedTransfer=1 where id = ?", [versionId])
