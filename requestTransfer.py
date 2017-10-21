@@ -18,9 +18,10 @@ def handleTransfer(environ, start_response):
         return ["Access Denied"]
 
     c = utils.getCursor()
-    c.execute("select name from versions where id = ?", [versionId])
+    c.execute("SELECT name, minorVersion FROM versions WHERE id = ?", [versionId])
 
     fileName = c.fetchone()[0]
+    minorVersion = c.fetchone()[1]
     if Path(utils.missionMakerDir + "/" + fileName).is_file():
         c.execute("update missions set status='Testing' where id = ?", [missionId])
         c.execute("update versions set requestedTransfer=1 where id = ?", [versionId])
@@ -30,9 +31,16 @@ def handleTransfer(environ, start_response):
         missionStuff = c.fetchone()
         missionName = missionStuff[0]
         missionAuthor = missionStuff[1]
-        payload = {'content': '<@&' + utils.discordAdminRoleId + '> Rejoice Comrades! ' + missionAuthor
-                              + ' has prepared a new adventure for us!\n' +
-                              missionName + ' now has ' + fileName + ' requested for transfer'}
+        if minorVersion:
+            payload = {'content': '<@&' + utils.discordAdminRoleId + '> Rejoice Comrades! ' + missionAuthor
+                                  + ' has prepared a new adventure for us!\n' +
+                                  missionName + ' now has ' + fileName + ' requested for transfer.'
+                                  + ' This is a minor version and can be accepted right away'}
+        else:
+            payload = {'content': '<@&' + utils.discordAdminRoleId + '> Rejoice Comrades! ' + missionAuthor
+                                  + ' has prepared a new adventure for us!\n' +
+                                  missionName + ' now has ' + fileName + ' requested for transfer'}
+
 
         r = requests.post(utils.discordHookUrl, data=payload)
 

@@ -3,8 +3,6 @@ import re
 from datetime import date
 from urllib.parse import parse_qs
 
-import requests
-
 import utils
 
 
@@ -83,18 +81,6 @@ def handleUpload(environ, start_response):
     c.execute(
         "insert into versions(missionId, name, createDate,minorVersion) values (?, ?, ?,?)",
         [missionId, fileName, date.today(), minorVersion])
-    if minorVersion:
-
-        if utils.discordHookUrl != '':
-            c.execute("select missionName, missionAuthor from missions where id = ?", [missionId])
-            missionStuff = c.fetchone()
-            missionName = missionStuff[0]
-            missionAuthor = missionStuff[1]
-            payload = {'content': '<@&' + utils.discordAdminRoleId + '> Rejoice Comrades! ' + missionAuthor
-                                  + ' has made minor changes to ' +
-                                  missionName + '. This needs to be accepted'}
-
-            r = requests.post(utils.discordHookUrl, data=payload)
     c.connection.commit()
     c.connection.close()
 
