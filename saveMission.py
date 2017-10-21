@@ -12,7 +12,10 @@ def constructQuery(missionJson, newMission, user):
     for part in ['missionPlayers', 'missionMap', 'missionType', 'missionDesc', 'missionNotes',
                  'framework', 'missionName']:
         queryParts.append(part + "=?")
-        params.append(html.escape(missionJson[part]))
+        if missionJson[part] is str:
+            params.append(html.escape(missionJson[part]))
+        else:
+            params.append(missionJson[part])
 
     if missionJson['isBroken']:
         queryParts.append("status='Broken'")
