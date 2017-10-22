@@ -10,7 +10,7 @@ $.templates("sessionTmpl", `
         <div>{{>host}}</div>
     </td>
     <td class="cellType">
-        <div>{{>player}}</div>
+        <div>{{>players}}</div>
     </td>
 </tr>
 <tr id="descRow" class="row descRow">

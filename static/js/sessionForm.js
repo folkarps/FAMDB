@@ -40,10 +40,9 @@ function getMissionNames(request, response) {
 }
 
 function addMission(name) {
-    $("#missionList").loadTemplate("sessionMissionTemplate.html",
-    {
-        missionName:name
-    }, { append: true});
+
+    var contents = $.render.sessionMissionTmpl({missionName: name});
+    $("#missionList").html($("#missionList").html() + contents);
 }
 
 function removeMission(button) {
