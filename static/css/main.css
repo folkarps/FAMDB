@@ -1049,47 +1049,63 @@ buttongroup a:hover,nav a:active {
 	#missionsListTableContainer table.tableMissions th.cellHeaderType {
 		display: table-cell;
 		padding: 0.5em 1em;
+        width: 6em;
 	}
 
 	#missionsListTableContainer table.tableMissions th.cellHeaderSlots {
 		display: table-cell;
 		padding: 0.5em 1em;
+        width: 4em;
 	}
 
 	#missionsListTableContainer table.tableMissions th.cellHeaderIsland {
 		display: table-cell;
 		padding: 0.5em 1em;
+        width: 7em;
 	}
 
 	#missionsListTableContainer table.tableMissions th.cellHeaderPlayed {
 		display: table-cell;
 		padding: 0.5em 1em;
+        width: 2em;
 	}
 
 	#missionsListTableContainer table.tableMissions th.cellHeaderLastPlayed {
 		display: table-cell;
 		padding: 0.5em 1em;
+        width: 6em;
 	}
 
 	#missionsListTableContainer table.tableMissions th.cellHeaderAuthor {
-		display: table-cell;
 		padding: 0.5em 1em;
+        display: block;
+        max-width: 10em;
 	}
 
 	#missionsListTableContainer table.tableMissions th.cellHeaderModified {
 		display: table-cell;
 		padding: 0.5em 1em;
-	}
+        width: 6em;
+    }
 
-	#missionsListTableContainer table.tableMissions th.cellHeaderBroken, th.cellHeaderRevision {
+    #missionsListTableContainer table.tableMissions th.cellHeaderStatus {
 		display: table-cell;
 		padding: 0.5em 1em;
+        width: 6em;
 	}
 
 	#missionsListTableContainer table.tableMissions td.cellMissions {
 		display: table-cell;
 		padding: 0.5em 1em;
 	}
+
+    div.cellAuthorDiv {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        max-width: 10em;
+    }
 
 	#missionsListTableContainer table.tableMissions td.cellIsland {
 		display: table-cell;
@@ -1116,25 +1132,14 @@ buttongroup a:hover,nav a:active {
 	}
 
 	#missionsListTableContainer table.tableMissions td.cellAuthor {
-		display: table-cell;
 		padding: 0.5em 1em;
+        display: block;
+        max-width: 10em;
 	}
 
 	#missionsListTableContainer table.tableMissions td.cellModified {
 		display: table-cell;
 		padding: 0.5em 1em;
-	}
-
-	#missionsListTableContainer table.tableMissions td.cellBroken {
-		display: table-cell;
-		padding: 0.5em 1em;
-		color: #f00;
-	}
-
-	#missionsListTableContainer table.tableMissions td.cellRevision {
-		display: table-cell;
-		padding: 0.5em 1em;
-		color: #576AFA;
 	}
 
 	#missionsListTableContainer table.tableMissions td.cellDropdown {

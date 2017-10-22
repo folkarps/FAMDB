@@ -19,7 +19,7 @@ $.templates("missionTmpl", `<tr class='row' id={{:id}}>
         <div>{{>lastPlayed}}</div>
     </td>
     <td class='cellAuthor'>
-        <div>{{>missionAuthor}}</div>
+        <div class="cellAuthorDiv">{{>missionAuthor}}</div>
     </td>
     <td class='cellModified'>
         <div>{{>missionModified}}</div>
@@ -33,11 +33,6 @@ $.templates("missionTmpl", `<tr class='row' id={{:id}}>
         <div class='cellDropdownSubtitle'>Framework</div>
         <br>
         <div >{{>framework}}</div>
-        </p>
-        <p class='fullInfo'>
-        <div class='cellDropdownSubtitle'>Author</div>
-        <br>
-        <div >{{>missionAuthorLong}}</div>
         </p>
         <p class='fullInfo'>
         <div class='cellDropdownSubtitle'>Description</div>
