@@ -30,7 +30,7 @@ def handleCleanup(environ, start_response):
                 pass
             
         c.execute(
-            "update versions set " + existsProperty + " = 0, " + toBeDeletedProperty + " = 0 where " +
+            "update versions set " + existsProperty + " = 0, " + toBeDeletedProperty + " = 0 where "
             + toBeDeletedProperty + " = 1")
     c.execute("delete from versions where existsOnMM = 0 and existsOnMain = 0")
     c.connection.commit()
