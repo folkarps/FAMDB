@@ -1,7 +1,6 @@
 import json
-from pathlib import Path
-
 import requests
+from pathlib import Path
 
 import utils
 
@@ -38,9 +37,9 @@ def handleTransfer(environ, start_response):
                                   missionName + ' now has ' + fileName + ' requested for transfer.'
                                   + ' This is a minor version and can be accepted right away'}
         else:
-            payload = {'content': '<@&' + utils.discordAdminRoleId + '> Rejoice Comrades! ' + missionAuthor
+            payload = {'content': 'Rejoice Comrades! ' + missionAuthor
                                   + ' has prepared a new adventure for us!\n' +
-                                  missionName + ' now has ' + fileName + ' requested for transfer'}
+                                  missionName + ' now has ' + fileName + ' requested for testing'}
 
 
         r = requests.post(utils.discordHookUrl, data=payload)
