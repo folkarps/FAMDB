@@ -10,40 +10,59 @@ $.templates("versionTmpl", `
 {{else}}
 <div class="missionVersionOuter">
 
-    <div style="display:inline-block">
+    <div class="toolTipContainer" style="display:inline-block">
         <img src="images/download.png" alt="Download" data-missionId={{:missionId}} data-versionId={{:id}}
              class="moveButton" onclick="downloadVersion(this)"/>
+        <span class="tooltiptext">Download</span>
     </div>
 
     {{if existsOnMM}}
+        {{if requestedTesting}}
+        <img src="images/requestedTransfer.png"/>
+        {{/if}}
         <div class="missionVersionInner">
 
-            <div style="display:inline-block;width:80%">{{>name}}</div>
+            <div class="fileNameContainer">{{>name}}</div>
             {{if allowedToEdit && !toBeDeletedMM}}
-                <img src="images/delete.png" alt="Delete" class='deleteButton'  data-missionId={{:missionId}} data-versionId={{:id}}
-                     onclick="deleteVersion(this, 'missionMaking')"/>
+                <div class="toolTipContainer">
+                
+                    <img src="images/delete.png" alt="Delete" class='deleteButton'  data-missionId={{:missionId}} data-versionId={{:id}}
+                         onclick="deleteVersion(this, 'missionMaking')"/>
+                     
+                    <span class="tooltiptext">Delete on next cleanup</span>
+                </div>
             {{/if}}
         </div>
     {{/if}}
-    {{if !existsOnMain && !requestedTransfer && allowedToEdit}}
-        <div style="display:inline-block">
-            <img src="images/requestTransfer.png" alt="RT"  data-missionId={{:missionId}} data-versionId={{:id}}
-                 class="moveButton" onclick="requestTransfer(this)"/>
+    {{if !existsOnMain && !requestedTransfer && !requestedTesting && allowedToEdit}}
+        <div class="moveButtonContainer toolTipContainer">
+            <img src="images/moveSat.png" alt="RT"  data-missionId={{:missionId}} data-versionId={{:id}}
+                 class="moveButton" onclick="requestTesting(this)"/>
+             <span class="tooltiptext">Request testing</span>
         </div>
     {{/if}}
     {{if !existsOnMain && allowedToMove}}
-        <div style="display:inline-block">
-            <img src="images/move.png" alt="Move"  data-missionId={{:missionId}} data-versionId={{:id}}
+        <div class="moveButtonContainer toolTipContainer">
+            <img src="images/moveNow.png" alt="Move"  data-missionId={{:missionId}} data-versionId={{:id}}
                  class="moveButton" onclick="moveVersion(this)"/>
+             <span class="tooltiptext">Move now</span>
+        </div>
+    {{/if}}
+    {{if !existsOnMain && !requestedTesting && !allowedToMove && allowedToEdit}}
+        <div class="moveButtonContainer toolTipContainer">
+            <img src="images/moveNow.png" alt="Move"  data-missionId={{:missionId}} data-versionId={{:id}}
+                 class="moveButton" onclick="requestTransfer(this)"/>
+             <span class="tooltiptext">Request transfer now</span>
         </div>
     {{/if}}
     {{if existsOnMain}}
         <div class="missionVersionInner" style="float:right;">
 
-            <div style="display:inline-block;text-align:left;width:80%;">{{>name}}</div>
+            <div class="deleteButtonContainer toolTipContainer" style="text-align:left">{{>name}}</div>
             {{if allowedToEdit && !toBeDeletedMain}}
                 <img src="images/delete.png" alt="Delete" class="deleteButton"  data-missionId={{:missionId}} data-versionId={{:id}}
                      onclick="deleteVersion(this, 'main')"/>
+                <span class="tooltiptext">Delete on next cleanup</span>
              {{/if}}
 
         </div>

@@ -31,7 +31,8 @@ def handleMove(environ, start_response):
     fileName = c.fetchone()[0]
     if Path(utils.missionMakerDir + "/" + fileName).exists():
         copyfile(utils.missionMakerDir + "/" + fileName, utils.missionMainDir + "/" + fileName)
-        c.execute("update versions set existsOnMain=1 where id = ?", [versionId])
+        c.execute("UPDATE versions SET existsOnMain=1, requestedTransfer=0, requestedTesting=0 WHERE id = ?",
+                  [versionId])
 
         c.execute("update missions set status ='Ready' where id = ?", [missionId])
 

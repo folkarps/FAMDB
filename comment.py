@@ -37,7 +37,9 @@ def handleComment(environ, start_response):
     fileName = versionRow[0]
     versionId = versionRow[1]
 
-    c.execute("update missions set status ='WIP' where id = ?", [missionId])
+    if rejection:
+        c.execute("UPDATE missions SET status ='WIP' WHERE id = ?", [missionId])
+        c.execute("UPDATE versions SET requestedTransfer=0, requestedTesting=0 WHERE id = ?", [versionId])
     c.execute("insert into comments (missionId, user, contents, createDate, versionId) values (?,?,?,?, ?)",
               [missionId, user.login, comment, datetime.now(), versionId])
 

@@ -6,8 +6,7 @@ import requests
 import utils
 
 
-def handleTransfer(environ, start_response):
-    user = environ['user']
+def handleTesting(environ, start_response):
     missionJsonString = utils.environToContents(environ)
     missionJson = json.loads(missionJsonString)
     missionId = missionJson['missionId']
@@ -23,17 +22,18 @@ def handleTransfer(environ, start_response):
     version = c.fetchone()
     fileName = version[0]
     if Path(utils.missionMakerDir + "/" + fileName).is_file():
-        c.execute("update missions set status='Testing' where id = ?", [missionId])
-        c.execute("update versions set requestedTransfer=1 where id = ?", [versionId])
+        c.execute("UPDATE missions SET status='Testing' WHERE id = ?", [missionId])
+        c.execute("UPDATE versions SET requestedTesting=1 WHERE id = ?", [versionId])
 
     if utils.discordHookUrl != '':
-        c.execute("select missionName, missionAuthor from missions where id = ?", [missionId])
+        c.execute("SELECT missionName, missionAuthor FROM missions WHERE id = ?", [missionId])
         missionStuff = c.fetchone()
         missionName = missionStuff[0]
         missionAuthor = missionStuff[1]
-        payload = {'content': 'Rejoice Comrades! ' + missionAuthor
+
+        payload = {'content': '<@&' + utils.discordAdminRoleId + '> Rejoice Comrades! ' + missionAuthor
                               + ' has prepared a new adventure for us!\n' +
-                              missionName + ' now has ' + fileName + ' requested for testing'}
+                              missionName + ' now has ' + fileName + ' requested for transfer.'}
         r = requests.post(utils.discordHookUrl, data=payload)
 
     c.connection.commit()

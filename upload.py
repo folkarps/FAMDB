@@ -10,7 +10,6 @@ def handleUpload(environ, start_response):
     c = utils.getCursor()
     o = parse_qs(environ['QUERY_STRING'])
     missionId = o['missionId'][0]
-    minorVersion = o['minor'][0] == "true"
     if not utils.checkUserPermissions(environ['user'], 2, missionId):
         start_response("403 Permission Denied", [])
         return ["Access Denied"]
@@ -79,8 +78,8 @@ def handleUpload(environ, start_response):
 
     # rest of the properties are set by defaults in the table
     c.execute(
-        "insert into versions(missionId, name, createDate,minorVersion) values (?, ?, ?,?)",
-        [missionId, fileName, date.today(), minorVersion])
+        "INSERT INTO versions(missionId, name, createDate) VALUES (?, ?, ?)",
+        [missionId, fileName, date.today()])
     c.connection.commit()
     c.connection.close()
 

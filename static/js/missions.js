@@ -141,6 +141,18 @@ function requestTransfer(mission) {
         });
 }
 
+function requestTesting(mission) {
+    var data = {}
+    data.missionId = $(mission).data("missionid");
+    data.versionId = $(mission).data("versionid");
+    jQuery.post("requestTesting", JSON.stringify(data), function (data, status, jqXHR) {
+        if (status == "success") {
+            $(mission).remove()
+        }
+
+    });
+}
+
 function editMission(button) {
         window.location.href = "missionForm.html?missionId=" + $(button).data("missionid");
 }
@@ -171,7 +183,7 @@ function uploadFile(submitButton){
     for(var i=0; i<files.length; i++){
         var file = files[i];
         var missionId = $(button).data("missionid");
-        var url = 'upload?missionId=' + missionId + "&minor=" + $("#fileUploadMinor" + missionId).prop("checked");
+        var url = 'upload?missionId=' + missionId;
         var xhr = new XMLHttpRequest();
         var fd = new FormData();
         xhr.open("POST", url, true);

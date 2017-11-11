@@ -59,8 +59,6 @@ $.templates("missionTmpl", `<tr class='row' id={{:id}}>
                        type='file'
                        multiple='multiple'/>
                 <a onclick='uploadFile(this)'>Submit</a>
-                <input id='fileUploadMinor{{:id}}' type='checkbox'></input>
-                <label for='fileUploadMinor{{:id}}'>Minor Version</label>
                 <span class='uploadErrorMessage'></span>
             </li>
         {{/if}}
