@@ -43,7 +43,8 @@ def handleComment(environ, start_response):
     c.execute("insert into comments (missionId, user, contents, createDate, versionId) values (?,?,?,?, ?)",
               [missionId, user.login, comment, datetime.now(), versionId])
 
-    if utils.discordHookUrl != '':
+    # Post to Discord only if there is a Discord url available, and the comment is not from the mission author
+    if utils.discordHookUrl != '' and not utils.checkUserPermissions(user, missionId=missionId, collector=utils.AND):
         c.execute("select missionName, missionAuthor from missions where id = ?", [missionId])
         missionFromDb = c.fetchone()
         missionName = missionFromDb[0]
