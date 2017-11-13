@@ -43,12 +43,12 @@ def handleComment(environ, start_response):
     c.execute("insert into comments (missionId, user, contents, createDate, versionId) values (?,?,?,?, ?)",
               [missionId, user.login, comment, datetime.now(), versionId])
 
-    # Post to Discord only if there is a Discord url available, and the comment is not from the mission author
-    if utils.discordHookUrl != '' and not utils.checkUserPermissions(user, missionId=missionId, collector=utils.AND):
+    if utils.discordHookUrl != '':
         c.execute("select missionName, missionAuthor from missions where id = ?", [missionId])
         missionFromDb = c.fetchone()
         missionName = missionFromDb[0]
-        missionAuthorDiscordIds = filter(None, [authorToUser(author) for author in missionFromDb[1].split(",")])
+        unawareAuthors = filter(lambda author: author != user, [author for author in missionFromDb[1].split(",")])
+        missionAuthorDiscordIds = filter(None, [authorToUser(author) for author in unawareAuthors])
         missionAuthorDiscordIds = ['<@' + discordId + ">" for discordId in missionAuthorDiscordIds]
 
         if rejection:
