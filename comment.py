@@ -47,7 +47,8 @@ def handleComment(environ, start_response):
         c.execute("select missionName, missionAuthor from missions where id = ?", [missionId])
         missionFromDb = c.fetchone()
         missionName = missionFromDb[0]
-        missionAuthorDiscordIds = filter(None, [authorToUser(author) for author in missionFromDb[1].split(",")])
+        unawareAuthors = filter(lambda author: author.strip() != user.login, [author for author in missionFromDb[1].split(",")])
+        missionAuthorDiscordIds = filter(None, [authorToUser(author) for author in unawareAuthors])
         missionAuthorDiscordIds = ['<@' + discordId + ">" for discordId in missionAuthorDiscordIds]
 
         if rejection:
