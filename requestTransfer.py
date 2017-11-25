@@ -33,7 +33,7 @@ def handleTransfer(environ, start_response):
         missionAuthor = missionStuff[1]
         payload = {'content': 'Rejoice Comrades! ' + missionAuthor
                               + ' has prepared a new adventure for us!\n' +
-                              missionName + ' now has ' + fileName + ' requested for testing'}
+                              missionName + ' now has ' + fileName + ' requested for transfer'}
         r = requests.post(utils.discordHookUrl, data=payload)
 
     c.connection.commit()
