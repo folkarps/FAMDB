@@ -57,12 +57,13 @@ $.templates("versionTmpl", `
     {{/if}}
     {{if existsOnMain}}
         <div class="missionVersionInner" style="float:right;">
-
-            <div class="deleteButtonContainer toolTipContainer" style="text-align:left">{{>name}}</div>
+            <div class="deleteButtonContainer" style="text-align:left">{{>name}}</div>
             {{if allowedToEdit && !toBeDeletedMain}}
-                <img src="images/delete.png" alt="Delete" class="deleteButton"  data-missionId={{:missionId}} data-versionId={{:id}}
-                     onclick="deleteVersion(this, 'main')"/>
-                <span class="tooltiptext">Delete on next cleanup</span>
+                <div class="toolTipContainer">
+                    <img src="images/delete.png" alt="Delete" class="deleteButton"  data-missionId={{:missionId}} data-versionId={{:id}}
+                         onclick="deleteVersion(this, 'main')"/>
+                    <span class="tooltiptext">Delete on next cleanup</span>
+                </div>
              {{/if}}
 
         </div>
