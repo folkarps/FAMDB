@@ -33,7 +33,7 @@ def handleTesting(environ, start_response):
 
         payload = {'content': '<@&' + utils.discordAdminRoleId + '> Rejoice Comrades! ' + missionAuthor
                               + ' has prepared a new adventure for us!\n' +
-                              missionName + ' now has ' + fileName + ' requested for transfer.'}
+                              missionName + ' now has ' + fileName + ' requested for testing.'}
         r = requests.post(utils.discordHookUrl, data=payload)
 
     c.connection.commit()

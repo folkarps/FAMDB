@@ -75,7 +75,7 @@ header a h2 {
 
 .fileNameContainer {
     display: inline-block;
-    width: 80%;
+    flex-basis: 40%;
 }
 
 .toolTipContainer .tooltiptext {
@@ -860,6 +860,10 @@ buttongroup a:hover,nav a:active {
     margin: 0.25em;
     vertical-align: middle;
 }
+
+.deleteButtonContainer {
+    flex-grow: 1;
+}
 .moveButton{
     height: 1.5em;
     background-color:#eaa724;
@@ -881,11 +885,13 @@ buttongroup a:hover,nav a:active {
 .missionVersionOuter {
     border:1px solid #eaa724;
     line-height: 2.4em;
+    display: flex;
+    flex-wrap: nowrap;
+
 }
 
 .missionVersionInner {
     display:inline-block;
-    width:42%;
 }
 
 .commentContents {

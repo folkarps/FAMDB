@@ -20,7 +20,6 @@ $.templates("versionTmpl", `
         {{if requestedTesting}}
         <img src="images/requestedTransfer.png"/>
         {{/if}}
-        <div class="missionVersionInner">
 
             <div class="fileNameContainer">{{>name}}</div>
             {{if allowedToEdit && !toBeDeletedMM}}
@@ -32,7 +31,6 @@ $.templates("versionTmpl", `
                     <span class="tooltiptext">Delete on next cleanup</span>
                 </div>
             {{/if}}
-        </div>
     {{/if}}
     {{if !existsOnMain && !requestedTransfer && !requestedTesting && allowedToEdit}}
         <div class="moveButtonContainer toolTipContainer">
@@ -56,16 +54,15 @@ $.templates("versionTmpl", `
         </div>
     {{/if}}
     {{if existsOnMain}}
-        <div class="missionVersionInner" style="float:right;">
-
-            <div class="deleteButtonContainer toolTipContainer" style="text-align:left">{{>name}}</div>
+            <div class="fileNameContainer">{{>name}}</div>
             {{if allowedToEdit && !toBeDeletedMain}}
-                <img src="images/delete.png" alt="Delete" class="deleteButton"  data-missionId={{:missionId}} data-versionId={{:id}}
-                     onclick="deleteVersion(this, 'main')"/>
-                <span class="tooltiptext">Delete on next cleanup</span>
+                <div class="toolTipContainer">
+                    <img src="images/delete.png" alt="Delete" class="deleteButton"  data-missionId={{:missionId}} data-versionId={{:id}}
+                         onclick="deleteVersion(this, 'main')"/>
+                    <span class="tooltiptext">Delete on next cleanup</span>
+                </div>
              {{/if}}
 
-        </div>
     {{/if}}
 
 
