@@ -31,11 +31,12 @@ def handleMissions(environ, start_response):
         for k, g in itertools.groupby(versionsFromDb, lambda x: x['missionId']):
             versionsGroupedByMission[k] = list(g)
 
-        c.execute(str.format('''select * from comments where missionId in ({}) order by versionId''', idParameter))
+        c.execute(str.format('''SELECT * FROM comments WHERE missionId IN ({}) ORDER BY missionId''', idParameter))
 
         commentsFromDb = c.fetchall()
         # group the comments by their mission Id
         commentsGroupedByMission = {}
+
         for k, g in itertools.groupby(commentsFromDb, lambda x: x['missionId']):
             commentsGroupedByMission[k] = list(g)
 
