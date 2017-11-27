@@ -31,7 +31,8 @@ def handleTransfer(environ, start_response):
         missionStuff = c.fetchone()
         missionName = missionStuff[0]
         missionAuthor = missionStuff[1]
-        payload = {'content': 'Rejoice Comrades! ' + missionAuthor
+        
+        payload = {'content': '<@&' + utils.discordAdminRoleId + '> Rejoice Comrades! ' + missionAuthor
                               + ' has prepared a new adventure for us!\n' +
                               missionName + ' now has ' + fileName + ' requested for transfer'}
         r = requests.post(utils.discordHookUrl, data=payload)
