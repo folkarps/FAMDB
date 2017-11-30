@@ -9,7 +9,7 @@ import utils
 
 def authorToUser(author):
     c = utils.getCursor()
-    c.execute("select discordId from users where login = ?", [author])
+    c.execute("SELECT discordId FROM users WHERE login = ?", [author.strip()])
     return c.fetchone()[0]
 
 
