@@ -38,7 +38,7 @@ def handleComment(environ, start_response):
     versionId = versionRow[1]
 
     if rejection:
-        c.execute("UPDATE missions SET status ='WIP' WHERE id = ?", [missionId])
+        c.execute("UPDATE missions SET status ='Broken' WHERE id = ?", [missionId])
         c.execute("UPDATE versions SET requestedTransfer=0, requestedTesting=0 WHERE id = ?", [versionId])
     c.execute("insert into comments (missionId, user, contents, createDate, versionId) values (?,?,?,?, ?)",
               [missionId, user.login, comment, datetime.now(), versionId])
@@ -51,7 +51,7 @@ def handleComment(environ, start_response):
         missionAuthorDiscordIds = filter(None, [authorToUser(author) for author in unawareAuthors])
 
         # Only send the message if there is at least one ID to send to
-        if missionAuthorDiscordIds:
+        if len(list(missionAuthorDiscordIds)) > 0:
             missionAuthorDiscordIds = ['<@' + discordId + ">" for discordId in missionAuthorDiscordIds]
 
             if rejection:
