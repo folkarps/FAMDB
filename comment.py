@@ -49,14 +49,17 @@ def handleComment(environ, start_response):
         missionName = missionFromDb[0]
         unawareAuthors = filter(lambda author: author.strip() != user.login, [author for author in missionFromDb[1].split(",")])
         missionAuthorDiscordIds = filter(None, [authorToUser(author) for author in unawareAuthors])
-        missionAuthorDiscordIds = ['<@' + discordId + ">" for discordId in missionAuthorDiscordIds]
 
-        if rejection:
-            payload = {
-                'content': 'Despair  ' + ' '.join(missionAuthorDiscordIds) + '! ' + fileName + ' has been rejected'}
-        else:
-            payload = {'content': ' '.join(missionAuthorDiscordIds) + '! ' + missionName + ' has a new comment. '}
-        r = requests.post(utils.discordHookUrl, data=payload)
+        # Only send the message if there is at least one ID to send to
+        if missionAuthorDiscordIds:
+            missionAuthorDiscordIds = ['<@' + discordId + ">" for discordId in missionAuthorDiscordIds]
+
+            if rejection:
+                payload = {
+                    'content': 'Despair  ' + ' '.join(missionAuthorDiscordIds) + '! ' + fileName + ' has been rejected'}
+            else:
+                payload = {'content': ' '.join(missionAuthorDiscordIds) + '! ' + missionName + ' has a new comment. '}
+            r = requests.post(utils.discordHookUrl, data=payload)
 
     c.connection.commit()
     c.connection.close()
