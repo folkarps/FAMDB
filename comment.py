@@ -20,7 +20,7 @@ def handleComment(environ, start_response):
     missionJson = json.loads(missionJsonString)
     missionId = missionJson['missionId']
     comment = html.escape(missionJson['comment'])
-    rejection = True if 'rejection' in missionJson and missionJson['rejection'] == 'true' else False
+    rejection = True if 'rejection' in missionJson and missionJson['rejection'] == True else False
     # If you're a MM user and this is your mission, or you're a low admin
     if rejection and not (
                 utils.checkUserPermissions(user, 1, missionId=missionId,
