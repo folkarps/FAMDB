@@ -31,6 +31,8 @@ $.templates("versionTmpl", `
                     <span class="tooltiptext">Delete on next cleanup</span>
                 </div>
             {{/if}}
+    {{else}}
+        <div class="fileNameContainer"></div>
     {{/if}}
     {{if !existsOnMain && !requestedTransfer && !requestedTesting && allowedToEdit}}
         <div class="moveButtonContainer toolTipContainer">
