@@ -31,7 +31,7 @@ def handleTesting(environ, start_response):
         missionName = missionStuff[0]
         missionAuthor = missionStuff[1]
 
-        payload = {'content': '<@&' + utils.discordAdminRoleId + '> Rejoice Comrades! ' + missionAuthor
+        payload = {'content': 'Rejoice Comrades! ' + missionAuthor
                               + ' has prepared a new adventure for us!\n' +
                               missionName + ' now has ' + fileName + ' requested for testing.'}
         r = requests.post(utils.discordHookUrl, data=payload)
