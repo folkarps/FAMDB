@@ -19,7 +19,7 @@ def handleCreateUser(environ, start_response):
     email = html.escape(signUpJson['email'].strip())
     discordId = signUpJson['discordId'].strip()
 
-    negativeRegex = re.compile(r'^[0-9]{16}$')
+    negativeRegex = re.compile(r'^[0-9]{18}$')
     if not negativeRegex.match(discordId):
         start_response("500 Internal Server Error", [])
         return ["Discord ID required."
