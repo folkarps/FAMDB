@@ -10,7 +10,7 @@ FolkArps's instance of FAMDB can be seen at http://server.folkarps.com/famdb/
 Users can create and edit mission descriptions, upload mission versions, and
 schedule deletion of specific versions of missions.
 
-Admins can move missions from the mission making server (MM server) to the main server, archive missions,
+Admins can move missions from the mission making server (MM server) to the main server, 
 and create sessions with specific missions.
 
 Issues can be reported at https://github.com/Raptoer/FAMDB/issues
@@ -28,28 +28,37 @@ pip install -r requirementsPosix.txt or pip install -r requirementsWindows.txt d
 
 windows users will then have to install pycrypt manually using a command that I lost.
 
-FAMDB runs as a WSGI server. This means it can be run using either apache's mod_wsgi (as we do) or a wsgi server built into python.
+FAMDB runs as a WSGI server. 
 
-Starting the server:
-python main.py start
+You have 2 options to run FAMDB
+1. Running using apache or nginx WSGI server. This is reccomended.
 
-Stopping the server:
-python main.py stop
+  For apache:
+    There are two directives that are necessary:
+    1. WSGIPythonPath
+      This tells python where to look for the files
+    2. WSGIScriptAlias
+      This tells apache when and how to route requests to FAMDB. point it to the wsgiScript.wsgi file
+2. Running using python's built in WSGI server.
 
-server can be started manually using 
-python startServer.py
-However this starts a foreground process
+     Starting the server:
+     python main.py start
+
+     Stopping the server:
+     python main.py stop
 
 Configuration
 =============
 in the file config.config there are a number of properties:
-* 4 folders, 2 for the missions and 2 for archives
+* 2 folders for mission pbos (one for testing server, and one for main server)
 * Port on which the built in server should run. This is ignored if using an external wsgi server.
 * email address for the recover password feature
 * email password for the recover password feature
 * email Server for the recover password feature
 * email sever for the recover password feature
 * external server address for the recover password feature
+* discord admin role ID
+* discord webhook url
  
 Please ensure that the user running the server has permissions to access these folders, as well as the entire famdb folder structure.
 
