@@ -34,6 +34,7 @@ You have 2 options to run FAMDB
 1. Running using apache or nginx WSGI server. This is reccomended.
   
   For apache there are two directives that are necessary.
+  
     1. WSGIPythonPath
       This tells python where to look for the files
     1. WSGIScriptAlias
