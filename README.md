@@ -37,7 +37,7 @@ You have 2 options to run FAMDB
   
     1. WSGIPythonPath
       This tells python where to look for the files
-    1. WSGIScriptAlias
+    2. WSGIScriptAlias
       This tells apache when and how to route requests to FAMDB. point it to the wsgiScript.wsgi file
 
 
