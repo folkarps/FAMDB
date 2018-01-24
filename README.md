@@ -32,13 +32,14 @@ FAMDB runs as a WSGI server.
 
 You have 2 options to run FAMDB
 1. Running using apache or nginx WSGI server. This is reccomended.
-
-  For apache:
-    There are two directives that are necessary:
+  
+  For apache there are two directives that are necessary.
     1. WSGIPythonPath
       This tells python where to look for the files
-    2. WSGIScriptAlias
+    1. WSGIScriptAlias
       This tells apache when and how to route requests to FAMDB. point it to the wsgiScript.wsgi file
+
+
 2. Running using python's built in WSGI server.
 
      Starting the server:
