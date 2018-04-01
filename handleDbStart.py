@@ -50,6 +50,14 @@ def initDb():
         sessionKey = Random.new().read(AES.block_size)
         c.execute("update users set sessionKey = ? where id = ?", [sessionKey, user['id']])
 
+    try:
+        c.execute('''ALTER TABLE versions ADD ppComplete INTEGER DEFAULT 0''')
+        c.execute('''ALTER TABLE versions ADD ppSuccessful INTEGER DEFAULT 0''')
+        c.execute('''ALTER TABLE versions ADD ppText TEXT''')
+    except:
+        pass
+
+
     # Save (commit) the changes
     c.connection.commit()
 

@@ -3,37 +3,10 @@ from http import cookies
 from http.cookies import SimpleCookie
 
 import utils
-from authors import handleAuthors
-from changePasswordInternal import handleChangePassword
-from cleanup import handleCleanup
-from comment import handleComment
-from createUser import handleCreateUser
-from deleteMission import handleMissionDelete
-from deleteSession import handleSessionDelete
-from deleteVersion import handleVersionDelete
-from download import handleDownload
-from editSession import handleEditSession
-from login import handleLogin
-from missions import handleMissions
-from move import handleMove
-from requestTesting import handleTesting
-from requestTransfer import handleTransfer
-from resetPassword import handleResetPassword
-from saveMission import handleSaveMission
-from session import handleGetSession
-from setPermissionLevel import handlePermissionLevel
-from sync import handleSync
-from upload import handleUpload
-from users import handleUsers
+from handler import Handler
 
-handlers = {'deleteVersion': handleVersionDelete, 'login': handleLogin, 'signup': handleCreateUser,
-            'move': handleMove, 'cleanup': handleCleanup, 'upload': handleUpload,
-            'saveMission': handleSaveMission, "setPermissionLevel": handlePermissionLevel,
-            "editSession": handleEditSession, "deleteSession": handleSessionDelete,
-            "deleteMission": handleMissionDelete, 'missions': handleMissions, 'authors': handleAuthors,
-            'users': handleUsers, 'sessions': handleGetSession, 'download': handleDownload,
-            'resetPassword': handleResetPassword, 'changePasswordInternal': handleChangePassword, 'sync': handleSync,
-            'requestTransfer': handleTransfer, 'requestTesting': handleTesting, 'comment': handleComment}
+subclasses = Handler.__subclasses__()
+handlers = {subclass().getHandled(): subclass().handle for (subclass) in subclasses}
 
 
 def wsgi(environ, start_response):
