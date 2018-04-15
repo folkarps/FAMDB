@@ -44,7 +44,7 @@ class CommentHandler(Handler):
             missionName = missionFromDb[0]
             unawareAuthors = filter(lambda author: author.strip() != user.login,
                                     [author for author in missionFromDb[1].split(",")])
-            missionAuthorDiscordIds = filter(None, [CommentHandler.authorToUser(author) for author in unawareAuthors])
+            missionAuthorDiscordIds = filter(None, [authorToUser(author) for author in unawareAuthors])
 
             # Only send the message if there is at least one ID to send to
             if len(list(missionAuthorDiscordIds)) > 0:
@@ -67,8 +67,9 @@ class CommentHandler(Handler):
     def getHandled(self):
         return "comment"
 
-    def authorToUser(self, author):
-        c = utils.getCursor()
-        c.execute("SELECT discordId FROM users WHERE login = ?", [author])
-        user = c.fetchone()
-        return None if user is None else user[0]
+
+def authorToUser(author):
+    c = utils.getCursor()
+    c.execute("SELECT discordId FROM users WHERE login = ?", [author])
+    user = c.fetchone()
+    return None if user is None else user[0]
