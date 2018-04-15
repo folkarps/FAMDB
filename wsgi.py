@@ -4,7 +4,7 @@ from http.cookies import SimpleCookie
 
 import utils
 from handler import Handler
-import handlers
+from handlers import *
 
 subclasses = Handler.__subclasses__()
 handlerInstances = {subclass().getHandled(): subclass().handle for (subclass) in subclasses}
