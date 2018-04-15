@@ -40,8 +40,12 @@ class MoveHandler(Handler):
             missionAuthorDiscordIds = filter(None, [authorToUser(author) for author in missionFromDb[0].split(",")])
             missionAuthorDiscordIds = ['<@' + discordId + ">" for discordId in missionAuthorDiscordIds]
 
-            payload = {
-                'content': 'Rejoice  ' + ' '.join(missionAuthorDiscordIds) + '! ' + fileName + ' has been accepted'}
+            if missionAuthorDiscordIds:
+                payload = {
+                    'content': 'Rejoice  ' + ' '.join(missionAuthorDiscordIds) + '! ' + fileName + ' has been accepted'}
+            else:
+                payload = {
+                    'content': 'Rejoice  ' + missionFromDb[0] + ':RIP:! ' + fileName + ' has been accepted'}
 
             r = requests.post(utils.discordHookUrl, data=payload)
 
@@ -53,7 +57,12 @@ class MoveHandler(Handler):
     def getHandled(self):
         return "move"
 
-    def authorToUser(self, author):
-        c = utils.getCursor()
-        c.execute("SELECT discordId FROM users WHERE login = ?", [author.strip()])
-        return c.fetchone()[0]
+
+def authorToUser(author):
+    c = utils.getCursor()
+    c.execute("SELECT discordId FROM users WHERE login = ?", [author.strip()])
+    fetchone = c.fetchone()
+    if fetchone:
+        return fetchone[0]
+    else:
+        return None
