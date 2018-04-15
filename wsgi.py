@@ -4,9 +4,10 @@ from http.cookies import SimpleCookie
 
 import utils
 from handler import Handler
+import handlers
 
 subclasses = Handler.__subclasses__()
-handlers = {subclass().getHandled(): subclass().handle for (subclass) in subclasses}
+handlerInstances = {subclass().getHandled(): subclass().handle for (subclass) in subclasses}
 
 
 def wsgi(environ, start_response):
@@ -18,8 +19,8 @@ def wsgi(environ, start_response):
     else:
         environ['HTTP_COOKIE'] = None
         environ['user'] = None
-    if simplePath in handlers:
-        return handlers[simplePath](environ, start_response)
+    if simplePath in handlerInstances:
+        return handlerInstances[simplePath](environ, start_response)
     else:
         responseHeaders = utils.handleBadSessionIds(environ)
 
