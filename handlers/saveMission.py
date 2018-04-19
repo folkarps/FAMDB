@@ -31,7 +31,7 @@ class SaveMissionHandler(Handler):
         if not hasPermissions:
             start_response("403 Permission Denied", [])
             return ["Access Denied"]
-        query, params = SaveMissionHandler.constructQuery(missionJson, newMission, environ['user'])
+        query, params = self.constructQuery(missionJson, newMission, environ['user'])
         params.append(missionId)
 
         c.execute("update missions set " + query + "where id=?", params)
