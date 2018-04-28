@@ -6,7 +6,7 @@ from handler import Handler
 
 
 class SessionsHandler(Handler):
-    def handleGetSession(environ, start_response):
+    def handle(self, environ, start_response):
         c = utils.getCursor()
         o = parse_qs(environ['QUERY_STRING'])
         if "sessionId" in o:
