@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='FAMDB',
-    version='2.1',
+    version='2.1.1',
     url='https://github.com/Raptoer/FAMDB',
     install_requires=[
         'discord.py',
