@@ -110,8 +110,12 @@ class MissionsHandler(Handler):
             query.append("missionAuthor = ?")
             p.append(params['author'][0])
         if "status" in params and (params['status'][0] != 'All Statuses'):
-            query.append("status = ?")
-            p.append(params['status'][0])
+            if params['status'][0] == 'Testing & Transfer':
+                query.append("status in ('Testing', 'Transfer')")
+            else:
+                query.append("status = ?")
+                p.append(params['status'][0])
+
         if "missionTypes[]" in params:
             missionTypeString = ["'{0}'".format(w) for w in params['missionTypes[]']]
             query.append(str.format("missionType in({})", ",".join(missionTypeString)))

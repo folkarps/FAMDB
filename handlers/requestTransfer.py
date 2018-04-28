@@ -25,7 +25,7 @@ class RequestTransferHandler(Handler):
         version = c.fetchone()
         fileName = version[0]
         if Path(utils.missionMakerDir + "/" + fileName).is_file():
-            c.execute("UPDATE missions SET status='Testing' WHERE id = ?", [missionId])
+            c.execute("UPDATE missions SET status='Transfer' WHERE id = ?", [missionId])
             c.execute("UPDATE versions SET requestedTransfer=1 WHERE id = ?", [versionId])
 
         if utils.discordHookUrl != '':

@@ -1,6 +1,6 @@
 var missionTypes = ["Adversarial","Coop","Coop (ZEUS)","Afterparty", "Race"];
 var islands = ["Altis","Tanoa","Stratis","Malden","Virtual Reality"];
-var statuses = ["Broken", "WIP", "Ready", "Testing"];
+var statuses = ["Broken", "WIP", "Ready", "Testing", "Transfer", "Testing & Transfer"];
 
 
 function GetIslandsList(parent) {
