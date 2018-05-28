@@ -898,6 +898,10 @@ buttongroup a:hover,nav a:active {
     margin-left:1em;
 }
 
+.versionDeleted {
+    color: #eaa724;
+}
+
 @media screen and (min-width: 1024px) {
 
 	/************************************************************

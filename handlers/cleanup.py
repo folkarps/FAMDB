@@ -34,10 +34,6 @@ class CleanupHandler(Handler):
                 "update versions set " + existsProperty + " = 0, " + toBeDeletedProperty + " = 0 where "
                 + toBeDeletedProperty + " = 1")
         c.execute("SELECT id FROM versions WHERE existsOnMM = 0 AND existsOnMain = 0")
-        versionRowsToBeDeleted = c.fetchall()
-        ids = [str(x['id']) for x in versionRowsToBeDeleted]
-        idParameter = ",".join(ids)
-        c.execute(str.format('''DELETE FROM comments WHERE versionId IN ({})''', idParameter))
 
         c.execute("DELETE FROM versions WHERE existsOnMM = 0 AND existsOnMain = 0")
         c.connection.commit()

@@ -3,8 +3,14 @@ $.templates("versionTmpl", `
 {{if isComment}}
 <div class="missionVersionOuter">
 
+    <br/>
     <div style="border-bottom:"> {{>user}}:</div>
-    <div class="commentContents"> {{>contents}}</div>
+    <div class="commentContents"> {{>contents}}
+    
+        {{if isMissingVersion}}
+        <div style="border-bottom:" class="versionDeleted">The version for this comment has been deleted</div>
+        {{/if}}
+    </div>
 </div>
 
 {{else}}

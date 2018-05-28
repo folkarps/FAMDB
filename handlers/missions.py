@@ -88,6 +88,8 @@ class MissionsHandler(Handler):
                                           commentsGrouped[dto['id']]]
                 for comment in commentsForThisMission:
                     comment['isComment'] = True
+                    if self.findVersion(comment['versionId'], versionsForThisMission) == False:
+                        comment['isMissingVersion'] = True
                 unsortedData = versionsForThisMission + commentsForThisMission
             else:
                 unsortedData = versionsForThisMission
@@ -96,6 +98,12 @@ class MissionsHandler(Handler):
             dto['versions'] = finalData
 
         return dto
+
+    def findVersion(self, versionId, versionsForThisMission):
+        for v in versionsForThisMission:
+            if v['id'] == versionId:
+                return True
+        return False
 
     def toDtoHelper(self, version):
         return dict(version)
