@@ -5,7 +5,7 @@ ArmAx missions database written in python3 and jQuery
 
 FAMDB is designed to simplify the lives of admins and hosts.
 
-FolkArps's instance of FAMDB can be seen at https://server.folkarps.com/famdb/
+FolkArps's instance of FAMDB can be seen at https://famdb.folkarps.com/
 
 Users can create and edit mission descriptions, upload mission versions, and
 schedule deletion of specific versions of missions.
@@ -13,7 +13,7 @@ schedule deletion of specific versions of missions.
 Admins can move missions from the mission making server (MM server) to the main server, 
 and create sessions with specific missions.
 
-Issues can be reported at https://github.com/Raptoer/FAMDB/issues
+Issues can be reported at https://github.com/folkarps/FAMDB/issues
 
 Usage
 =====
