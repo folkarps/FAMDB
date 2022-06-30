@@ -3,15 +3,15 @@ from distutils.core import setup
 setup(
     name='FAMDB',
     version='2.1.1',
-    url='https://github.com/Raptoer/FAMDB',
+    url='https://github.com/folkarps/FAMDB',
     install_requires=[
-        'discord.py',
         'passlib',
-        'pycrypto',
         'psutil',
+        'pycryptodome',
+        'requests',
     ],
     license='MIT',
     author='abarton',
     author_email='Raptoer@gmail.com',
-    description='Arma mission database'
+    description='Folk ARPS Arma mission database'
 )
