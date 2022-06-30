@@ -1,5 +1,5 @@
 var missionTypes = ["Adversarial","Coop","Coop (ZEUS)","Afterparty", "Race"];
-var islands = ["Altis","Livonia","Malden","Stratis","Tanoa","Weferlingen (Summer)","Weferlingen (Winter)","Virtual Reality"];
+var islands = ["Altis","Cam Lao Nam","Gabreta","Khe Sanh","Livonia","Malden","Stratis","Tanoa","Weferlingen (Summer)","Weferlingen (Winter)","Virtual Reality"];
 var statuses = ["Broken", "WIP", "Ready", "Testing", "Transfer", "Testing & Transfer"];
 
 
