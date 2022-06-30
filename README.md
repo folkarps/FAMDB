@@ -5,7 +5,7 @@ ArmAx missions database written in python3 and jQuery
 
 FAMDB is designed to simplify the lives of admins and hosts.
 
-FolkArps's instance of FAMDB can be seen at http://server.folkarps.com/famdb/
+FolkArps's instance of FAMDB can be seen at https://server.folkarps.com/famdb/
 
 Users can create and edit mission descriptions, upload mission versions, and
 schedule deletion of specific versions of missions.
@@ -17,21 +17,19 @@ Issues can be reported at https://github.com/Raptoer/FAMDB/issues
 
 Usage
 =====
-After python 3.5+, pip and git have been installed run
+After python 3.9+, pip and git have been installed run
 
-sudo pip install -e git+git://github.com/Raptoer/FAMDB.git@master#egg=FAMDB
+git clone https://github.com/folkarps/FAMDB.git -b master
 
 This will download FAMDB to the current directory.
 Then run 
 
-pip install -r requirementsPosix.txt or pip install -r requirementsWindows.txt depending on your environment
-
-windows users will then have to install pycrypt manually using a command that I lost.
+pip3 install .
 
 FAMDB runs as a WSGI server. 
 
 You have 2 options to run FAMDB
-1. Running using apache or nginx WSGI server. This is reccomended.
+1. Running using apache or nginx WSGI server. This is recommended.
   
      For apache there are two directives that are necessary.
   
@@ -77,5 +75,6 @@ Credits
 * Tigershark
 * Wolfenswan
 * Pooter
+* Lexer
 
-For help contact Pooter on discord at Pooter#7054 or on the FolkArps discord (www.folkarps.com)
+For help contact Lexer on discord at on the FolkArps discord (Link found at https://www.folkarps.com)
