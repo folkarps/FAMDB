@@ -24,7 +24,7 @@ $.templates("versionTmpl", `
 
     {{if existsOnMM}}
         {{if requestedTesting}}
-        <img src="images/requestedTransfer.png"/>
+        <img src="images/requestTransfer.png"/>
         {{/if}}
 
             <div class="fileNameContainer">{{>name}}</div>
