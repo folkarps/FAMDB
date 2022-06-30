@@ -139,6 +139,12 @@ class MissionsHandler(Handler):
         if "missionId" in params:
             query.append("id  = ? ")
             p.append(params['missionId'][0])
+        if "countMax" in params:
+            query.append("playedCounter <= ? ")
+            p.append(params['countMax'][0])
+        if "countMin" in params:
+            query.append("playedCounter >= ? ")
+            p.append(params['countMin'][0])
         return " AND ".join(query), p
 
 
