@@ -5,8 +5,8 @@ $.templates("versionTmpl", `
 
     <br/>
     <div style="border-bottom:"> {{>user}}:</div>
-    <div class="commentContents"> {{>contents}}
-    
+    {{!-- contents is already HTML-encoded so safe (and proper) to insert raw with ':' --}}
+    <div class="commentContents"> {{:contents}}
         {{if isMissingVersion}}
         <div style="border-bottom:" class="versionDeleted">The version for this comment has been deleted</div>
         {{/if}}
