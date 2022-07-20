@@ -124,6 +124,12 @@ class MissionsHandler(Handler):
                 query.append("status = ?")
                 p.append(params['status'][0])
 
+        if "cdlcFilter" in params:
+            if params['cdlcFilter'][0] == 'Non-CDLC only':
+                query.append("isCDLCMission = 0")
+            elif params['cdlcFilter'][0] == 'CDLC only':
+                query.append("isCDLCMission = 1")
+
         if "missionTypes[]" in params:
             missionTypeString = ["'{0}'".format(w) for w in params['missionTypes[]']]
             query.append(str.format("missionType in({})", ",".join(missionTypeString)))
