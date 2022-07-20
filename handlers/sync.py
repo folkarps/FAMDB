@@ -13,7 +13,7 @@ class SyncHandler(Handler):
         c = utils.getCursor()
         if utils.checkUserPermissions(environ['user'], 3):
 
-            c.execute(str.format('''SELECT * FROM versions ORDER BY missionId'''))
+            c.execute(str.format('''SELECT v.id, v.name, v.existsOnMM, v.existsOnMain, m.isCDLCMission FROM versions as v join missions as m on v.missionId = m.id ORDER BY v.missionId'''))
             versionsFromDb = c.fetchall()
 
             for version in versionsFromDb:
@@ -27,7 +27,8 @@ class SyncHandler(Handler):
                 existsOnMain = False
                 if version['existsOnMain']:
                     existsOnMain = True
-                    if not Path(utils.missionMainDir + "/" + version['name']).is_file():
+                    # CDLC missions only live in the MM directory, even if existsOnMain is true, so don't try it
+                    if version['isCDLCMission'] == 0 and not Path(utils.missionMainDir + "/" + version['name']).is_file():
                         existsOnMain = False
                         c.execute(str.format('''UPDATE versions SET existsOnMain=0 WHERE id = {}''', version['id']))
 
