@@ -6,6 +6,9 @@ $.templates("missionTmpl", `<tr class='row' id={{:id}}>
     <td class='cellType'>
         <div >{{>missionType}}</div>
     </td>
+    <td class='cellCDLC'>
+        <div >{{if isCDLCMission == 1}}Yes{{else}}No{{/if}}</div>
+    </td>
     <td class='cellSlots'>
         <div >{{>missionPlayers}}</div>
     </td>

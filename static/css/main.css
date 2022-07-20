@@ -355,6 +355,11 @@ SECTION: MISSIONSLIST
     text-align:left
 }
 
+#missionsListTableContainer table.tableMissions th.cellHeaderCDLC {
+    display:none;
+    text-align:left
+}
+
 #missionsListTableContainer table.tableMissions th.cellHeaderPlayed {
     display:none;
     text-align:left
@@ -418,6 +423,10 @@ SECTION: MISSIONSLIST
 
 #missionsListTableContainer table.tableMissions td.cellBroken, td.cellRevision, td.cellPlayedcounter {
 	display: none;
+}
+
+#missionsListTableContainer table.tableMissions td.cellCDLC {
+    display:none
 }
 
 #missionsListTableContainer table.tableMissions td.cellDropdown {
@@ -1106,6 +1115,12 @@ buttongroup a:hover,nav a:active {
         width: 4em;
 	}
 
+	#missionsListTableContainer table.tableMissions th.cellHeaderCDLC {
+		display: table-cell;
+		padding: 0.5em 1em;
+        width: 4em;
+	}
+
 	#missionsListTableContainer table.tableMissions th.cellHeaderIsland {
 		display: table-cell;
 		padding: 0.5em 1em;
@@ -1127,7 +1142,6 @@ buttongroup a:hover,nav a:active {
 	#missionsListTableContainer table.tableMissions th.cellHeaderAuthor {
 		padding: 0.5em 1em;
         display: block;
-        max-width: 10em;
 	}
 
 	#missionsListTableContainer table.tableMissions th.cellHeaderModified {
@@ -1152,7 +1166,6 @@ buttongroup a:hover,nav a:active {
         overflow: hidden;
         text-overflow: ellipsis;
         display: block;
-        max-width: 10em;
     }
 
 	#missionsListTableContainer table.tableMissions td.cellIsland {
@@ -1174,6 +1187,10 @@ buttongroup a:hover,nav a:active {
 		display: table-cell;
 	}
 
+	#missionsListTableContainer table.tableMissions td.cellCDLC {
+		display: table-cell;
+	}
+
 	#missionsListTableContainer table.tableMissions td.cellLastPlayed {
         display: table-cell;
 		padding: 0.5em 1em;
@@ -1182,7 +1199,6 @@ buttongroup a:hover,nav a:active {
 	#missionsListTableContainer table.tableMissions td.cellAuthor {
 		padding: 0.5em 1em;
         display: block;
-        max-width: 10em;
 	}
 
 	#missionsListTableContainer table.tableMissions td.cellModified {
