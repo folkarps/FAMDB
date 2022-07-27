@@ -2,8 +2,7 @@
 name: Deployment
 on:
   push:
-    branches: ["master", "issue-11-housekeeping"]
-  workflow_dispatch: {}
+    branches: ["master"]
 
 jobs:
   deploy:
@@ -29,7 +28,7 @@ jobs:
             
             echo "Updating code"
             git fetch --prune
-            echo git checkout ${{ github.sha }}
+            git checkout ${{ github.sha }}
             
             echo "Reloading Apache"
-            echo sudo systemctl reload apache2
+            sudo systemctl reload apache2
