@@ -117,14 +117,21 @@ def handleBadSessionIds(environ):
 
 # Adapted from https://stackoverflow.com/a/21901260
 def get_git_revision(base_path):
-    git_dir = pathlib.Path(base_path) / '.git'
-    with (git_dir / 'HEAD').open('r') as head:
-        ref = head.readline().split(' ')[-1].strip()
+    try:
+        git_dir = pathlib.Path(base_path) / '.git'
+        with (git_dir / 'HEAD').open('r') as head:
+            ref = head.readline().split(' ')[-1].strip()
 
-    with (git_dir / ref).open('r') as git_hash:
-        long_hash = git_hash.readline().strip()
+        # Handle a detached HEAD
+        if "/" not in ref:
+            long_hash = ref
+        else:
+            with (git_dir / ref).open('r') as git_hash:
+                long_hash = git_hash.readline().strip()
         short_hash = long_hash[:7]
         return long_hash, short_hash
+    except:
+        return "", ""
 
 
 git_revision = get_git_revision(currentPath)
