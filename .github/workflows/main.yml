@@ -29,7 +29,7 @@ jobs:
             
             echo "Updating code"
             git fetch --prune
-            echo git checkout ${{ github.GITHUB_SHA }}
+            echo git checkout ${{ github.sha }}
             
             echo "Reloading Apache"
             echo sudo systemctl reload apache2
