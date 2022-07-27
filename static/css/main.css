@@ -380,6 +380,11 @@ SECTION: MISSIONSLIST
     text-align:left
 }
 
+#missionsListTableContainer table.tableMissions th.cellHeaderStatus {
+    display:none;
+    text-align:left
+}
+
 #missionsListTableContainer table.tableMissions th.cellHeaderBroken, th.cellHeaderRevision {
     display:none;
     text-align:left
@@ -1141,7 +1146,8 @@ buttongroup a:hover,nav a:active {
 
 	#missionsListTableContainer table.tableMissions th.cellHeaderAuthor {
 		padding: 0.5em 1em;
-        display: block;
+        display: table-cell;
+        width: 12em;
 	}
 
 	#missionsListTableContainer table.tableMissions th.cellHeaderModified {
@@ -1153,7 +1159,7 @@ buttongroup a:hover,nav a:active {
     #missionsListTableContainer table.tableMissions th.cellHeaderStatus {
 		display: table-cell;
 		padding: 0.5em 1em;
-        width: 6em;
+        width: 8em;
 	}
 
 	#missionsListTableContainer table.tableMissions td.cellMissions {
@@ -1184,11 +1190,13 @@ buttongroup a:hover,nav a:active {
 	}
 
 	#missionsListTableContainer table.tableMissions td.cellPlayed {
-		display: table-cell;
+		padding: 0.5em 1em;
+        display: table-cell;
 	}
 
 	#missionsListTableContainer table.tableMissions td.cellCDLC {
-		display: table-cell;
+		padding: 0.5em 1em;
+        display: table-cell;
 	}
 
 	#missionsListTableContainer table.tableMissions td.cellLastPlayed {
@@ -1198,10 +1206,15 @@ buttongroup a:hover,nav a:active {
 
 	#missionsListTableContainer table.tableMissions td.cellAuthor {
 		padding: 0.5em 1em;
-        display: block;
+        display: table-cell;
 	}
 
 	#missionsListTableContainer table.tableMissions td.cellModified {
+		display: table-cell;
+		padding: 0.5em 1em;
+	}
+
+    #missionsListTableContainer table.tableMissions td.cellStatus {
 		display: table-cell;
 		padding: 0.5em 1em;
 	}
