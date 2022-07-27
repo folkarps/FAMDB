@@ -48,10 +48,12 @@ class SaveMissionHandler(Handler):
         params = []
 
         for part in ['missionPlayers', 'missionMap', 'missionType', 'missionDesc', 'missionNotes',
-                     'framework', 'missionName']:
+                     'framework', 'missionName', 'isCDLCMission']:
             queryParts.append(part + "=?")
             if missionJson[part] is str:
                 params.append(html.escape(missionJson[part]))
+            elif type(missionJson[part]) is bool:
+                params.append(1 if missionJson[part] else 0)
             else:
                 params.append(missionJson[part])
 

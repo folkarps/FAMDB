@@ -45,8 +45,7 @@
             <h3>Filters</h3>
         </div>
 
-        <form action="#" id="form_filters" method="post" name=
-                "form_filters">
+        <form action="#" id="form_filters" method="post" name="form_filters">
 
             <fieldset>
                 <legend align="left">Map</legend>
@@ -59,7 +58,7 @@
             </fieldset>
 
             <fieldset id="missionTypes">
-
+                <legend align="left">Type</legend>
             </fieldset>
 
             <fieldset>
@@ -86,23 +85,29 @@
 
             <fieldset>
                 <legend align="left">Filter</legend>
-                <label for=
-                               "searchText">Text</label><br>
+
+                <label for="searchText">Text</label><br>
                 <input class="searchBox" id="searchText" maxlength="36"
-                       name="searchText" type="text" value=""> <select id=
-                                                                               "authorSelected" name="authorSelected">
-                <option>
-                    All Authors
-                </option>
-            </select>
+                       name="searchText" type="text" value="">
+
+                <select id="cdlcFilterSelected" name="cdlcFilterSelected">
+                    <option>Non-CDLC & CDLC</option>
+                    <option>Non-CDLC only</option>
+                    <option>CDLC only</option>
+                </select>
+
+                <select id="authorSelected" name="authorSelected">
+                    <option>
+                        All Authors
+                    </option>
+                </select>
                 <select id="status" name="status">
                     <option>
                         All Statuses
                     </option>
                 </select>
             </fieldset>
-            <input type="reset" value="Reset">&nbsp;<input id=
-                                                                   "submitButton" type="submit" value="Apply"><br>
+            <input type="reset" value="Reset">&nbsp;<input id="submitButton" type="submit" value="Apply"><br>
         </form>
     </section>
 
@@ -124,6 +129,10 @@
 
                     <th class="cellHeaderType">
                         <a href="#">Type</a>
+                    </th>
+
+                    <th class="cellHeaderCDLC">
+                        <a href="#">CDLC</a>
                     </th>
 
                     <th class="cellHeaderSlots">
@@ -150,8 +159,9 @@
                         <a href="#">Modified</a>
                     </th>
 
-                    <th class="cellHeaderStatus">&nbsp;
-                        <a href="#">Status</a></th>
+                    <th class="cellHeaderStatus">
+                        <a href="#">Status</a>
+                    </th>
                 </tr>
                 </thead>
                 <tbody></tbody>

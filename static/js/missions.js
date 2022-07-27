@@ -26,7 +26,7 @@ function LoadData() {
     params["name"] = searchVal;
     params["countMax"] = Number($("#playcountMax").val());
     params["countMin"] = Number($("#playcountMin").val());
-
+    params["cdlcFilter"] = $("#cdlcFilterSelected").val();
 
     jQuery.get("missions", params, function (data, status, jqXHR)
     {

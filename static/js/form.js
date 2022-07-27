@@ -29,6 +29,7 @@ function LoadMission() {
                 $("#missionDescription").val(mission.missionDesc);
                 $("#missionNotes").val(mission.missionNotes);
                 $("#framework").val(mission.framework);
+                $('#isCDLCMission').prop('checked', mission.isCDLCMission == 1)
                 $("#loading").hide();
             }else {
                 setNewMission();
@@ -63,6 +64,7 @@ function WriteMission() {
     var missionNotes = $("#missionNotes").val();
     var isBroken = $('#missionBroken').prop('checked');
     var needsRevision = $('#missionNeedsRevision').prop('checked');
+    var isCDLCMission = $('#isCDLCMission').prop('checked');
 
     if ( !(missionName.match(/^[a-zA-Z0-9'-_][a-zA-Z0-9'-_ ]+$/)) || missionName === "" || missionName === null) {
         MissionSaveError("Enter a mission name!");
@@ -108,9 +110,9 @@ function WriteMission() {
     data.isBroken = isBroken;
     data.needsRevision = needsRevision;
     data.missionNotes = missionNotes;
+    data.isCDLCMission = isCDLCMission;
     data.framework = $("#framework").val();
     if(getQueryDict()['missionId'] != null) {
-
         data.missionId = getQueryDict()['missionId'];
     }
 

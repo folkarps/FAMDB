@@ -22,18 +22,30 @@ class CleanupHandler(Handler):
                 toBeDeletedProperty = 'toBeDeletedMM'
                 existsProperty = 'existsOnMM'
 
-            c.execute('''SELECT * FROM versions WHERE ''' + toBeDeletedProperty + ''' = 1''')
+            c.execute('''SELECT v.name, m.isCDLCMission FROM versions as v join missions as m on v.missionId = m.id WHERE v.''' + toBeDeletedProperty + ''' = 1''')
             toBeDeleted = c.fetchall()
-            for deleteMe in toBeDeleted:
+            for (name, isCDLCMission) in toBeDeleted:
+                # CDLC missions always live in missionMakerDir, so handle deletion of the actual file in a special case
+                if isCDLCMission == 1:
+                    continue
+
                 try:
-                    os.remove(os.path.join(missionDirPrefix, deleteMe['name']))
+                    os.remove(os.path.join(missionDirPrefix, name))
                 except OSError:
                     pass
 
             c.execute(
                 "update versions set " + existsProperty + " = 0, " + toBeDeletedProperty + " = 0 where "
                 + toBeDeletedProperty + " = 1")
-        c.execute("SELECT id FROM versions WHERE existsOnMM = 0 AND existsOnMain = 0")
+
+        # Delete the CDLC PBO only if it's been "deleted" on both servers
+        c.execute("SELECT v.name FROM versions as v join missions as m on v.missionId = m.id WHERE v.existsOnMM = 0 AND v.existsOnMain = 0 AND m.isCDLCMission = 1")
+        cdlcToBeDeleted = c.fetchall()
+        for row in cdlcToBeDeleted:
+            try:
+                os.remove(os.path.join(utils.missionMakerDir, row['name']))
+            except OSError:
+                pass
 
         c.execute("DELETE FROM versions WHERE existsOnMM = 0 AND existsOnMain = 0")
         c.connection.commit()

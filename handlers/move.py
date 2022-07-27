@@ -24,11 +24,13 @@ class MoveHandler(Handler):
             return ["Access Denied"]
 
         c = utils.getCursor()
-        c.execute("SELECT name FROM versions WHERE id = ?", [versionId])
+        c.execute("select versions.name, missions.isCDLCMission from versions join missions on versions.missionId = missions.id where versions.id = ?", [versionId])
+        (fileName, isCDLCMission) = c.fetchone()
 
-        fileName = c.fetchone()[0]
         if Path(utils.missionMakerDir + "/" + fileName).exists():
-            copyfile(utils.missionMakerDir + "/" + fileName, utils.missionMainDir + "/" + fileName)
+            # CDLC missions always live in missionMakerDir, so don't actually move the file, just pretend to
+            if isCDLCMission == 0:
+                copyfile(utils.missionMakerDir + "/" + fileName, utils.missionMainDir + "/" + fileName)
             c.execute("UPDATE versions SET existsOnMain=1, requestedTransfer=0, requestedTesting=0 WHERE id = ?",
                       [versionId])
 
