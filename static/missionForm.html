@@ -160,8 +160,8 @@
 </div>
 
 <footer>
-    <p>&copy; 2016 <a href="https://www.folkarps.com">Folk ARPS</a>
-    </p>
+    <p>&copy; 2016-2022 <a href="https://www.folkarps.com">Folk ARPS</a></p>
+    <div id="versionInfo" style="font-size: x-small"></div>
 </footer>
 
 </body>
@@ -179,5 +179,10 @@
 </script>
 <!--<script src="js/add.js" type="text/javascript"></script>-->
 <script src="js/jquery.tablesorter.js" type="text/javascript"></script>
-
+<script defer>
+    jQuery.get("currentGitRevision", null, function (data, status, jqXHR) {
+        var git_revision = JSON.parse(data);
+        document.getElementById("versionInfo").innerHTML = `Current revision: <a href=https://github.com/folkarps/FAMDB/commit/${git_revision.gitLongHash}>${git_revision.gitShortHash}</a>`
+    });
+</script>
 </html>
