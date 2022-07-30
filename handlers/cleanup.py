@@ -47,7 +47,13 @@ class CleanupHandler(Handler):
             except OSError:
                 pass
 
+        # Clean-up versions with no files, and set missions with no versions (files) to the "Broken" status if not already Broken (or WIP)
         c.execute("DELETE FROM versions WHERE existsOnMM = 0 AND existsOnMain = 0")
+        c.execute("SELECT id FROM missions WHERE status NOT IN ('WIP', 'Broken') AND id NOT IN (SELECT DISTINCT missionId from versions)")
+        no_versions = c.fetchall()
+        for row in no_versions:
+            c.execute("UPDATE missions SET status ='Broken' WHERE id = ?", [row['id']])
+
         c.connection.commit()
         c.connection.close()
 
