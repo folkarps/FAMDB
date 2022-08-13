@@ -1,6 +1,18 @@
 // Functions used to populate the main table
 var blah = false;
 
+// Init tablesorter
+$("#missionTable").tablesorter({
+    // sort on the first column and third column, order asc
+    widgets: ["zebra"], // initialize zebra striping of the table
+    sortList: [[0,0]], // Sort table alphabetically by default
+    cssChildRow: "descRow",
+    emptyTo: 'emptyMin',
+    cssAsc           : 'fa fa-sort-asc',
+    cssDesc          : 'fa fa-sort-desc',
+    cssNone          : 'fa fa-sort',
+});
+
 function LoadData() {
     var mapVal = $("#islandSelected").val();
     var authorVal = $("#authorSelected").val();
@@ -51,16 +63,8 @@ function LoadData() {
         });
 
         // Sort the table
-        $("#missionTable").tablesorter({
-            // sort on the first column and third column, order asc
-            widgets: ["zebra"], // initialize zebra striping of the table
-            sortList: [[0,0]], // Sort table alphabetically by default
-            cssChildRow: "descRow",
-            emptyTo: 'emptyMin',
-            cssAsc           : 'fa fa-sort-asc',
-            cssDesc          : 'fa fa-sort-desc',
-            cssNone          : 'fa fa-sort',
-        });
+        $("#missionTable").trigger("update");
+
         if (getQueryDict()['missionId'] != null && !blah) {
             blah = true;
             table = $("#missionTable > tbody");
@@ -72,24 +76,11 @@ function LoadData() {
             $('html, body').animate({
                 scrollTop: $(cellMissions).offset().top
             }, 500);
-
-
         }
 
         if(!isLoggedIn()) {
             $(".buttons").css("display", "none");
         }
-
-        setTimeout(function() {
-            var resort = false, // re-apply the current sort
-                callback = function(table) {};
-            // let the plugin know that we made a update, then the plugin will
-            // automatically sort the table based on the header settings
-            $("table").trigger("updateAll", [resort,
-                callback
-            ]);
-
-        }, 100);
     });
 }
 
