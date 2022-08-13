@@ -124,6 +124,19 @@ class MissionsHandler(Handler):
                 query.append("status = ?")
                 p.append(params['status'][0])
 
+        text_subquery = []
+        if "name" in params:
+            text_subquery.append("missionName like ?")
+            p.append("%" + params['name'][0] + "%")
+        if "searchDesc" in params:
+            text_subquery.append("missionDesc like ?")
+            p.append("%" + params['searchDesc'][0] + "%")
+        if "searchNotes" in params:
+            text_subquery.append("missionNotes like ?")
+            p.append("%" + params['searchNotes'][0] + "%")
+        if text_subquery:
+            query.append("(" + " OR ".join(text_subquery) + ")")
+
         if "cdlcFilter" in params:
             if params['cdlcFilter'][0] == 'Non-CDLC only':
                 query.append("isCDLCMission = 0")
@@ -133,9 +146,6 @@ class MissionsHandler(Handler):
         if "missionTypes[]" in params:
             missionTypeString = ["'{0}'".format(w) for w in params['missionTypes[]']]
             query.append(str.format("missionType in({})", ",".join(missionTypeString)))
-        if "name" in params:
-            query.append("missionName  like ?")
-            p.append("%" + params['name'][0] + "%")
         if "playerMax" in params:
             query.append("missionPlayers  <= ? ")
             p.append(params['playerMax'][0])

@@ -32,12 +32,19 @@ function LoadData() {
         }
     }
 
+    if(document.getElementById("searchNameBox").checked === true) {
+        params["name"] = searchVal;
+    }
+    if(document.getElementById("searchDescBox").checked === true) {
+        params["searchDesc"] = searchVal;
+    }
+    if(document.getElementById("searchNotesBox").checked === true) {
+        params["searchNotes"] = searchVal;
+    }
+
     params["missionTypes"] = typeString;
     params["playerMax"] = Number($("#slotsMax").val());
     params["playerMin"] = Number($("#slotsMin").val());
-    params["name"] = searchVal;
-    params["countMax"] = Number($("#playcountMax").val());
-    params["countMin"] = Number($("#playcountMin").val());
     params["cdlcFilter"] = $("#cdlcFilterSelected").val();
 
     jQuery.get("missions", params, function (data, status, jqXHR)
