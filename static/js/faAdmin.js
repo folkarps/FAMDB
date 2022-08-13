@@ -28,14 +28,25 @@ function setPermissionLevel(select) {
 }
 
 function cleanup() {
+    HidePopup("#deleteWindow")
     jQuery.post("cleanup", {}, function(data, status, jqXHR) {
-        window.location.href = "index.html"
+        var parsed = JSON.parse(data)
+
+        // Debug logging
+        for(const deleted of parsed.result.deleted) {
+            console.log(`Deleted ${deleted.filename} from server ${deleted.from}`)
+        }
+        for(const broken of parsed.result.broken) {
+            console.log(`Mission ${broken} had no versions/files, marking as Broken`)
+        }
+
+        alert('Cleanup complete! See browser debug console log')
     });
 }
 
 function sync() {
     jQuery.post("sync", {}, function(data, status, jqXHR) {
-        window.location.href = "index.html"
+        alert('Sync complete!')
     });
 }
 $("#getout").hide();

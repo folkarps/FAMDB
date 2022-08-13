@@ -1,5 +1,5 @@
+import json
 import os
-
 import utils
 from handler import Handler
 
@@ -12,6 +12,7 @@ class CleanupHandler(Handler):
             start_response("403 Permission Denied", [])
             return ["Access Denied"]
 
+        deleted_log = []
         for origin in ['main', 'missionMaker']:
             if origin == 'main':
                 missionDirPrefix = utils.missionMainDir
@@ -30,6 +31,7 @@ class CleanupHandler(Handler):
                     continue
 
                 try:
+                    deleted_log.append({"from": origin, "filename": name})
                     os.remove(os.path.join(missionDirPrefix, name))
                 except OSError:
                     pass
@@ -43,16 +45,32 @@ class CleanupHandler(Handler):
         cdlcToBeDeleted = c.fetchall()
         for row in cdlcToBeDeleted:
             try:
+                deleted_log.append({"from": "both (CDLC)", "filename": row['name']})
                 os.remove(os.path.join(utils.missionMakerDir, row['name']))
             except OSError:
                 pass
 
+        # Clean-up versions with no files, and set missions with no versions (files) to the "Broken" status if not already Broken (or WIP)
+        broken_log = []
         c.execute("DELETE FROM versions WHERE existsOnMM = 0 AND existsOnMain = 0")
+        c.execute("SELECT id, missionName FROM missions WHERE status NOT IN ('WIP', 'Broken') AND id NOT IN (SELECT DISTINCT missionId from versions)")
+        no_versions = c.fetchall()
+        for row in no_versions:
+            c.execute("UPDATE missions SET status ='Broken' WHERE id = ?", [row['id']])
+            broken_log.append(row['missionName'])
+
         c.connection.commit()
         c.connection.close()
 
+        cleanup_log = {
+            "result": {
+                "deleted": deleted_log,
+                "broken": broken_log
+            }
+        }
+        response = json.dumps(cleanup_log).encode()
         start_response("200 OK", [])
-        return []
+        return [response]
 
     def getHandled(self):
         return "cleanup"
