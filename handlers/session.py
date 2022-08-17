@@ -18,7 +18,7 @@ class SessionsHandler(Handler):
         user = environ['user']
         sessionDtos = [dict(x) for x in sessions]
         for x in sessionDtos:
-            x['missionNamesList'] = x['missionNames'].split(",")
+            x['missionNamesList'] = json.loads(x['missionNames'])
             if user is not None:
                 if user.permissionLevel >= 2:
                     x['allowedToEdit'] = True

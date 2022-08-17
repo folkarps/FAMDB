@@ -33,7 +33,7 @@ class EditSessionHandler(Handler):
         newMissions = []
 
         if existingMissionNames['missionNames'] is not None:
-            existingMissionNames = existingMissionNames['missionNames'].split(",")
+            existingMissionNames = json.loads(existingMissionNames['missionNames'])
             for mission in missions:
                 if mission in existingMissionNames:
                     existingMissionNames.remove(mission)
@@ -52,7 +52,12 @@ class EditSessionHandler(Handler):
 
     def toParams(self, editSessionJson, sessionId):
         params = []
-        params.append(",".join(editSessionJson['missionNames']))
+
+        mission_names = editSessionJson['missionNames']
+        if mission_names is None:
+            mission_names = []
+
+        params.append(json.dumps(mission_names))
         params.append(editSessionJson['host'])
         params.append(editSessionJson['name'])
         params.append(editSessionJson['players'])
