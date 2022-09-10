@@ -1,6 +1,7 @@
 from Crypto import Random
 from Crypto.Cipher import AES
 
+import json
 import utils
 
 
@@ -11,6 +12,7 @@ def initDb():
     db_migrate_add_users_resetpwlink(c)
     db_migrate_ensure_users_sessionkeys(c)
     db_migrate_add_missions_cdlcflag(c)
+    db_migrate_reencode_session_missionnames_as_json(c)
 
     # Save (commit) the changes
     c.connection.commit()
@@ -18,6 +20,40 @@ def initDb():
     # We can also close the connection if we are done with it.
     # Just be sure any changes have been committed or they will be lost.
     c.connection.close()
+
+
+def db_migrate_reencode_session_missionnames_as_json(c):
+    # Find any session with missionNames which aren't JSON arrays
+    c.execute("select id, missionNames from sessions where missionNames not like '[%'")
+    sessions_to_encode = c.fetchall()
+
+    if sessions_to_encode:
+        # Build a 'set' of all mission names for quick lookup
+        c.execute("select missionName from missions")
+        mission_lookup = {row[0]: True for row in c.fetchall()}
+
+        for (session_id, corrupt_mission_names) in sessions_to_encode:
+            # These mission names might be corrupted as mission names containing a comma are erroneously split
+            corrupt_missions = corrupt_mission_names.split(",")
+            missions = []
+
+            partial = []
+            for name in corrupt_missions:
+                # Build up a list of mission name fragments that aren't in the lookup
+                # Once we find a valid name, it's a fair assumption that any previously built-up partials are a valid name
+                if name in mission_lookup:
+                    if partial:
+                        missions.append(",".join(partial))
+                        partial = []
+                    missions.append(name)
+                else:
+                    partial.append(name)
+
+            # Just in-case *no* names are valid, or corrupted were at the end
+            if partial:
+                missions.append(",".join(partial))
+
+            c.execute("update sessions set missionNames = ? where id = ?", [json.dumps(missions), session_id])
 
 
 def db_migrate_add_missions_cdlcflag(c):
