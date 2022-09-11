@@ -189,6 +189,18 @@ SECTION: FILTERS
     text-transform:uppercase
 }
 
+.innerFiltersLabel {
+    padding:.3em .5em;
+    font-size:11px;
+    font-weight:500;
+    color:#fff;
+    background-color:#000;
+    border:2px solid #eaa724;
+    border-radius:6px;
+    text-transform:uppercase;
+    display: inline-block;
+}
+
 #filters fieldset label {
     padding:0 .5em;
     font-size:1em
@@ -197,7 +209,7 @@ SECTION: FILTERS
 #filters fieldset select {
     margin:5px 0;
     padding:15px 0;
-    width:90%;
+    width:100%;
     font-family:'Ubuntu Condensed';
     font-size:1em;
     font-weight:400;
@@ -216,12 +228,13 @@ SECTION: FILTERS
 
 #filters fieldset input.searchBox[type="text"] {
     font-size:1em;
-    width:90%;
+    width:100%;
     border:1px solid #ccc;
     background-color:#303030;
     padding:15px 2px;
     margin:20px 0;
-    color:#ccc
+    color:#ccc;
+    box-sizing: border-box;
 }
 
 #filters fieldset input[type="checkbox"] {
@@ -1021,6 +1034,7 @@ buttongroup a:hover,nav a:active {
 	#filters fieldset label {
 		padding: 0px 0.5em 0px;
 		font-size: 0.8em;
+		vertical-align: text-top;
 	}
 
 	#filters fieldset select {
@@ -1041,13 +1055,13 @@ buttongroup a:hover,nav a:active {
 
 	#filters fieldset input.searchBox[type="text"] {
 		padding: 5px;
-		margin: 10px 0px 15px;
+		margin: 5px 0px 15px;
 		font-size: 1em;
 	}
 
 	#filters fieldset input[type="checkbox"] {
 		padding: 5px;
-		margin: 10px 0px 6px 0px;
+		margin: 5px 0px 5px 0px;
 		font-size: 1em;
 	}
 

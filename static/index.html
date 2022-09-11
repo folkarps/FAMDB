@@ -41,59 +41,35 @@
 
 <div>
     <section id="filters">
-        <div id="filtersHeader">
-            <h3>Filters</h3>
-        </div>
-
         <form action="#" id="form_filters" method="post" name="form_filters">
-
             <fieldset>
-                <legend align="left">Map</legend>
-                <select id=
-                                "islandSelected" name="islandSelected">
+                <legend align="left">Search</legend>
+                <div>
+                    <input type="checkbox" id="searchNameBox" checked><label for="searchNameBox">Name</label>
+                    <input type="checkbox" id="searchDescBox"><label for="searchDescBox">Description</label>
+                    <input type="checkbox" id="searchNotesBox"><label for="searchNotesBox">Notes</label>
+                </div>
+                <input class="searchBox" id="searchText" maxlength="36" name="searchText" type="text" value="">
+
+                <div>
+                    <div class="innerFiltersLabel" style="margin-bottom: 5px; margin-top: 5px;">Type</div>
+                    <div id="missionTypes"></div>
+                </div>
+
+                <div>
+                    <div class="innerFiltersLabel" style="margin-top: 15px;">Slots</div>
+                    <div>
+                        <label for="slotsMin">Min</label>
+                        <input class="slots" id="slotsMin" maxlength="3" name="slotsMin" type="text" value="1">
+                        <label for="slotsMax">Max</label>
+                        <input class="slots" id="slotsMax" maxlength="3" name="slotsMax" type="text" value="999">
+                    </div>
+                </div>
+
+                <select id="islandSelected" name="islandSelected" style="margin-top: 10px;">
                     <option>
                         All Maps
                     </option>
-                </select>
-            </fieldset>
-
-            <fieldset id="missionTypes">
-                <legend align="left">Type</legend>
-            </fieldset>
-
-            <fieldset>
-                <legend align="left">Slots</legend>
-                <input class="slots"
-                       id="slotsMin" maxlength="3" name="slotsMin" type="text"
-                       value="1"><label for="slotsMin">Min</label> <input class=
-                                                                                  "slots" id="slotsMax" maxlength="3"
-                                                                          name="slotsMax" type=
-                                                                                  "text" value="999"><label
-                    for="slotsMax">Max</label>
-            </fieldset>
-
-            <fieldset>
-                <legend align="left">Playcount</legend>
-                <input class="slots"
-                       id="playcountMin" maxlength="3" name="playcountMin" type="text"
-                       value="0"><label for="playcountMin">Min</label> <input class=
-                                                                                      "slots" id="playcountMax"
-                                                                              maxlength="3" name="playcountMax" type=
-                                                                                      "text" value="999"><label
-                    for="Max">Max</label>
-            </fieldset>
-
-            <fieldset>
-                <legend align="left">Filter</legend>
-
-                <label for="searchText">Text</label><br>
-                <input class="searchBox" id="searchText" maxlength="36"
-                       name="searchText" type="text" value="">
-
-                <select id="cdlcFilterSelected" name="cdlcFilterSelected">
-                    <option>Non-CDLC & CDLC</option>
-                    <option>Non-CDLC only</option>
-                    <option>CDLC only</option>
                 </select>
 
                 <select id="authorSelected" name="authorSelected">
@@ -101,23 +77,26 @@
                         All Authors
                     </option>
                 </select>
+
                 <select id="status" name="status">
                     <option>
                         All Statuses
                     </option>
                 </select>
+
+                <select id="cdlcFilterSelected" name="cdlcFilterSelected">
+                    <option>Non-CDLC & CDLC</option>
+                    <option>Non-CDLC only</option>
+                    <option>CDLC only</option>
+                </select>
             </fieldset>
-            <input type="reset" value="Reset">&nbsp;<input id="submitButton" type="submit" value="Apply"><br>
+
+            <input type="reset" value="Reset">
+            <input id="submitButton" type="submit" value="Apply"><br>
         </form>
     </section>
 
-    <section id="missionsList">
-        <div id="missionsListHeader">
-
-            <h3>Missions<a href="missionForm.html">
-                <!--<i title="Add a new mission"  class="fa fa-plus-square-o fa-fw"></i>--></a></h3>
-        </div>
-
+    <section id="missionsList" style="padding-top: 10px;">
         <div id="missionsListTableContainer">
             <table border="0" class="tableMissions" data-role="table" id=
                     "missionTable">
