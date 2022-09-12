@@ -1,5 +1,5 @@
 var missionTypes = ["Adversarial","Coop","Coop (ZEUS)","Afterparty", "Race"];
-var islands = ["Altis","Cam Lao Nam","Cham","Cham (Winter)","Gabreta","Hellanmaa","Hellanmaa (Winter)","Khe Sanh","Livonia","Maksniemi","Malden","Mutambara","Pulau","Sefrou-Ramal","Stratis","Suursaari","Tanoa","The Bra","Vinjensvingen","Weferlingen (Summer)","Weferlingen (Winter)","Virtual Reality"];
+var islands = ["Altis","Cam Lao Nam","Cham","Cham (Winter)","Gabreta","Hellanmaa","Hellanmaa (Winter)","Khe Sanh","Livonia","Maksniemi","Malden","Mutambara","Pulau","Sefrou-Ramal","Stratis","Suursaari","Tanoa","The Bra","Vinjesvingen","Weferlingen (Summer)","Weferlingen (Winter)","Virtual Reality"];
 var statuses = ["Broken", "WIP", "Ready", "Testing", "Transfer", "Testing & Transfer"];
 
 
