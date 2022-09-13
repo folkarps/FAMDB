@@ -19,7 +19,7 @@ var islands = [
     "Suursaari",            // Mod  - Suursaari
     "Tanoa",                // DLC  - Apex
     "The Bra",              // CDLC - SOGPF
-    "Vinjesvingen",          // Mod  - Vinjesvingen
+    "Vinjesvingen",         // Mod  - Vinjesvingen
     "Weferlingen (Summer)", // CDLC - GM
     "Weferlingen (Winter)", // CDLC - GM
     "Virtual Reality"       // Vanilla
