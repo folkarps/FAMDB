@@ -1,6 +1,29 @@
 var missionTypes = ["Adversarial","Coop","Coop (ZEUS)","Afterparty", "Race"];
-var islands = ["Altis","Cam Lao Nam","Gabreta","Khe Sanh","Livonia","Malden","Sefrou-Ramal","Stratis","Tanoa","The Bra","Weferlingen (Summer)","Weferlingen (Winter)","Virtual Reality"];
 var statuses = ["Broken", "WIP", "Ready", "Testing", "Transfer", "Testing & Transfer"];
+var islands = [
+    "Altis",                // Vanilla
+    "Cam Lao Nam",          // CDLC - SOGPF
+    "Cham",                 // Mod  - Cham
+    "Cham (Winter)",        // Mod  - Cham
+    "Gabreta",              // CDLC - CSLA
+    "Hellanmaa",            // Mod  - Hellanmaa
+    "Hellanmaa (Winter)",   // Mod  - Hellanmaa
+    "Khe Sanh",             // CDLC - SOGPF
+    "Livonia",              // DLC  - Contact
+    "Maksniemi",            // Mod  - Maksniemi
+    "Malden",               // Vanilla
+    "Mutambara",            // Mod  - Mutambara
+    "Pulau",                // Mod  - Pulau
+    "Sefrou-Ramal",         // CDLC - WS
+    "Stratis",              // Vanilla
+    "Suursaari",            // Mod  - Suursaari
+    "Tanoa",                // DLC  - Apex
+    "The Bra",              // CDLC - SOGPF
+    "Vinjesvingen",         // Mod  - Vinjesvingen
+    "Weferlingen (Summer)", // CDLC - GM
+    "Weferlingen (Winter)", // CDLC - GM
+    "Virtual Reality"       // Vanilla
+];
 
 
 function GetIslandsList(parent) {
