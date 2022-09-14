@@ -8,7 +8,7 @@ var islands = [
     "Gabreta",              // CDLC - CSLA
     "Hellanmaa",            // Mod  - Hellanmaa
     "Hellanmaa (Winter)",   // Mod  - Hellanmaa
-    "Khe Sanh",             // CDLC - CSLA
+    "Khe Sanh",             // CDLC - SOGPF
     "Livonia",              // DLC  - Contact
     "Maksniemi",            // Mod  - Maksniemi
     "Malden",               // Vanilla
