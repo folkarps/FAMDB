@@ -17,11 +17,11 @@ function LoadData() {
     var mapVal = $("#islandSelected").val();
     var authorVal = $("#authorSelected").val();
     var searchVal = $("#searchText").val();
+    var frameworkVal = $("#searchFramework").val();
     var params = {};
     params["map"] = mapVal;
     params["status"] = $("#status").val();
     params["author"] = authorVal;
-
 
     var checkboxes = $("#missionTypes").find(':checkbox');
     var typeString = [];
@@ -46,6 +46,10 @@ function LoadData() {
     params["playerMax"] = Number($("#slotsMax").val());
     params["playerMin"] = Number($("#slotsMin").val());
     params["cdlcFilter"] = $("#cdlcFilterSelected").val();
+
+    if(frameworkVal !== "All Frameworks") {
+        params["frameworks"] = frameworks[frameworkVal].versions;
+    }
 
     jQuery.get("missions", params, function (data, status, jqXHR)
     {

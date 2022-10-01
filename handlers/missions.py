@@ -146,6 +146,8 @@ class MissionsHandler(Handler):
         if "missionTypes[]" in params:
             missionTypeString = ["'{0}'".format(w) for w in params['missionTypes[]']]
             query.append(str.format("missionType in({})", ",".join(missionTypeString)))
+        if "frameworks[]" in params:
+            query.append(str.format("framework in({})", ",".join([f"'{f}'" for f in params['frameworks[]']])))
         if "playerMax" in params:
             query.append("missionPlayers  <= ? ")
             p.append(params['playerMax'][0])
