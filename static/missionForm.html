@@ -96,38 +96,7 @@
                     <br>
                     <label for="framework">Framework</label>
                     <br>
-                    <select id="framework" name="framework">
-					    <option>
-                            FA3 3.5.6
-                        </option>
-						<option>
-                            FA3 3.5.5
-                        </option>
-                        <option>
-                            FA3 3.5.4
-                        </option>
-                        <option>
-                            FA3 3.5.3
-                        </option>
-                        <option>
-                            FA3 3.5.2
-                        </option>
-                        <option>
-                            F3 3.5.1
-                        </option>
-                        <option>
-                            F3 3.5.0
-                        </option>
-                        <option>
-                            F3 3.4.1
-                        </option>
-                        <option>
-                            F3 3.4.0
-                        </option>
-                        <option>
-                            F3 3.3.x or older
-                        </option>
-                    </select>
+                    <select id="framework" name="framework"></select>
                     <br>
                 </div>
 
@@ -170,6 +139,7 @@
 <script>
     GetIslandsList("#missionIsland");
     GetMissionTypesList("#missionType")
+    PopulateFrameworkVersionList("#framework")
 </script>
 <script src="js/popup.js" type="text/javascript"></script>
 <script src="js/user.js" type="text/javascript"></script>

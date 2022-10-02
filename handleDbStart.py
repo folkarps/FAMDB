@@ -13,6 +13,8 @@ def initDb():
     db_migrate_ensure_users_sessionkeys(c)
     db_migrate_add_missions_cdlcflag(c)
     db_migrate_reencode_session_missionnames_as_json(c)
+    db_migrate_set_null_framework_to_unknown(c)
+    db_migrate_framework_prefix_old_f3(c)
 
     # Save (commit) the changes
     c.connection.commit()
@@ -20,6 +22,24 @@ def initDb():
     # We can also close the connection if we are done with it.
     # Just be sure any changes have been committed or they will be lost.
     c.connection.close()
+
+
+def db_migrate_framework_prefix_old_f3(c):
+    # Some older missions has both 'x.x.x' and 'F3 x.x.x' entries in database. Clean-up by adding prefix to former
+    c.execute('''update missions set framework = 'F3 '||framework where framework in (
+        '3.1.x or older',
+        '3.2.0',
+        '3.2.1',
+        '3.2.2',
+        '3.3.0',
+        '3.3.x or older',
+        '3.4.0',
+        '3.4.1'
+    )''')
+
+
+def db_migrate_set_null_framework_to_unknown(c):
+    c.execute("update missions set framework = 'Unknown' where framework is NULL")
 
 
 def db_migrate_reencode_session_missionnames_as_json(c):

@@ -78,6 +78,12 @@
                     </option>
                 </select>
 
+                <select id="searchFramework" name="searchFramework">
+                    <option>
+                        All Frameworks
+                    </option>
+                </select>
+
                 <select id="status" name="status">
                     <option>
                         All Statuses
@@ -255,6 +261,7 @@
 <script>
         GetIslandsList("#islandSelected");
         GenerateMissionTypesCheckbox("#missionTypes");
+        PopulateFrameworkCategoryList("#searchFramework");
         GetStatuses("#status");
 </script>
 <script src="js/popup.js" type="text/javascript"></script>
