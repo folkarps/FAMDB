@@ -32,14 +32,21 @@ function LoadData() {
         }
     }
 
+    var searchText = searchVal.split(" ").filter(e => !e.startsWith("#")).join(" ")
+    var searchTags = searchVal.split(" ").filter(e => e.startsWith("#")).map(e => e.replace("#", ""))
+
     if(document.getElementById("searchNameBox").checked === true) {
-        params["name"] = searchVal;
+        params["name"] = searchText;
     }
     if(document.getElementById("searchDescBox").checked === true) {
-        params["searchDesc"] = searchVal;
+        params["searchDesc"] = searchText;
     }
     if(document.getElementById("searchNotesBox").checked === true) {
-        params["searchNotes"] = searchVal;
+        params["searchNotes"] = searchText;
+    }
+
+    if(searchTags.length > 0) {
+        params["searchTags"] = searchTags;
     }
 
     params["missionTypes"] = typeString;
@@ -231,3 +238,45 @@ function deleteMission() {
     });
 
 }
+
+function tagSearch(tag) {
+    $('#searchText').val(tag);
+    $('#submitButton').click();
+}
+
+var validTags = [];
+$.getJSON("validTags", function(data) {
+    validTags = data;
+
+    $( "#searchText" ).autocomplete({
+      source: function(request, response) {
+        var current = request.term.split(" ").filter(e => e.startsWith("#")).map(e => e.replace("#", ""))
+        var incompleteTags = current.filter(e => !validTags.includes(e))
+        if (incompleteTags.length == 0) {
+            response('')
+            return
+        }
+        response($.ui.autocomplete.filter(validTags.filter(t => !current.includes(t)), incompleteTags.pop()));
+      },
+      delay: 0,
+      minLength: 0,
+      focus: function( event, ui ) { return false },
+      select: function( event, ui ) {
+        var active = this.value.split(" ").filter(e => e.startsWith("#")).filter(e => !validTags.includes(e.replace("#", ""))).pop()
+        var replaced = false
+        this.value = this.value.split(" ").map(e => {
+            if(e === active) {
+                replaced = true
+                return "#" + ui.item.value
+            }
+            return e
+        }).join(" ")
+
+        // Handle weird cases where the trigger input has been deleted but the menu is still open and selected
+        if(!replaced) {
+            this.value += " #" + ui.item.value
+        }
+        return false
+      }
+    });
+})

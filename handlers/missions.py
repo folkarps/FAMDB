@@ -19,7 +19,7 @@ class MissionsHandler(Handler):
         c.execute("SELECT * FROM missions WHERE " + query, params)
         missionsFromDb = c.fetchall()
 
-        # if any missions were returned, return all versions associated with those missions
+        # if any missions were returned, return all versions, comments, and tags associated with those missions
         if len(missionsFromDb) > 0:
             ids = [str(x['id']) for x in missionsFromDb]
             # sqlite can't take lists, so we need to transform it into a string
@@ -42,14 +42,20 @@ class MissionsHandler(Handler):
             for k, g in itertools.groupby(commentsFromDb, lambda x: x['missionId']):
                 commentsGroupedByMission[k] = list(g)
 
+            c.execute(str.format('''SELECT * FROM mission_tags WHERE missionId IN ({}) ORDER BY missionId''', idParameter))
+            tagsFromDb = c.fetchall()
+            tagsGroupedByMission = {}
+            for k, g in itertools.groupby(tagsFromDb, lambda x: x['missionId']):
+                tagsGroupedByMission[k] = list(g)
         else:
             versionsGroupedByMission = []
             commentsGroupedByMission = []
+            tagsGroupedByMission = []
 
         user = environ['user']
 
         # transform the row objects into objects that can be serialized
-        m = [MissionsHandler.toDto(self, x, versionsGroupedByMission, commentsGroupedByMission, user) for x in
+        m = [MissionsHandler.toDto(self, x, versionsGroupedByMission, commentsGroupedByMission, tagsGroupedByMission, user) for x in
              missionsFromDb]
         encode = json.dumps(m).encode()
 
@@ -65,7 +71,7 @@ class MissionsHandler(Handler):
         return version
 
     # copy the variables out of the non-serializable db object into a blank object
-    def toDto(self, missionFromDb, verionsGrouped, commentsGrouped, user: utils.User):
+    def toDto(self, missionFromDb, verionsGrouped, commentsGrouped, tagsGrouped, user: utils.User):
         dto = MissionsHandler.toDtoHelper(self, missionFromDb)
         dto['allowedToEdit'] = False
         dto['allowedToVersion'] = False
@@ -96,6 +102,12 @@ class MissionsHandler(Handler):
 
             finalData = sorted(unsortedData, key=functools.cmp_to_key(cmpVersionAndComents))
             dto['versions'] = finalData
+
+        if dto['id'] in tagsGrouped:
+            tagsForThisMission = [MissionsHandler.toDtoHelper(self, tag)['tag'] for tag in tagsGrouped[dto['id']]]
+            dto['tags'] = sorted(tagsForThisMission)
+        else:
+            dto['tags'] = []
 
         return dto
 
@@ -163,6 +175,14 @@ class MissionsHandler(Handler):
         if "countMin" in params:
             query.append("playedCounter >= ? ")
             p.append(params['countMin'][0])
+
+        if "searchTags[]" in params:
+            tags_subquery = []
+            for tag in params["searchTags[]"]:
+                tags_subquery.append("id in (select missionId from mission_tags where tag = ?)")
+                p.append(tag)
+            query.append(str.format("({})", " AND ".join(tags_subquery)))
+
         return " AND ".join(query), p
 
 

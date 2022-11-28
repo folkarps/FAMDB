@@ -48,6 +48,10 @@ $.templates("missionTmpl", `<tr class='row' id={{:id}}>
         <br>
         <div>{{>missionNotes}}</div>
         </p>
+        <p class='fullInfo'>
+        <br>
+        {{for tags}}<div style="display: inline; padding-right:5px;"><a href="#{{>}}" style="all: revert; color:#eaa724" onclick="tagSearch('#{{>}}');return false;">#{{>}}</a></div>{{/for}}
+        </p>
 
         <ul class='buttons'>
         {{if allowedToEdit}}
