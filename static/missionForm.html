@@ -108,14 +108,9 @@
                     <br>
                     <select id="framework" name="framework"></select>
                     <br>
-                    <label for="tagName">Tags</label>
-                    <br>
-                    <input type="text" id="tagName" onfocus="$('#tagName').autocomplete('search')">
-                    <div id="tagList"></div>
                 </div>
 
                 <div id="editMissionsContainerBottom">
-
                     <label for="missionDescription">Description</label>
                     <br>
                     <textarea id="missionDescription" name="missionDescription"
@@ -129,6 +124,11 @@
                     <input id='isCDLCMission' type='checkbox'/>
                     <label for='isCDLCMission'>CDLC mission (the Transfer button marks as Ready but doesn't copy PBO to Main mpmissions directory)</label>
                     <br>
+
+                    <label for="tagName">Tags</label>
+                    <br>
+                    <input type="text" id="tagName" onfocus="$('#tagName').autocomplete('search')">
+                    <div id="tagList" style="display: flex; flex-flow: wrap; flex-direction: row"></div>
                 </div>
                 <span id="errorEdit"></span>
                 <br>

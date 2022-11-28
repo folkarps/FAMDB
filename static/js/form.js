@@ -155,9 +155,8 @@ function removeTag(button) {
     $(button).parent().remove()
 }
 
-$.templates("missionTagTmpl", `<div class="missionTag">
-    <div class="missionTagDiv" style="display:inline-block;">{{>tag}}</div>
-    <button style="display:inline-block;float:right" onclick="removeTag(this)">Remove</button>
+$.templates("missionTagTmpl", `<div class="missionTag" style="display:inline-block; padding-right: 10px;">
+    <div class="missionTagDiv" style="display: inline; padding-right: 3px;">{{>tag}}</div><a href="#" style="all: revert; color:#eaa724; font-weight: bold;" onclick="removeTag(this);return false;">X</a></div>
 </div>`);
 
 var validTags = [];
