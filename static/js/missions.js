@@ -240,6 +240,7 @@ function deleteMission() {
 }
 
 function tagSearch(tag) {
+    $('#resetButton').click();
     $('#searchText').val(tag);
     $('#submitButton').click();
 }
