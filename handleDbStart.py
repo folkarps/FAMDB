@@ -15,13 +15,88 @@ def initDb():
     db_migrate_reencode_session_missionnames_as_json(c)
     db_migrate_set_null_framework_to_unknown(c)
     db_migrate_framework_prefix_old_f3(c)
+    db_migrate_add_tags_tables(c)
 
     # Save (commit) the changes
     c.connection.commit()
 
+    db_populate_valid_tags(c)
+
     # We can also close the connection if we are done with it.
     # Just be sure any changes have been committed or they will be lost.
     c.connection.close()
+
+
+def db_populate_valid_tags(c):
+    valid_tags = [
+        '3ifb',
+        'aaf',
+        'ai_friends',
+        'boats',
+        'bundeswehr',
+        'cache_hunt',
+        'cdf',
+        'chdkz',
+        'cls',
+        'csat',
+        'csla',
+        'custom_faction',
+        'day',
+        'defense',
+        'denmark',
+        'escort',
+        'fia',
+        'gendarmerie',
+        'helicopters',
+        'hostages',
+        'item_retrieval',
+        'jets',
+        'jungle',
+        'large',
+        'ldf',
+        'long',
+        'mechanised',
+        'mines',
+        'motorised',
+        'nato',
+        'night',
+        'no_markers',
+        'no_reinforcements',
+        'npr',
+        'nva',
+        'paradrop',
+        'parameters',
+        'poland',
+        'radio',
+        'randomised',
+        'scripted_gimmick',
+        'short',
+        'silly',
+        'small',
+        'special_forces',
+        'spetsnaz',
+        'symmetric_fireteams',
+        'syndikat',
+        'takistan',
+        'tanks',
+        'towing',
+        'toys',
+        'urban',
+        'us'
+    ]
+
+    c.execute('''begin exclusive transaction''')
+    c.execute('''delete from valid_tags''')
+    c.executemany('''insert into valid_tags (tag) values (?)''', [(tag,) for tag in valid_tags])
+    c.execute('''commit transaction''')
+
+
+def db_migrate_add_tags_tables(c):
+    c.execute('''create table if not exists mission_tags
+                     (tag text, missionId int, primary key(tag, missionId)) without rowid''')
+
+    c.execute('''create table if not exists valid_tags
+                     (tag text primary key) without rowid''')
 
 
 def db_migrate_framework_prefix_old_f3(c):

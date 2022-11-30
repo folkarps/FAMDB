@@ -29,7 +29,11 @@ function LoadMission() {
                 $("#missionDescription").val(mission.missionDesc);
                 $("#missionNotes").val(mission.missionNotes);
                 $("#framework").val(mission.framework);
-                $('#isCDLCMission').prop('checked', mission.isCDLCMission == 1)
+                $('#isCDLCMission').prop('checked', mission.isCDLCMission == 1);
+
+                var contents = $.render.missionTagTmpl(mission.tags.map(function(item){return {tag:item};}));
+                $("#tagList").html(contents);
+
                 $("#loading").hide();
             }else {
                 setNewMission();
@@ -65,6 +69,11 @@ function WriteMission() {
     var isBroken = $('#missionBroken').prop('checked');
     var needsRevision = $('#missionNeedsRevision').prop('checked');
     var isCDLCMission = $('#isCDLCMission').prop('checked');
+
+    var tags = [];
+    $("#tagList").find(".missionTagDiv").toArray().forEach(function(item){
+        tags.push(item.textContent)
+    });
 
     if ( !(missionName.match(/^[a-zA-Z0-9'-_][a-zA-Z0-9'-_ ]+$/)) || missionName === "" || missionName === null) {
         MissionSaveError("Enter a mission name!");
@@ -112,6 +121,7 @@ function WriteMission() {
     data.missionNotes = missionNotes;
     data.isCDLCMission = isCDLCMission;
     data.framework = $("#framework").val();
+    data.tags = tags;
     if(getQueryDict()['missionId'] != null) {
         data.missionId = getQueryDict()['missionId'];
     }
@@ -135,5 +145,36 @@ function WriteMission() {
 function MissionSaveError(string) {
     $("#errorEdit").text(string);
 }
+
+function addTag(tag) {
+    var contents = $.render.missionTagTmpl({tag: tag});
+    $("#tagList").html($("#tagList").html() + contents);
+}
+
+function removeTag(button) {
+    $(button).parent().remove()
+}
+
+$.templates("missionTagTmpl", `<div class="missionTag" style="display:inline-block; padding-right: 10px;">
+    <div class="missionTagDiv" style="display: inline; padding-right: 3px;">{{>tag}}</div><a href="#" style="all: revert; color:#eaa724; font-weight: bold;" onclick="removeTag(this);return false;">X</a></div>
+</div>`);
+
+var validTags = [];
+$.getJSON("validTags", function(data) {
+    validTags = data;
+
+    $( "#tagName" ).autocomplete({
+      source: function(request, response) {
+        var current = [];
+        $("#tagList").find(".missionTagDiv").toArray().forEach(function(item){
+            current.push(item.textContent)
+        });
+        response($.ui.autocomplete.filter(validTags.filter(t => !current.includes(t)), request.term));
+      },
+      delay: 0,
+      minLength: 0,
+      select: function( event, ui ) { addTag(ui.item.value); ui.item.value = ''; document.activeElement.blur();}
+    });
+})
 
 LoadMission();

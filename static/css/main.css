@@ -909,6 +909,11 @@ buttongroup a:hover,nav a:active {
     padding-bottom:5px;
 }
 
+.missionTag {
+    padding-top:5px;
+    padding-bottom:5px;
+}
+
 .missionVersionOuter {
     border:1px solid #eaa724;
     line-height: 2.4em;

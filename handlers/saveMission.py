@@ -35,6 +35,9 @@ class SaveMissionHandler(Handler):
         params.append(missionId)
 
         c.execute("update missions set " + query + "where id=?", params)
+
+        self.save_tags(c, missionId, missionJson['tags'])
+
         c.connection.commit()
         c.connection.close()
         start_response("201 Created", [])
@@ -63,3 +66,13 @@ class SaveMissionHandler(Handler):
             queryParts.append("missionAuthor=?")
             params.append(user.login)
         return " , ".join(queryParts), params
+
+    def save_tags(self, c, mission_id, tags):
+        c.execute('select tag from valid_tags')
+        result = c.fetchall()
+        valid_tags = [row['tag'] for row in result]
+
+        clean_tags = set(tags).intersection(valid_tags)
+
+        c.execute('delete from mission_tags where missionId = ?', [mission_id])
+        c.executemany('insert into mission_tags (tag, missionId) values(?, ?)', [(t, mission_id) for t in clean_tags])
