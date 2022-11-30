@@ -41,6 +41,7 @@ def db_populate_valid_tags(c):
         'cls',
         'csat',
         'csla',
+        'ctrg',
         'custom_faction',
         'day',
         'defense',
