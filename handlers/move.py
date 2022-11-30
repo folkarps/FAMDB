@@ -1,4 +1,5 @@
 import json
+from datetime import date
 from pathlib import Path
 from shutil import copyfile
 
@@ -34,7 +35,7 @@ class MoveHandler(Handler):
             c.execute("UPDATE versions SET existsOnMain=1, requestedTransfer=0, requestedTesting=0 WHERE id = ?",
                       [versionId])
 
-            c.execute("UPDATE missions SET status ='Ready' WHERE id = ?", [missionId])
+            c.execute("UPDATE missions SET status = 'Ready', missionModified = ? WHERE id = ?", [date.today(), missionId])
 
         if utils.discordHookUrl != '':
             c.execute("SELECT missionAuthor FROM missions WHERE id = ?", [missionId])
