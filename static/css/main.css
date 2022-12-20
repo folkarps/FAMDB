@@ -934,6 +934,14 @@ buttongroup a:hover,nav a:active {
     color: #eaa724;
 }
 
+.tagIndexHeading {
+    display: inline;
+    font-family:'Ubuntu',sans-serif;
+    font-weight:500;
+    font-size:1em;
+    color:#fff;
+}
+
 @media screen and (min-width: 1024px) {
 
 	/************************************************************

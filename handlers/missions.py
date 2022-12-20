@@ -121,7 +121,7 @@ class MissionsHandler(Handler):
         return dict(version)
 
     def constructQuery(self, params):
-        query = []
+        query = ['1 = 1']  # default value to prevent error on empty query
         p = []
         if ("map" in params) and (params['map'][0] != 'All Maps'):
             query.append('missionMap = ?')
