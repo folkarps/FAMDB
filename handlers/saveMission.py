@@ -60,8 +60,6 @@ class SaveMissionHandler(Handler):
             else:
                 params.append(missionJson[part])
 
-        queryParts.append("missionModified=?")
-        params.append(date.today())
         if newMission:
             queryParts.append("missionAuthor=?")
             params.append(user.login)
