@@ -28,7 +28,7 @@ var frameworks = {
     "Modern FA3 (>= 3.5)": {
         "uiPriority": 0, // order to appear in dropdown, 0 being closet to top
         "versions": [    // order in dropdowns, so newer at top makes sense. Needs to be exhaustive for search to work
-            //"FA3 3.5.7",
+            "FA3 3.5.7",
             "FA3 3.5.6",
             "FA3 3.5.5",
             "FA3 3.5.4",
