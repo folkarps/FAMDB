@@ -1,8 +1,10 @@
 import base64
+import hashlib
 import pathlib
 import os
 import sqlite3
 from http.cookies import SimpleCookie
+from io import SEEK_END, SEEK_SET
 
 import psutil
 
@@ -114,6 +116,34 @@ def handleBadSessionIds(environ):
     else:
         return []
 
+
+# Takes a file-like object (that must be seekable) and validates it is a valid PBO
+# Will return a truthy value if so, falsy otherwise.
+# The file is validated by checking the checksum at the end of the file
+# Reference: https://community.bistudio.com/wiki/PBO_File_Format#End_of_File_Checksum_or_Sha
+# Note the above page says (at time of writing) that the Arma checksum is MD5; it's actually SHA1
+def is_valid_pbo(file):
+    read_size = 16 * 1024  # 16KB
+    file_size = file.seek(0, SEEK_END)
+    file.seek(0, SEEK_SET)
+
+    checksum = hashlib.sha1()
+    left = file_size - 21
+    while True:
+        if read_size > left:
+            read_size = left
+        block = file.read(read_size)
+        checksum.update(block)
+        left -= len(block)
+        if left < 1:
+            break
+
+    checksum_block = file.read(21)
+    file.seek(0, SEEK_SET)
+    if len(checksum_block) == 21 and checksum_block[0] == 0x00 and checksum_block[1:] == checksum.digest():
+        return True
+
+    return False
 
 # Adapted from https://stackoverflow.com/a/21901260
 def get_git_revision(base_path):

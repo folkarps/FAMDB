@@ -67,9 +67,10 @@ $.templates("missionTmpl", `<tr class='row' id={{:id}}>
                 <input id='fileUpload{{:id}}' onchange='updateFileLabel(this)' data-missionId='{{:id}}'
                        style='display:none'
                        type='file'
+                       accept=".pbo"
                        multiple='multiple'/>
                 <a onclick='uploadFile(this)'>Submit</a>
-                <span class='uploadErrorMessage'></span>
+                <span style='font-weight:bold; color:red;' class='uploadErrorMessage'></span>
             </li>
         {{/if}}
             {{if hasOwnProperty('versions')}}
