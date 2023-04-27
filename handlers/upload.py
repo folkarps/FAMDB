@@ -48,7 +48,7 @@ class UploadHandler(Handler):
             return ["PBO verification failed. Try the upload again".encode()]
 
         out_path = pathlib.Path(utils.missionMakerDir, safe_filename)
-        with out_path.open('wxb') as out_file:
+        with out_path.open('xb') as out_file:
             shutil.copyfileobj(file_data, out_file)
 
         c = utils.getCursor()
