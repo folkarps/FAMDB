@@ -1,5 +1,6 @@
-import os
-import re
+import cgi
+import pathlib
+import shutil
 from datetime import date
 from urllib.parse import parse_qs
 
@@ -9,79 +10,52 @@ from handler import Handler
 
 class UploadHandler(Handler):
     def handle(self, environ, start_response):
-        c = utils.getCursor()
-        o = parse_qs(environ['QUERY_STRING'])
-        missionId = o['missionId'][0]
-        if not utils.checkUserPermissions(environ['user'], 2, missionId):
+        params = parse_qs(environ['QUERY_STRING'])
+        if environ['REQUEST_METHOD'] != 'POST' or 'missionId' not in params:
+            start_response("400 Bad Request", [])
+            return ["Must be POST and missionId must be a query parameter".encode()]
+
+        mission_id = params['missionId'][0]
+        if not utils.checkUserPermissions(environ['user'], 2, mission_id):
             start_response("403 Permission Denied", [])
-            return ["Access Denied"]
+            return ["Access Denied".encode()]
 
-        # This monstrosity of code was copied from the internet, I barely understand how it works
-
-        content_type = environ.get('CONTENT_TYPE', '0')
-        if not content_type:
-            start_response("500 Internal Server Error", [])
-            return ["Content-Type header doesn't contain boundary".encode()]
-        boundary = content_type.split("=")[1].encode()
-        remainbytes = int(environ.get('CONTENT_LENGTH', '0'))
-
-        if remainbytes > (20 * 1024 * 1024):
-            start_response("500 Internal Server Error", [])
-            return ["20 MB is the max size".encode()]
-
-        line = environ['wsgi.input'].readline()
-        remainbytes -= len(line)
-        if not boundary in line:
-            start_response("500 Internal Server Error", [])
-            return ["Content NOT begin with boundary".encode()]
-        line = environ['wsgi.input'].readline()
-        remainbytes -= len(line)
-        decode = line.decode()
-        regex = r'Content-Disposition.*name="upload_file"; filename="(.*)".*'
-        fn = re.findall(regex, decode)
-        if not fn:
-            start_response("500 Internal Server Error", [])
-            return ["Can't find out file name...".encode()]
-
-        fileName = fn[0]
-
-        # protect from filesystem roaming
-        fileName = fileName.replace("..", "")
-
-        if not fileName.endswith(".pbo"):
-            start_response("500 Internal Server Error", [])
-            return ["Only .pbo files are allowed".encode()]
-
-        fullPath = os.path.join(utils.missionMakerDir, fileName).replace("\n", "")
-        line = environ['wsgi.input'].readline()
-        remainbytes -= len(line)
-        line = environ['wsgi.input'].readline()
-        remainbytes -= len(line)
         try:
-            out = open(fullPath, 'wb')
-        except IOError:
-            start_response("500 Internal Server Error", [])
-            return ["Can't create file to write, do you have permission to write?".encode()]
+            cgi.maxlen = 20 * 1024 * 1024
+            form_data = cgi.FieldStorage(
+                fp=environ['wsgi.input'],
+                environ=environ,
+                strict_parsing=True,
+                keep_blank_values=True
+            )
+        except (TypeError, ValueError) as e:
+            start_response("400 Bad Request", [])
+            return [f"File upload error: {e}".encode()]
+        if 'upload_file' not in form_data:
+            start_response("400 Bad Request", [])
+            return ["upload_file must be specified in submitted form".encode()]
 
-        preline = environ['wsgi.input'].readline()
-        remainbytes -= len(preline)
-        while remainbytes > 0:
-            line = environ['wsgi.input'].readline()
-            remainbytes -= len(line)
-            if boundary in line:
-                preline = preline[0:-1]
-                if preline.endswith(b'\r'):
-                    preline = preline[0:-1]
-                out.write(preline)
-                out.close()
-            else:
-                out.write(preline)
-                preline = line
+        upload_file = form_data['upload_file']
+        unsafe_filepath = pathlib.PurePath(upload_file.filename)
+        if unsafe_filepath.suffix.lower() != '.pbo':
+            start_response("400 Bad Request", [])
+            return ["Only .pbo files are allowed".encode()]
+        safe_filename = unsafe_filepath.name
+        file_data = upload_file.file
 
+        if not utils.is_valid_pbo(file_data):
+            start_response("400 Bad Request", [])
+            return ["PBO verification failed. Try the upload again".encode()]
+
+        out_path = pathlib.Path(utils.missionMakerDir, safe_filename)
+        with out_path.open('wxb') as out_file:
+            shutil.copyfileobj(file_data, out_file)
+
+        c = utils.getCursor()
         # rest of the properties are set by defaults in the table
         c.execute(
             "INSERT INTO versions(missionId, name, createDate) VALUES (?, ?, ?)",
-            [missionId, fileName, date.today()])
+            [mission_id, safe_filename, date.today()])
         c.connection.commit()
         c.connection.close()
 

@@ -187,6 +187,9 @@ function submitComment(button) {
 }
 
 function uploadFile(submitButton){
+    // Reset the error message when a new upload starts
+    $(submitButton).siblings(".uploadErrorMessage").text("");
+
     var button = $(submitButton).siblings("input")[0];
     var files = button.files;
     for(var i=0; i<files.length; i++){
@@ -201,9 +204,8 @@ function uploadFile(submitButton){
                 // Every thing ok, file uploaded
                 window.location.href = "index.html?missionId=" + missionId;
             }else {
-                if(xhr.status == 500) {
-                    var span = $($(submitButton).siblings(".uploadErrorMessage")[0])[0];
-                    span.innerText = xhr.responseText;
+                if(xhr.status >= 400) {
+                    $(submitButton).siblings(".uploadErrorMessage").text("Upload failed! " + xhr.responseText);
                 }
             }
         };
@@ -223,7 +225,10 @@ function updateFileLabel(uploadSystem) {
     for(var i=0; i < files.length; i++) {
         text += files[i].name + ",";
     }
-    div.innerHTML = (text)
+    div.innerHTML = (text);
+
+    // Reset the error message when a new file is selected
+    $(uploadSystem).siblings(".uploadErrorMessage").text("");
 }
 function openDeletePopup(button) {
     window.delMissionId = $(button).data("missionid");
