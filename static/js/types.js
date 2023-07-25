@@ -13,7 +13,7 @@ var islands = [
     "Maksniemi",            // Mod  - Maksniemi
     "Malden",               // Vanilla
     "Mutambara",            // Mod  - Mutambara
-	"Normandy",				// CDLC - Spearhead 1944
+    "Normandy",             // CDLC - Spearhead 1944
     "Pulau",                // Mod  - Pulau
     "Sefrou-Ramal",         // CDLC - WS
     "Stratis",              // Vanilla
