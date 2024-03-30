@@ -55,6 +55,7 @@ def db_populate_valid_tags(c):
         'gendarmerie',
         'helicopters',
         'hostages',
+        'ion',
         'item_retrieval',
         'jets',
         'jungle',
@@ -88,6 +89,8 @@ def db_populate_valid_tags(c):
         'tanks',
         'towing',
         'toys',
+        'tura',
+        'una',
         'urban',
         'us'
     ]
